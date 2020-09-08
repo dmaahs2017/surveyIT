@@ -3,7 +3,7 @@ import { NavBar } from "../components/NavBar";
 const Index = () => (
   <>
     <NavBar />
-    <div>hello world</div>
+    <div>Hello surveyors and surveyees!</div>
   </>
 );
 
