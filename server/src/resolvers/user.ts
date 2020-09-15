@@ -81,13 +81,35 @@ export class UserResolver {
         ],
       };
     }
-
-    if (options.password.length <= 2) {
+    let hasSpecialCharRegexp = new RegExp("[!@#\$%\^\&*\)\(+=._-]{1,}")
+    if (!hasSpecialCharRegexp.test(options.password)) {
       return {
         errors: [
           {
             field: "password",
-            message: "length must be greater than 2",
+            message: "password must have at least 1 special character: '[!@#$%^&*)(+=._-]'",
+          },
+        ],
+      };
+    }
+
+    let hasDigitsRegexp = new RegExp("[0-9]{1,}")
+    if (!hasDigitsRegexp.test(options.password)) {
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "password must have at least 1 digit",
+          },
+        ],
+      };
+    }
+    if (options.password.length <= 8) {
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "length must be greater than 8",
           },
         ],
       };
@@ -117,8 +139,8 @@ export class UserResolver {
       };
   }
 
-  let phoneNumberRegexp = new RegExp("^\d{10}$");
-    if(phoneNumberRegexp.test(options.phoneNumber)) {
+  let phoneNumberRegexp = new RegExp("^[0-9]{10}$");
+    if(!phoneNumberRegexp.test(options.phoneNumber)) {
       return {
         errors: [
           {
