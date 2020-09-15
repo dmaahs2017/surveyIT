@@ -15,22 +15,7 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
-  posts: Array<Post>;
-  post?: Maybe<Post>;
   me?: Maybe<User>;
-};
-
-
-export type QueryPostArgs = {
-  id: Scalars['Float'];
-};
-
-export type Post = {
-  __typename?: 'Post';
-  id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  title: Scalars['String'];
 };
 
 export type User = {
@@ -39,37 +24,21 @@ export type User = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   username: Scalars['String'];
+  email: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  typeOfUser: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createPost: Post;
-  updatePost?: Maybe<Post>;
-  deletePost: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
 };
 
 
-export type MutationCreatePostArgs = {
-  title: Scalars['String'];
-};
-
-
-export type MutationUpdatePostArgs = {
-  title?: Maybe<Scalars['String']>;
-  id: Scalars['Float'];
-};
-
-
-export type MutationDeletePostArgs = {
-  id: Scalars['Float'];
-};
-
-
 export type MutationRegisterArgs = {
-  options: UsernamePasswordInput;
+  options: RegisterInput;
 };
 
 
@@ -89,6 +58,14 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type RegisterInput = {
+  username: Scalars['String'];
+  email: Scalars['String'];
+  password: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  typeOfUser: Scalars['String'];
+};
+
 export type UsernamePasswordInput = {
   username: Scalars['String'];
   password: Scalars['String'];
@@ -96,7 +73,7 @@ export type UsernamePasswordInput = {
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username'>
+  & Pick<User, 'id' | 'username' | 'email' | 'phoneNumber' | 'typeOfUser'>
 );
 
 export type LoginMutationVariables = Exact<{
@@ -128,6 +105,9 @@ export type LogoutMutation = (
 
 export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
+  email: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  typeOfUser: Scalars['String'];
   password: Scalars['String'];
 }>;
 
@@ -161,6 +141,9 @@ export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
   username
+  email
+  phoneNumber
+  typeOfUser
 }
     `;
 export const LoginDocument = gql`
@@ -190,8 +173,8 @@ export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $password: String!) {
-  register(options: {username: $username, password: $password}) {
+    mutation Register($username: String!, $email: String!, $phoneNumber: String!, $typeOfUser: String!, $password: String!) {
+  register(options: {username: $username, email: $email, phoneNumber: $phoneNumber, typeOfUser: $typeOfUser, password: $password}) {
     errors {
       field
       message

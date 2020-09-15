@@ -9,7 +9,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery();
   let body = null;
-  let logo = <h1>SurveyIT</h1>
+  let logo = <h1><a href="/">SurveyIT</a></h1>
 
   // data is loading
   if (fetching) {
