@@ -71,16 +71,6 @@ export class UserResolver {
     @Arg("options") options: RegisterInput,
     @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
-    if (options.username.length <= 2) {
-      return {
-        errors: [
-          {
-            field: "username",
-            message: "length must be greater than 2",
-          },
-        ],
-      };
-    }
     let hasSpecialCharRegexp = new RegExp("[!@#\$%\^\&*\)\(+=._-]{1,}")
     if (!hasSpecialCharRegexp.test(options.password)) {
       return {
