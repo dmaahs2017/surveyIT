@@ -22,6 +22,20 @@ class UsernamePasswordInput {
   password: string;
 }
 
+@InputType()
+class RegisterInput {
+    @Field()
+    username: string;
+    @Field()
+    email: string;
+    @Field()
+    password: string;
+    @Field()
+    phoneNumber: string;
+    @Field()
+    typeOfUser: string;
+}
+
 @ObjectType()
 class FieldError {
   @Field()
@@ -54,7 +68,7 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async register(
-    @Arg("options") options: UsernamePasswordInput,
+    @Arg("options") options: RegisterInput,
     @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
     if (options.username.length <= 2) {
@@ -79,6 +93,43 @@ export class UserResolver {
       };
     }
 
+  let emailRegexp = new RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)");
+    if (!emailRegexp.test(options.email)) {
+      return {
+        errors: [
+          {
+            field: "email",
+            message: "email must be of from 'me@domain.com'",
+          },
+        ],
+      };
+    }
+
+  let validUserTypes = ["SURVEYOR", "SURVEYEE"];
+  if (!validUserTypes.includes(options.typeOfUser.toUpperCase())) {
+      return {
+        errors: [
+          {
+            field: "typeOfUser",
+            message: "typeOfUser must be one of [" + validUserTypes + "]",
+          },
+        ],
+      };
+  }
+
+  let phoneNumberRegexp = new RegExp("^\d{10}$");
+    if(phoneNumberRegexp.test(options.phoneNumber)) {
+      return {
+        errors: [
+          {
+            field: "phoneNumber",
+            message: "phoneNumber must be 10 digits",
+          },
+        ],
+      };
+    }
+
+
     const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
@@ -87,6 +138,9 @@ export class UserResolver {
         .getKnexQuery()
         .insert({
           username: options.username,
+          email: options.email,
+          phone_number: options.phoneNumber,
+          type_of_user: options.typeOfUser.toUpperCase(),
           password: hashedPassword,
           created_at: new Date(),
           updated_at: new Date(),
@@ -100,11 +154,21 @@ export class UserResolver {
         return {
           errors: [
             {
-              field: "username",
-              message: "username already taken",
+              field: "unkown",
+              message: "a unique field is already taken",
             },
           ],
         };
+      }
+      else {
+        return {
+          errors: [
+            {
+              field: "unknown",
+              message: "Failed inserting user"
+            }
+          ]
+        }
       }
     }
 
@@ -113,6 +177,9 @@ export class UserResolver {
     // keep them logged in
     req.session.userId = user.id;
 
+    //this is a weird thing with how the naming works. DB auto converts to snake case but graphql expects camelCase
+    user.phoneNumber = user.phone_number;
+    user.typeOfUser = user.type_of_user;
     return { user };
   }
 
