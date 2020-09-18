@@ -44,7 +44,6 @@ open a terminal in VScode and run these commands in order
 cd server
 npm install
 yarn install
-yarn gen // this will generate the graphql .tsx code from the .graphql files
 ```
 Then run `docker-compose up` - note if this doesn't work I'm not sure because I'm on linux. You may have to figure out how to run it with docker desktop. The file that is important is the `docker-compose.yml` file at `surveyIT/server/docker-compose.yml`. The [docker docs](https://docs.docker.com/compose/install/) may be useful here.
 
@@ -73,6 +72,7 @@ yarn install
 ```
 then run the FE with 
 ```
+yarn gen // this will generate the graphql .tsx code from the .graphql files
 yarn dev
 ```
 Go to [http://localhost:3000](http://localhost:3000) to verify it is working.
