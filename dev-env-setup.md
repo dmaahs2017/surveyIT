@@ -1,4 +1,3 @@
-[toc]
 # Install Required Tools
 ## VScode
 Download and install [Visual Studio Code](https://code.visualstudio.com/)
