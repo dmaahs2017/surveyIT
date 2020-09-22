@@ -80,3 +80,7 @@ yarn dev
 ```
 Go to [http://localhost:3000](http://localhost:3000) to verify it is working.
 
+
+# Dbeaver
+Dbeaver is a useful tool to inspect/manipulate the databse directly by connecting to it. The interface is fairly intuitive.
+[Download Dbeaver here](https://dbeaver.io/)
