@@ -1,0 +1,40 @@
+html *
+{
+   font-size: 1em;
+   font-family: Arial;
+}
+
+.container {
+    padding: 1%;
+    background-color: #00CDEE ;
+}
+
+.columns {
+    display: flex;
+    justify-content: space-between;
+    margin:1em;
+}
+
+.col{
+    width:25%;
+    margin: 1%;
+}
+
+.img {
+    align-self: center;
+    max-width: 100%;
+}
+
+.title {
+    font-size: 2em;
+}
+
+h1 {
+    text-align: center;
+}
+
+html *
+{
+   font-size: 1em;
+   font-family: Arial;
+}

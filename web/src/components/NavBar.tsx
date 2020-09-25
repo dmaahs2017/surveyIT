@@ -11,7 +11,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery();
   let body = null;
-  let logo = <a href="/"><Image size="50px" src="http://localhost:3000/web/src/images/logo_white.png" /></a> //src={logo_white} doesnt work
+  let logo = <a href="/"><Image size="3vh" src="https://dcassetcdn.com/design_img/1559024/551167/551167_7840631_1559024_911ff84c_image.png" /></a> //src={logo_white} doesnt work
 
   // data is loading
   if (fetching) {
