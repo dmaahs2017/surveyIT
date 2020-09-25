@@ -1,7 +1,9 @@
 import React from "react";
-import { Box, Link, Flex, Button } from "@chakra-ui/core";
+import { Box, Link, Flex, Button, Image } from "@chakra-ui/core";
 import NextLink from "next/link";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
+import logo_white from "../images/logo_white.png";
+
 
 interface NavBarProps {}
 
@@ -9,7 +11,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery();
   let body = null;
-  let logo = <h1><a href="/">SurveyIT</a></h1>
+  let logo = <a href="/"><Image size="50px" src="http://localhost:3000/web/src/images/logo_white.png" /></a> //src={logo_white} doesnt work
 
   // data is loading
   if (fetching) {
@@ -44,8 +46,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   }
 
   return (
-    <Flex bg="tan" p={4}>
-      {logo}
+    <Flex bg="#7851a9" p={4}>
+
+        {logo}
+
       <Box ml={"auto"}>{body}</Box>
     </Flex>
   );
