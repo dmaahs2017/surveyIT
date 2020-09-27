@@ -1,12 +1,25 @@
+/*
+things that might affect you while working on the html:
+scrollbars are disabled
+<h1> are centered
+*/
 html *
 {
    font-size: 1em;
    font-family: Arial;
 }
 
+body, html {
+  height: 100%;
+  overflow: hidden;
+  background-color: #00CDEE ;
+}
+
+
+
 .container {
     padding: 1%;
-    background-color: #00CDEE ;
+    height: 95vh;
 }
 
 .columns {
@@ -15,7 +28,17 @@ html *
     margin:1em;
 }
 
-.col{
+.col1{
+    width:25%;
+    margin: 1%;
+}
+
+.col2{
+    width:25%;
+    margin: 1%;
+}
+
+.col3{
     width:25%;
     margin: 1%;
 }
@@ -37,4 +60,20 @@ html *
 {
    font-size: 1em;
    font-family: Arial;
+}
+
+@media (max-aspect-ratio: 4/3) {
+
+    .col1 {
+        width: 40%;
+    }
+
+    .col2 {
+        width: 60%;
+    }
+    
+    .col3 {
+        width: 0%;
+    }
+    
 }

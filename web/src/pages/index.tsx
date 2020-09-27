@@ -8,7 +8,7 @@ const Index = () => (
     <div className="container">
       <h1 className="title">Welcome To Survey IT!</h1>
       <div className="columns">
-        <div className="col">
+        <div className="col1">
           <h2 className="title">Quick Links: </h2>
           <ul>
             <li>
@@ -28,11 +28,11 @@ const Index = () => (
             </li>
           </ul>
         </div>
-        <div className="col" style={{width:"40%"}}>
+        <div className="col2" style={{width:"40%"}}>
           <h1>Get FREE rewards and figt cards by filling surveys!</h1>
           <h1>Take your first survey and earn $ in few minutes</h1>
         </div>
-        <div className="col">
+        <div className="col3">
           <div>
           <Image className="img" src="https://dcassetcdn.com/design_img/1559024/551167/551167_7840631_1559024_911ff84c_image.png" />
           </div>
