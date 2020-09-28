@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   ThemeProvider,
   CSSReset,
@@ -7,10 +7,10 @@ import {
   Heading,
   Flex,
   List,
-  ListItem
-} from '@chakra-ui/core'
-import { Wrapper } from '../components/Wrapper';
-import {NavBar} from '../components/NavBar';
+  ListItem,
+} from "@chakra-ui/core";
+import { Wrapper } from "../components/Wrapper";
+import { NavBar } from "../components/NavBar";
 
 const SurveyorDash = () => (
   <ThemeProvider theme={theme}>
@@ -46,6 +46,6 @@ const SurveyorDash = () => (
       </Grid>
     </Wrapper>
   </ThemeProvider>
-)
+);
 
 export default SurveyorDash;

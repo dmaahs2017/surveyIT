@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   ThemeProvider,
   CSSReset,
@@ -7,10 +7,10 @@ import {
   Grid,
   Heading,
   List,
-  ListItem
-} from '@chakra-ui/core'
-import {NavBar} from '../components/NavBar';
-import {Wrapper} from '../components/Wrapper';
+  ListItem,
+} from "@chakra-ui/core";
+import { NavBar } from "../components/NavBar";
+import { Wrapper } from "../components/Wrapper";
 
 const SurveyeeDash = () => (
   <ThemeProvider theme={theme}>
@@ -18,7 +18,9 @@ const SurveyeeDash = () => (
     <Wrapper>
       <CSSReset />
       <Flex flexDirection="column">
-        <Heading mb="3rem" textAlign="center">Surveyee Dashboard</Heading>
+        <Heading mb="3rem" textAlign="center">
+          Surveyee Dashboard
+        </Heading>
         <Grid templateColumns="repeat(3, 1fr)" gap={6}>
           <Flex
             alignItems="center"
@@ -54,6 +56,6 @@ const SurveyeeDash = () => (
       </Flex>
     </Wrapper>
   </ThemeProvider>
-)
+);
 
 export default SurveyeeDash;
