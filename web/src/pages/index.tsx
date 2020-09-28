@@ -1,9 +1,10 @@
 import { NavBar } from "../components/NavBar";
+import { About } from "../components/About";
 
 const Index = () => (
   <>
     <NavBar />
-    <div>Hello surveyors and surveyees!</div>
+    <About />
   </>
 );
 
