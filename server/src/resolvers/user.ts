@@ -24,16 +24,16 @@ class UsernamePasswordInput {
 
 @InputType()
 class RegisterInput {
-    @Field()
-    username: string;
-    @Field()
-    email: string;
-    @Field()
-    password: string;
-    @Field()
-    phoneNumber: string;
-    @Field()
-    typeOfUser: string;
+  @Field()
+  username: string;
+  @Field()
+  email: string;
+  @Field()
+  password: string;
+  @Field()
+  phoneNumber: string;
+  @Field()
+  typeOfUser: string;
 }
 
 @ObjectType()
@@ -71,19 +71,20 @@ export class UserResolver {
     @Arg("options") options: RegisterInput,
     @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
-    let hasSpecialCharRegexp = new RegExp("[!@#\$%\^\&*\)\(+=._-]{1,}")
+    let hasSpecialCharRegexp = new RegExp("[!@#$%^&*)(+=._-]{1,}");
     if (!hasSpecialCharRegexp.test(options.password)) {
       return {
         errors: [
           {
             field: "password",
-            message: "password must have at least 1 special character: '[!@#$%^&*)(+=._-]'",
+            message:
+              "password must have at least 1 special character: '[!@#$%^&*)(+=._-]'",
           },
         ],
       };
     }
 
-    let hasDigitsRegexp = new RegExp("[0-9]{1,}")
+    let hasDigitsRegexp = new RegExp("[0-9]{1,}");
     if (!hasDigitsRegexp.test(options.password)) {
       return {
         errors: [
@@ -105,7 +106,9 @@ export class UserResolver {
       };
     }
 
-  let emailRegexp = new RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)");
+    let emailRegexp = new RegExp(
+      "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)"
+    );
     if (!emailRegexp.test(options.email)) {
       return {
         errors: [
@@ -117,8 +120,8 @@ export class UserResolver {
       };
     }
 
-  let validUserTypes = ["SURVEYOR", "SURVEYEE"];
-  if (!validUserTypes.includes(options.typeOfUser.toUpperCase())) {
+    let validUserTypes = ["SURVEYOR", "SURVEYEE"];
+    if (!validUserTypes.includes(options.typeOfUser.toUpperCase())) {
       return {
         errors: [
           {
@@ -127,10 +130,10 @@ export class UserResolver {
           },
         ],
       };
-  }
+    }
 
-  let phoneNumberRegexp = new RegExp("^[0-9]{10}$");
-    if(!phoneNumberRegexp.test(options.phoneNumber)) {
+    let phoneNumberRegexp = new RegExp("^[0-9]{10}$");
+    if (!phoneNumberRegexp.test(options.phoneNumber)) {
       return {
         errors: [
           {
@@ -140,7 +143,6 @@ export class UserResolver {
         ],
       };
     }
-
 
     const hashedPassword = await argon2.hash(options.password);
     let user;
@@ -171,16 +173,15 @@ export class UserResolver {
             },
           ],
         };
-      }
-      else {
+      } else {
         return {
           errors: [
             {
               field: "unknown",
-              message: "Failed inserting user"
-            }
-          ]
-        }
+              message: "Failed inserting user",
+            },
+          ],
+        };
       }
     }
 

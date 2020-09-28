@@ -21,11 +21,11 @@ export class User {
   username!: string;
 
   @Field()
-  @Property({ type: "text", unique:true })
+  @Property({ type: "text", unique: true })
   email!: string;
 
   @Field()
-  @Property({ type: "text", unique:true })
+  @Property({ type: "text", unique: true })
   phoneNumber!: string;
 
   @Field()
