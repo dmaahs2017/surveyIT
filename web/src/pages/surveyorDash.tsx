@@ -27,19 +27,19 @@ const SurveyorDash = () => (
           <Flex justifyContent="center" flexDirection="column">
             <Heading textAlign="center">Open Surveys</Heading>
             <List styleType="disc">
-              <ListItem styleType='"disc"'>Survey Preview Components</ListItem>
+              <ListItem>Survey Preview Components</ListItem>
             </List>
           </Flex>
           <Flex justifyContent="center" flexDirection="column">
             <Heading textAlign="center">Closed Surveys</Heading>
             <List styleType="disc">
-              <ListItem styleType='"disc"'>Survey Preview Components</ListItem>
+              <ListItem>Survey Preview Components</ListItem>
             </List>
           </Flex>
           <Flex justifyContent="center" flexDirection="column">
             <Heading textAlign="center">Other</Heading>
             <List styleType="disc">
-              <ListItem styleType='"disc"'>Survey Preview Components</ListItem>
+              <ListItem>Survey Preview Components</ListItem>
             </List>
           </Flex>
         </Grid>
