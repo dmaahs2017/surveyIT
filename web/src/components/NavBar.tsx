@@ -1,59 +1,47 @@
-import React from "react";
-import { Box, Link, Flex, Button } from "@chakra-ui/core";
-import NextLink from "next/link";
-import { useMeQuery, useLogoutMutation } from "../generated/graphql";
-import { useRouter } from "next/router";
+import React from 'react'
+import {
+  ThemeProvider,
+  CSSReset,
+  theme,
+  Grid,
+  Flex,
+  Heading,
+  Avatar,
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuGroup,
+  MenuDivider,
+} from '@chakra-ui/core'
+import { useMeQuery } from "../generated/graphql";
 
-interface NavBarProps {}
-
-export const NavBar: React.FC<NavBarProps> = ({}) => {
-  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
-  const [{ data, fetching }] = useMeQuery();
-  const router = useRouter();
-  let body = null;
-  let logo = (
-    <h1>
-      <a href="/">SurveyIT</a>
-    </h1>
-  );
-
-  // data is loading
-  if (fetching) {
-    // user not logged in
-  } else if (!data?.me) {
-    body = (
-      <>
-        <NextLink href="/login">
-          <Link mr={2}>login</Link>
-        </NextLink>
-        <NextLink href="/register">
-          <Link>register</Link>
-        </NextLink>
-      </>
-    );
-    // user is logged in
-  } else {
-    body = (
-      <Flex>
-        <Box mr={2}>{data.me.username}</Box>
-        <Button
-          onClick={() => {
-            logout();
-            router.push("/")
-          }}
-          isLoading={logoutFetching}
-          variant="link"
-        >
-          logout
-        </Button>
-      </Flex>
-    );
-  }
+export const NavBar = () => {
+  const [{ data, fetching }] = useMeQuery(); 
+  let greet = data?.me ? ("Hi " + data.me.username) : "Create an account";
 
   return (
-    <Flex bg="tan" p={4}>
-      {logo}
-      <Box ml={"auto"}>{body}</Box>
-    </Flex>
-  );
-};
+
+  <ThemeProvider theme={theme}>
+    <CSSReset />
+    <Grid templateColumns="repeat(2, 1fr)" gap={6} backgroundColor="purple.500">
+      <Flex alignItems="center">
+        <Heading ml={2}>SurveyIT</Heading>
+      </Flex>
+      <Flex alignItems="center" justifyContent="flex-end">
+        <Menu>
+          <MenuButton as={Button}>
+            {greet}
+            <MenuList>
+              <MenuItem>Logout</MenuItem>
+              <MenuItem as="a" href="/login">Login</MenuItem>
+              <MenuItem as="a" href="/register">Register</MenuItem>
+            </MenuList>
+          </MenuButton>
+        </Menu>
+      </Flex>
+    </Grid>
+  </ThemeProvider>
+)
+}
