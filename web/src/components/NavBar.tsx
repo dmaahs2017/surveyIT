@@ -11,6 +11,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Link,
 } from "@chakra-ui/core";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { useRouter } from "next/router";
@@ -18,31 +19,32 @@ import { useRouter } from "next/router";
 export const NavBar = () => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery();
-  let greet = data?.me ? "Hi " + data.me.username : "Create an account";
+  let greet = data?.me ? "Hi " + data.me.username : "Register/Login";
   let items = null;
   let router = useRouter();
 
   if (!data?.me) {
     items = (
       <>
-        <MenuItem as="a" href="/login">
-          Login
-        </MenuItem>
-        <MenuItem as="a" href="/register">
-          Register
-        </MenuItem>
+        <Link href="/login">
+          <MenuItem>Login</MenuItem>
+        </Link>
+        <Link href="/register">
+          <MenuItem>Register</MenuItem>
+        </Link>
       </>
     );
   } else {
+    let dash =
+      data.me.typeOfUser === "SURVEYOR" ? "/surveyorDash" : "/surveyeeDash";
     items = (
       <>
         <MenuItem
           onClick={() => {
-            logout();
-            router.push("/");
+            router.push(dash);
           }}
         >
-          Logout
+          Dashboard
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -50,6 +52,14 @@ export const NavBar = () => {
           }}
         >
           Manage Account
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            logout();
+            router.push("/");
+          }}
+        >
+          Logout
         </MenuItem>
       </>
     );
@@ -64,11 +74,13 @@ export const NavBar = () => {
         backgroundColor="purple.500"
       >
         <Flex alignItems="center">
-          <Heading ml={2}>SurveyIT</Heading>
+          <Link href="/" ml="2">
+            <Heading ml={2}>SurveyIT</Heading>
+          </Link>
         </Flex>
         <Flex alignItems="center" justifyContent="flex-end">
           <Menu>
-            <MenuButton as={Button}>
+            <MenuButton as={Button} mr="2" mb="2" mt="2">
               {greet}
               <MenuList>{items}</MenuList>
             </MenuButton>
