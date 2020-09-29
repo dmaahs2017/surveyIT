@@ -1,6 +1,6 @@
 import React from "react";
-import { Formik, Form } from "formik";
-import { Checkbox, Box, Button } from "@chakra-ui/core";
+import { label, Formik, Field, Form } from "formik";
+import { Text, Checkbox, Box, Button } from "@chakra-ui/core";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
 import { useRegisterMutation } from "../generated/graphql";
@@ -23,15 +23,21 @@ const Register: React.FC<registerProps> = ({}) => {
             email: "",
             phoneNumber: "",
             typeOfUser: "",
+            isSurveyor: false,
             password: "",
           }}
           onSubmit={async (values, { setErrors }) => {
+            values.typeOfUser = values.isSurveyor ? "surveyor" : "surveyee";
             const response = await register(values);
             if (response.data?.register.errors) {
               setErrors(toErrorMap(response.data.register.errors));
+              console.log(response.data.register.errors);
             } else if (response.data?.register.user) {
-              // worked
-              router.push("/");
+              if ( values.isSurveyor ) {
+                router.push("/surveyorDash");
+              } else {
+                router.push("/surveyeeDash");
+              }
             } else {
               console.log(response);
             }
@@ -67,9 +73,10 @@ const Register: React.FC<registerProps> = ({}) => {
                 />
               </Box>
               <Box mt={4}>
-                <Checkbox name="Is Surveyor" placeholder="password">
-                  Check here if making a surveyor account
-                </Checkbox>
+                <label>
+                  <Field type="checkbox" name="isSurveyor" />
+                  {" Check here if making a surveyor account"}
+                </label>
               </Box>
 
               <Button

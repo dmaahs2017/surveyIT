@@ -23,7 +23,11 @@ const Login: React.FC<{}> = ({}) => {
               setErrors(toErrorMap(response.data.login.errors));
             } else if (response.data?.login.user) {
               // worked
-              router.push("/surveyeeDash");
+              if (response.data?.login.user.typeOfUser === "SURVEYEE") {
+                router.push("/surveyeeDash");
+              } else {
+                router.push("/surveyorDash");
+              }
             }
           }}
         >
