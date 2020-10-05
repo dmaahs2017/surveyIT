@@ -3,101 +3,94 @@ things that might affect you while working on the html:
 scrollbars are disabled
 <h1> are centered
 */
-html *
-{
-   font-size: 1em;
-   font-family: Arial;
+html * {
+  font-size: 1em;
+  font-family: Arial;
 }
 
-body, html {
+body,
+html {
   height: 100%;
   overflow: hidden;
-  background-color: white ;
+  background-color: white;
 }
 
-
-
 .container {
-    padding: 1%;
-    height: 95vh;
+  padding: 1%;
+  height: 95vh;
 }
 
 .columns {
-    display: flex;
-    justify-content: space-between;
-    margin:1em;
+  display: flex;
+  justify-content: space-between;
+  margin: 1em;
 }
 
-.col1{
-    width:25%;
-    margin: 1%;
+.col1 {
+  width: 25%;
+  margin: 1%;
 }
 
-.col2{
-    width:25%;
-    margin: 1%;
+.col2 {
+  width: 25%;
+  margin: 1%;
 }
 
-.col3{
-    width:25%;
-    margin: 1%;
+.col3 {
+  width: 25%;
+  margin: 1%;
 }
 
 .img {
-    align-self: center;
-    max-width: 100%;
+  align-self: center;
+  max-width: 100%;
 }
 
 .title {
-    font-size: 2em;
+  font-size: 2em;
 }
 
 .userInfo {
-    width: 50vw;
-    margin: auto; 
-    text-align: left;
-    border: 2px solid #7851a9;
-    padding: 1vw;
+  width: 50vw;
+  margin: auto;
+  text-align: left;
+  border: 2px solid #7851a9;
+  padding: 1vw;
 }
 
 .profilePic {
-    width: 10vh;
-    height: auto;
-    margin: auto;
-    margin-bottom: 0.5vh;
-}    
+  width: 10vh;
+  height: auto;
+  margin: auto;
+  margin-bottom: 0.5vh;
+}
 
 .simpleField {
-    margin: 0.2vh;
-    border: 1px solid black;
-    width: 15vw;
-    padding: 0.2em;
-    
+  margin: 0.2vh;
+  border: 1px solid black;
+  width: 15vw;
+  padding: 0.2em;
 }
 
 h1 {
-    text-align: center;
+  text-align: center;
 }
 
-
-html *
-{
-   font-size: 1em;
-   font-family: Arial;
+html * {
+  font-size: 1em;
+  font-family: Arial;
 }
 
 @media (max-aspect-ratio: 4/3) {
+  .col1 {
+    width: 40%;
+  }
 
-    .col1 {
-        width: 40%;
-    }
+  .col2 {
+    width: 60%;
+  }
 
-    .col2 {
-        width: 60%;
-    }
-    
-    .col3 {
-        width: 0%;
-    }
-    
+  .col3 {
+    width: 0%;
+  }
 }

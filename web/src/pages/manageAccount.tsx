@@ -1,40 +1,38 @@
 import React from "react";
 import { NavBar } from "../components/NavBar";
+import { Heading, Avatar, Text, Button } from "@chakra-ui/core";
 
 const manageAccount: React.FC<{}> = ({}) => {
-
-    return (
-      <div>
-        
-        <NavBar />
-            <h1 className="title">Account</h1>
-            <div className="container">
-                <div className="userInfo">
-                    <img className="profilePic" src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" />
-                    <p style={{textAlign:"center"}}>AccountName</p>
-                    { /* delte from here */}
-                    <p>Name</p>
-                    <input className="simpleField" type="text" />
-                    <p>Email</p>
-                    <input className="simpleField" type="email" />
-                    <p>Password</p>
-                    <input className="simpleField" type="password" />
-                    <p>Phone Number</p>
-                    <input className="simpleField" type="text" />
-                    <p>Income</p>
-                    <input className="simpleField" type="text" />
-                    <p>Education</p>
-                    <input className="simpleField" type="text" />
-                    <p>Gender</p>
-                    <input className="simpleField" type="text" />
-                    <p></p>
-                    <button>Edit Account</button>
-                { /* To Here */}
-                </div>
-            </div>
+  return (
+    <div>
+      <NavBar />
+      <Heading>Account</Heading>
+      <div className="container">
+        <div className="userInfo">
+          <Avatar />
+          <Text style={{ textAlign: "center" }}>AccountName</Text>
+          {/* delte from here */}
+          <Text>Name</Text>
+          <input className="simpleField" type="text" />
+          <Text>Email</Text>
+          <input className="simpleField" type="email" />
+          <Text>Password</Text>
+          <input className="simpleField" type="password" />
+          <Text>Phone Number</Text>
+          <input className="simpleField" type="text" />
+          <Text>Income</Text>
+          <input className="simpleField" type="text" />
+          <Text>Education</Text>
+          <input className="simpleField" type="text" />
+          <Text>Gender</Text>
+          <input className="simpleField" type="text" />
+          <Text></Text>
+          <Button>Edit Account</Button>
+          {/* To Here */}
+        </div>
       </div>
-    );
-  };
-  
-  export default manageAccount;
-  
+    </div>
+  );
+};
+
+export default manageAccount;
