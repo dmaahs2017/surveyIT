@@ -1,56 +1,92 @@
 import React from "react";
-import { Box, Link, Flex, Button } from "@chakra-ui/core";
-import NextLink from "next/link";
+import {
+  ThemeProvider,
+  CSSReset,
+  theme,
+  Grid,
+  Flex,
+  Heading,
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Link,
+} from "@chakra-ui/core";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
+import { useRouter } from "next/router";
 
-interface NavBarProps {}
-
-export const NavBar: React.FC<NavBarProps> = ({}) => {
+export const NavBar = () => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery();
-  let body = null;
-  let logo = (
-    <h1>
-      <a href="/">SurveyIT</a>
-    </h1>
-  );
+  let greet = data?.me ? "Hi " + data.me.username : "Register/Login";
+  let items = null;
+  let router = useRouter();
 
-  // data is loading
-  if (fetching) {
-    // user not logged in
-  } else if (!data?.me) {
-    body = (
+  if (!data?.me) {
+    items = (
       <>
-        <NextLink href="/login">
-          <Link mr={2}>login</Link>
-        </NextLink>
-        <NextLink href="/register">
-          <Link>register</Link>
-        </NextLink>
+        <Link href="/login">
+          <MenuItem>Login</MenuItem>
+        </Link>
+        <Link href="/register">
+          <MenuItem>Register</MenuItem>
+        </Link>
       </>
     );
-    // user is logged in
   } else {
-    body = (
-      <Flex>
-        <Box mr={2}>{data.me.username}</Box>
-        <Button
+    let dash =
+      data.me.typeOfUser === "SURVEYOR" ? "/surveyorDash" : "/surveyeeDash";
+    items = (
+      <>
+        <MenuItem
+          onClick={() => {
+            router.push(dash);
+          }}
+        >
+          Dashboard
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            router.push("/manageAccount");
+          }}
+        >
+          Manage Account
+        </MenuItem>
+        <MenuItem
           onClick={() => {
             logout();
+            router.push("/");
           }}
-          isLoading={logoutFetching}
-          variant="link"
         >
-          logout
-        </Button>
-      </Flex>
+          Logout
+        </MenuItem>
+      </>
     );
   }
 
   return (
-    <Flex bg="tan" p={4}>
-      {logo}
-      <Box ml={"auto"}>{body}</Box>
-    </Flex>
+    <ThemeProvider theme={theme}>
+      <CSSReset />
+      <Grid
+        templateColumns="repeat(2, 1fr)"
+        gap={6}
+        backgroundColor="purple.500"
+      >
+        <Flex alignItems="center">
+          <Link href="/" ml="2">
+            <Heading ml={2}>SurveyIT</Heading>
+          </Link>
+        </Flex>
+        <Flex alignItems="center" justifyContent="flex-end">
+          <Menu>
+            <MenuButton as={Button} mr="2" mb="2" mt="2">
+              {greet}
+              <MenuList>{items}</MenuList>
+            </MenuButton>
+          </Menu>
+        </Flex>
+      </Grid>
+    </ThemeProvider>
   );
 };
