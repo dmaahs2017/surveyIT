@@ -9,6 +9,7 @@ import {
   RegisterMutation,
   LogoutMutation,
 } from "../generated/graphql";
+import "./style.css";
 
 function betterUpdateQuery<Result, Query>(
   cache: Cache,
