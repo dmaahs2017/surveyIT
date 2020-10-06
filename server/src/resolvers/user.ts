@@ -12,7 +12,7 @@ import { MyContext } from "../types";
 import { User } from "../entities/User";
 import argon2 from "argon2";
 import { EntityManager } from "@mikro-orm/postgresql";
-import { COOKIE_NAME } from "../constants";
+import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from "../constants";
 
 @InputType()
 class UsernamePasswordInput {
@@ -193,6 +193,49 @@ export class UserResolver {
     //this is a weird thing with how the naming works. DB auto converts to snake case but graphql expects camelCase
     user.phoneNumber = user.phone_number;
     user.typeOfUser = user.type_of_user;
+    return { user };
+  }
+
+  @Mutation(() => UserResponse)
+  async changePassword(
+    @Arg("token") token: string,
+    @Arg("newPassword") newPassword: string,
+    @Ctx() { redis, em, req }: MyContext
+  ): Promise<UserResponse> {
+    //validate password
+    const key = FORGET_PASSWORD_PREFIX + token;
+    const userId = await redis.get(key);
+    if (!userId) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "token expired",
+          }
+        ],
+      };
+    }
+
+    const user = await em.findOne(User, {id: parseInt(userId) });
+
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "user no longer exists",
+          },
+        ]
+      };
+    }
+
+    user.password = await argon2.hash(newPassword);
+    await em.persistAndFlush(user);
+
+    await redis.del(key);
+
+    req.session.userId = user.id;
+
     return { user };
   }
 
