@@ -42,7 +42,6 @@ Then open the repo folder in vscode
 open a terminal in VScode and run these commands in order
 ```bash
 cd server
-npm install
 yarn install
 docker-compose up
 //open a new terminal
@@ -70,7 +69,6 @@ Graphql is the interface for the frontend application. This page is where we can
 ## 3. Setup Frontend
 ```
 cd surveyIT/web
-npm install
 yarn install
 ```
 then run the FE with 

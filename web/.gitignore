@@ -5,10 +5,6 @@ node_modules
 /.pnp
 .pnp.js
 
-
-# generated code
-src/generated
-
 # testing
 /coverage
 
