@@ -13,6 +13,8 @@ import { User } from "../entities/User";
 import argon2 from "argon2";
 import { EntityManager } from "@mikro-orm/postgresql";
 import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from "../constants";
+import { v4 } from "uuid"
+import { sendEmail } from "../utils/sendEmail"
 
 @InputType()
 class UsernamePasswordInput {
@@ -237,6 +239,33 @@ export class UserResolver {
     req.session.userId = user.id;
 
     return { user };
+  }
+
+  @Mutation(() => Boolean)
+  async forgotPassword(
+    @Arg("email") email: string,
+    @Ctx() {em, redis}: MyContext
+  ) {
+    const user = await em.findOne(User, {email});
+    if (!user) {
+      //no email in the db
+      console.log("FAILED");
+      return true;
+    }
+
+    const token = v4();
+
+    await sendEmail(
+      email,
+      `<a href="http://localhost:3000/change-password/${token}">reset password</a>`
+    );
+    await redis.set(
+      FORGET_PASSWORD_PREFIX + token,
+      user.id,
+      "ex",
+      1000 * 60 * 60 * 24 * 3
+    ); // 3 days
+    return true;
   }
 
   @Mutation(() => UserResponse)
