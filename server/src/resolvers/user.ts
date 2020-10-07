@@ -12,7 +12,9 @@ import { MyContext } from "../types";
 import { User } from "../entities/User";
 import argon2 from "argon2";
 import { EntityManager } from "@mikro-orm/postgresql";
-import { COOKIE_NAME } from "../constants";
+import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from "../constants";
+import { v4 } from "uuid"
+import { sendEmail } from "../utils/sendEmail"
 
 @InputType()
 class UsernamePasswordInput {
@@ -194,6 +196,76 @@ export class UserResolver {
     user.phoneNumber = user.phone_number;
     user.typeOfUser = user.type_of_user;
     return { user };
+  }
+
+  @Mutation(() => UserResponse)
+  async changePassword(
+    @Arg("token") token: string,
+    @Arg("newPassword") newPassword: string,
+    @Ctx() { redis, em, req }: MyContext
+  ): Promise<UserResponse> {
+    //validate password
+    const key = FORGET_PASSWORD_PREFIX + token;
+    const userId = await redis.get(key);
+    if (!userId) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "token expired",
+          }
+        ],
+      };
+    }
+
+    const user = await em.findOne(User, {id: parseInt(userId) });
+
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "user no longer exists",
+          },
+        ]
+      };
+    }
+
+    user.password = await argon2.hash(newPassword);
+    await em.persistAndFlush(user);
+
+    await redis.del(key);
+
+    req.session.userId = user.id;
+
+    return { user };
+  }
+
+  @Mutation(() => Boolean)
+  async forgotPassword(
+    @Arg("email") email: string,
+    @Ctx() {em, redis}: MyContext
+  ) {
+    const user = await em.findOne(User, {email});
+    if (!user) {
+      //no email in the db
+      console.log("FAILED");
+      return true;
+    }
+
+    const token = v4();
+
+    await sendEmail(
+      email,
+      `<a href="http://localhost:3000/change-password/${token}">reset password</a>`
+    );
+    await redis.set(
+      FORGET_PASSWORD_PREFIX + token,
+      user.id,
+      "ex",
+      1000 * 60 * 60 * 24 * 3
+    ); // 3 days
+    return true;
   }
 
   @Mutation(() => UserResponse)
