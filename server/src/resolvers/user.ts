@@ -1,59 +1,13 @@
-import {
-  Resolver,
-  Mutation,
-  Arg,
-  InputType,
-  Field,
-  Ctx,
-  ObjectType,
-  Query,
-} from "type-graphql";
+import { Resolver, Mutation, Arg, Ctx, Query } from "type-graphql";
 import { MyContext } from "../types";
 import { User } from "../entities/User";
 import argon2 from "argon2";
 import { EntityManager } from "@mikro-orm/postgresql";
 import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from "../constants";
-import { v4 } from "uuid"
-import { sendEmail } from "../utils/sendEmail"
-
-@InputType()
-class UsernamePasswordInput {
-  @Field()
-  username: string;
-  @Field()
-  password: string;
-}
-
-@InputType()
-class RegisterInput {
-  @Field()
-  username: string;
-  @Field()
-  email: string;
-  @Field()
-  password: string;
-  @Field()
-  phoneNumber: string;
-  @Field()
-  typeOfUser: string;
-}
-
-@ObjectType()
-class FieldError {
-  @Field()
-  field: string;
-  @Field()
-  message: string;
-}
-
-@ObjectType()
-class UserResponse {
-  @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
-
-  @Field(() => User, { nullable: true })
-  user?: User;
-}
+import { v4 } from "uuid";
+import { sendEmail } from "../utils/sendEmail";
+import { UserResponse } from "./object-types";
+import { RegisterInput, UsernamePasswordInput } from "./input-types";
 
 @Resolver()
 export class UserResolver {
@@ -213,12 +167,12 @@ export class UserResolver {
           {
             field: "token",
             message: "token expired",
-          }
+          },
         ],
       };
     }
 
-    const user = await em.findOne(User, {id: parseInt(userId) });
+    const user = await em.findOne(User, { id: parseInt(userId) });
 
     if (!user) {
       return {
@@ -227,7 +181,7 @@ export class UserResolver {
             field: "token",
             message: "user no longer exists",
           },
-        ]
+        ],
       };
     }
 
@@ -244,9 +198,9 @@ export class UserResolver {
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("email") email: string,
-    @Ctx() {em, redis}: MyContext
+    @Ctx() { em, redis }: MyContext
   ) {
-    const user = await em.findOne(User, {email});
+    const user = await em.findOne(User, { email });
     if (!user) {
       //no email in the db
       console.log("FAILED");

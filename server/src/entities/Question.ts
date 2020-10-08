@@ -1,7 +1,13 @@
-import { OneToMany, Entity, PrimaryKey, Property, ManyToOne } from "@mikro-orm/core";
+import {
+  OneToMany,
+  Entity,
+  PrimaryKey,
+  Property,
+  ManyToOne,
+} from "@mikro-orm/core";
 import { ObjectType, Field } from "type-graphql";
-import { Survey } from "./Survey"
-import {QuestionAnswer} from "./QuestionAnswer"
+import { Survey } from "./Survey";
+import { QuestionAnswer } from "./QuestionAnswer";
 
 @ObjectType()
 @Entity()
@@ -25,6 +31,6 @@ export class Question {
   @ManyToOne(() => Survey)
   survey!: Survey;
 
-  @OneToMany(() => QuestionAnswer, qa => qa.question)
+  @OneToMany(() => QuestionAnswer, (qa) => qa.question)
   answers!: QuestionAnswer[];
 }

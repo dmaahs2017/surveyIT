@@ -1,7 +1,7 @@
 import { Entity, PrimaryKey, Property, ManyToOne } from "@mikro-orm/core";
 import { ObjectType, Field } from "type-graphql";
-import { Question } from "./Question"
-import { User } from "./User"
+import { Question } from "./Question";
+import { User } from "./User";
 
 @ObjectType()
 @Entity()

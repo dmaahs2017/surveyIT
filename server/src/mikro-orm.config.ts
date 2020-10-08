@@ -2,9 +2,9 @@ import { __prod__ } from "./constants";
 import { MikroORM } from "@mikro-orm/core";
 import path from "path";
 import { User } from "./entities/User";
-import { Survey } from "./entities/Survey"
-import {Question} from "./entities/Question"
-import {QuestionAnswer} from "./entities/QuestionAnswer"
+import { Survey } from "./entities/Survey";
+import { Question } from "./entities/Question";
+import { QuestionAnswer } from "./entities/QuestionAnswer";
 
 export default {
   migrations: {

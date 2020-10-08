@@ -1,7 +1,7 @@
 import { OneToMany, Entity, PrimaryKey, Property } from "@mikro-orm/core";
 import { ObjectType, Field } from "type-graphql";
-import { Survey } from "./Survey"
-import { QuestionAnswer } from "./QuestionAnswer"
+import { Survey } from "./Survey";
+import { QuestionAnswer } from "./QuestionAnswer";
 
 @ObjectType()
 @Entity()
@@ -29,10 +29,10 @@ export class User {
   @Property({ type: "text" })
   password!: string;
 
-  @OneToMany(() => Survey, survey => survey.creator)
+  @OneToMany(() => Survey, (survey) => survey.creator)
   surveys: Survey[];
 
-  @OneToMany(() => QuestionAnswer, qa => qa.user)
+  @OneToMany(() => QuestionAnswer, (qa) => qa.user)
   answers: QuestionAnswer[];
 
   @Field(() => String)

@@ -6,6 +6,7 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/user";
+import { SurveyResolver } from "./resolvers/survey";
 import redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
@@ -46,7 +47,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, SurveyResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({ em: orm.em, req, res }),
