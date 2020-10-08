@@ -30,8 +30,6 @@ export class SurveyResolver {
       console.log(err);
     }
 
-    console.log("=========== DBG ==============");
-    console.log(survey);
     return survey;
   }
 

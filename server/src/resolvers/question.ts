@@ -1,7 +1,7 @@
 import { Query, Resolver, Arg, Ctx, Int, Mutation } from "type-graphql";
-import { Question } from "../entities/Question"
-import { PaginatedQuestions } from "./object-types"
-import {MyContext} from "../types"
+import { Question } from "../entities/Question";
+import { PaginatedQuestions } from "./object-types";
+import { MyContext } from "../types";
 import { EntityManager } from "@mikro-orm/postgresql";
 
 @Resolver()
@@ -23,9 +23,9 @@ export class QuestionResolver {
           created_at: new Date(),
           updated_at: new Date(),
         })
-      .returning("*");
+        .returning("*");
       question = result[0];
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
 
@@ -36,14 +36,14 @@ export class QuestionResolver {
   async questions(
     @Arg("limit", () => Int) limit: number,
     @Arg("offset", () => Int) offset: number,
-    @Arg("survey_id", () => Int, {nullable: true}) survey_id: number | null,
-    @Ctx() { em  }: MyContext
+    @Arg("survey_id", () => Int, { nullable: true }) survey_id: number | null,
+    @Ctx() { em }: MyContext
   ): Promise<PaginatedQuestions> {
     let questions, count;
     if (survey_id) {
       [questions, count] = await (em as EntityManager).findAndCount(
         Question,
-        {survey: {id: survey_id}},
+        { survey: { id: survey_id } },
         { limit: limit, offset: offset }
       );
     } else {
@@ -58,6 +58,6 @@ export class QuestionResolver {
       questions: questions,
       total: count,
       hasMore: count - (offset + limit) > 0,
-    }
+    };
   }
 }

@@ -7,7 +7,7 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/user";
 import { SurveyResolver } from "./resolvers/survey";
-import { QuestionResolver } from "./resolvers/question"
+import { QuestionResolver } from "./resolvers/question";
 import redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";

@@ -5,7 +5,7 @@ query questions($limit: Int!, $offset: Int!, $survey_id: Int!) {
     questions {
       id
       question
-    	survey {
+      survey {
         id
       }
     }

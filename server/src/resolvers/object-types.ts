@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "type-graphql";
 import { User } from "../entities/User";
 import { Survey } from "../entities/Survey";
-import { Question } from "../entities/Question"
+import { Question } from "../entities/Question";
 
 @ObjectType()
 export class FieldError {
