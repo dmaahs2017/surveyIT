@@ -4,7 +4,8 @@ import { InputType, Field } from "type-graphql";
 export class SurveyInput {
   @Field()
   name: string;
-
+  @Field()
+  creator_id: number;
   @Field()
   description?: string;
 }

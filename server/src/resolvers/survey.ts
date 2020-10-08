@@ -1,37 +1,56 @@
-import { Resolver, Arg, Ctx, Query, Int } from "type-graphql";
+import { Resolver, Arg, Ctx, Query, Int, Mutation } from "type-graphql";
 import { EntityManager } from "@mikro-orm/postgresql";
 import { PaginatedSurveys } from "./object-types";
 import { MyContext } from "../types";
 import { Survey } from "../entities/Survey";
+import { SurveyInput } from "./input-types";
 
 @Resolver()
 export class SurveyResolver {
+  @Mutation(() => Survey)
+  async createSurvey(
+    @Arg("options") options: SurveyInput,
+    @Ctx() { em }: MyContext
+  ) {
+    let survey;
+    try {
+      const result = await (em as EntityManager)
+        .createQueryBuilder(Survey)
+        .getKnexQuery()
+        .insert({
+          name: options.name,
+          description: options.description ? options.description : null,
+          creator_id: options.creator_id,
+          created_at: new Date(),
+          updated_at: new Date(),
+        })
+        .returning("*");
+      survey = result[0];
+    } catch (err) {
+      console.log(err);
+    }
+
+    console.log("=========== DBG ==============");
+    console.log(survey);
+    return survey;
+  }
+
   @Query(() => PaginatedSurveys)
   async surveys(
     @Arg("limit", () => Int) limit: number,
-    @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
+    @Arg("offset", () => Int, { nullable: true }) offset: number,
     @Ctx() { em }: MyContext
   ): Promise<PaginatedSurveys> {
-    // 20 -> 21
-    const realLimit = Math.min(50, limit);
-    const reaLimitPlusOne = realLimit + 1;
-
-    const replacements: any[] = [reaLimitPlusOne];
-
-    if (cursor) {
-      replacements.push(new Date(parseInt(cursor)));
-    }
-
     const [surveys, count] = await (em as EntityManager).findAndCount(
       Survey,
       {},
-      { limit: realLimit }
+      { limit: limit, offset: offset }
     );
 
     return {
       surveys: surveys,
       total: count,
-      hasMore: surveys.length === reaLimitPlusOne,
+      hasMore: count - (offset + limit) > 0,
     };
   }
 }
