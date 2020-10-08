@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "type-graphql";
 import { User } from "../entities/User";
 import { Survey } from "../entities/Survey";
+import { Question } from "../entities/Question"
 
 @ObjectType()
 export class FieldError {
@@ -32,6 +33,18 @@ export class SurveyResponse {
 export class PaginatedSurveys {
   @Field(() => [Survey])
   surveys: Survey[];
+
+  @Field()
+  total: number;
+
+  @Field()
+  hasMore: boolean;
+}
+
+@ObjectType()
+export class PaginatedQuestions {
+  @Field(() => [Question])
+  questions: Question[];
 
   @Field()
   total: number;

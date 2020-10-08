@@ -28,6 +28,7 @@ export class Question {
   @Property()
   question!: String;
 
+  @Field(() => Survey)
   @ManyToOne(() => Survey)
   survey!: Survey;
 
