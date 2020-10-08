@@ -1,0 +1,13 @@
+query questions($limit: Int!, $offset: Int!, $survey_id: Int!) {
+  questions(limit: $limit, offset: $offset, survey_id: $survey_id) {
+    total
+    hasMore
+    questions {
+      id
+      question
+      survey {
+        id
+      }
+    }
+  }
+}

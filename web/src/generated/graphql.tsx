@@ -15,17 +15,65 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
+  surveys: PaginatedSurveys;
+  questions: PaginatedQuestions;
+};
+
+
+export type QuerySurveysArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryQuestionsArgs = {
+  survey_id?: Maybe<Scalars['Int']>;
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
 };
 
 export type User = {
   __typename?: 'User';
   id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
   username: Scalars['String'];
   email: Scalars['String'];
   phoneNumber: Scalars['String'];
   typeOfUser: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type PaginatedSurveys = {
+  __typename?: 'PaginatedSurveys';
+  surveys: Array<Survey>;
+  total: Scalars['Float'];
+  hasMore: Scalars['Boolean'];
+};
+
+export type Survey = {
+  __typename?: 'Survey';
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  creator: User;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type PaginatedQuestions = {
+  __typename?: 'PaginatedQuestions';
+  questions: Array<Question>;
+  total: Scalars['Float'];
+  hasMore: Scalars['Boolean'];
+};
+
+export type Question = {
+  __typename?: 'Question';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  question: Scalars['String'];
+  survey: Survey;
 };
 
 export type Mutation = {
@@ -35,6 +83,8 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
+  createSurvey: Survey;
+  createQuestion: Question;
 };
 
 
@@ -56,6 +106,17 @@ export type MutationForgotPasswordArgs = {
 
 export type MutationLoginArgs = {
   options: UsernamePasswordInput;
+};
+
+
+export type MutationCreateSurveyArgs = {
+  options: SurveyInput;
+};
+
+
+export type MutationCreateQuestionArgs = {
+  survey_id: Scalars['Int'];
+  q_str: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -81,6 +142,12 @@ export type RegisterInput = {
 export type UsernamePasswordInput = {
   username: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type SurveyInput = {
+  name: Scalars['String'];
+  creator_id: Scalars['Float'];
+  description: Scalars['String'];
 };
 
 export type RegularUserFragment = (
@@ -140,6 +207,29 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'logout'>
+);
+
+export type QuestionsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  survey_id: Scalars['Int'];
+}>;
+
+
+export type QuestionsQuery = (
+  { __typename?: 'Query' }
+  & { questions: (
+    { __typename?: 'PaginatedQuestions' }
+    & Pick<PaginatedQuestions, 'total' | 'hasMore'>
+    & { questions: Array<(
+      { __typename?: 'Question' }
+      & Pick<Question, 'id' | 'question'>
+      & { survey: (
+        { __typename?: 'Survey' }
+        & Pick<Survey, 'id'>
+      ) }
+    )> }
+  ) }
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -232,6 +322,25 @@ export const LogoutDocument = gql`
 
 export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
+};
+export const QuestionsDocument = gql`
+    query questions($limit: Int!, $offset: Int!, $survey_id: Int!) {
+  questions(limit: $limit, offset: $offset, survey_id: $survey_id) {
+    total
+    hasMore
+    questions {
+      id
+      question
+      survey {
+        id
+      }
+    }
+  }
+}
+    `;
+
+export function useQuestionsQuery(options: Omit<Urql.UseQueryArgs<QuestionsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<QuestionsQuery>({ query: QuestionsDocument, ...options });
 };
 export const RegisterDocument = gql`
     mutation Register($username: String!, $email: String!, $phoneNumber: String!, $typeOfUser: String!, $password: String!) {
