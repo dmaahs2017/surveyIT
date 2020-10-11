@@ -209,29 +209,6 @@ export type LogoutMutation = (
   & Pick<Mutation, 'logout'>
 );
 
-export type QuestionsQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  survey_id: Scalars['Int'];
-}>;
-
-
-export type QuestionsQuery = (
-  { __typename?: 'Query' }
-  & { questions: (
-    { __typename?: 'PaginatedQuestions' }
-    & Pick<PaginatedQuestions, 'total' | 'hasMore'>
-    & { questions: Array<(
-      { __typename?: 'Question' }
-      & Pick<Question, 'id' | 'question'>
-      & { survey: (
-        { __typename?: 'Survey' }
-        & Pick<Survey, 'id'>
-      ) }
-    )> }
-  ) }
-);
-
 export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
@@ -264,6 +241,29 @@ export type MeQuery = (
     { __typename?: 'User' }
     & RegularUserFragment
   )> }
+);
+
+export type QuestionsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  survey_id: Scalars['Int'];
+}>;
+
+
+export type QuestionsQuery = (
+  { __typename?: 'Query' }
+  & { questions: (
+    { __typename?: 'PaginatedQuestions' }
+    & Pick<PaginatedQuestions, 'total' | 'hasMore'>
+    & { questions: Array<(
+      { __typename?: 'Question' }
+      & Pick<Question, 'id' | 'question'>
+      & { survey: (
+        { __typename?: 'Survey' }
+        & Pick<Survey, 'id'>
+      ) }
+    )> }
+  ) }
 );
 
 export const RegularUserFragmentDoc = gql`
@@ -323,25 +323,6 @@ export const LogoutDocument = gql`
 export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
-export const QuestionsDocument = gql`
-    query questions($limit: Int!, $offset: Int!, $survey_id: Int!) {
-  questions(limit: $limit, offset: $offset, survey_id: $survey_id) {
-    total
-    hasMore
-    questions {
-      id
-      question
-      survey {
-        id
-      }
-    }
-  }
-}
-    `;
-
-export function useQuestionsQuery(options: Omit<Urql.UseQueryArgs<QuestionsQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<QuestionsQuery>({ query: QuestionsDocument, ...options });
-};
 export const RegisterDocument = gql`
     mutation Register($username: String!, $email: String!, $phoneNumber: String!, $typeOfUser: String!, $password: String!) {
   register(options: {username: $username, email: $email, phoneNumber: $phoneNumber, typeOfUser: $typeOfUser, password: $password}) {
@@ -369,4 +350,23 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const QuestionsDocument = gql`
+    query questions($limit: Int!, $offset: Int!, $survey_id: Int!) {
+  questions(limit: $limit, offset: $offset, survey_id: $survey_id) {
+    total
+    hasMore
+    questions {
+      id
+      question
+      survey {
+        id
+      }
+    }
+  }
+}
+    `;
+
+export function useQuestionsQuery(options: Omit<Urql.UseQueryArgs<QuestionsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<QuestionsQuery>({ query: QuestionsDocument, ...options });
 };
