@@ -39,6 +39,9 @@ export class PaginatedSurveys {
 
   @Field()
   hasMore: boolean;
+
+  @Field()
+  id: string;
 }
 
 @ObjectType()

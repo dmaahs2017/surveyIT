@@ -4,6 +4,7 @@ import { PaginatedSurveys } from "./object-types";
 import { MyContext } from "../types";
 import { Survey } from "../entities/Survey";
 import { SurveyInput } from "./input-types";
+import { v4 } from "uuid";
 
 @Resolver()
 export class SurveyResolver {
@@ -49,6 +50,7 @@ export class SurveyResolver {
       surveys: surveys,
       total: count,
       hasMore: count - (offset + limit) > 0,
+      id: v4(),
     };
   }
 }

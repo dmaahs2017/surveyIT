@@ -1,0 +1,10 @@
+query Surveys($limit: Int!, $offset: Int!) {
+  surveys(offset: $offset, limit: $limit) {
+    total
+    hasMore
+    id
+    surveys {
+      ...SurveySnippet
+    }
+  }
+}
