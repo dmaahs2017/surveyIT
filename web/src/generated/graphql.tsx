@@ -16,6 +16,7 @@ export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
   surveys: PaginatedSurveys;
+  survey: SurveyResponse;
   questions: PaginatedQuestions;
 };
 
@@ -23,6 +24,11 @@ export type Query = {
 export type QuerySurveysArgs = {
   offset?: Maybe<Scalars['Int']>;
   limit: Scalars['Int'];
+};
+
+
+export type QuerySurveyArgs = {
+  survey_id: Scalars['Int'];
 };
 
 
@@ -59,6 +65,18 @@ export type Survey = {
   creator: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+};
+
+export type SurveyResponse = {
+  __typename?: 'SurveyResponse';
+  errors?: Maybe<Array<FieldError>>;
+  survey?: Maybe<Survey>;
+};
+
+export type FieldError = {
+  __typename?: 'FieldError';
+  field: Scalars['String'];
+  message: Scalars['String'];
 };
 
 export type PaginatedQuestions = {
@@ -124,12 +142,6 @@ export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
-};
-
-export type FieldError = {
-  __typename?: 'FieldError';
-  field: Scalars['String'];
-  message: Scalars['String'];
 };
 
 export type RegisterInput = {
@@ -286,6 +298,25 @@ export type QuestionsQuery = (
   ) }
 );
 
+export type SurveyQueryVariables = Exact<{
+  survey_id: Scalars['Int'];
+}>;
+
+
+export type SurveyQuery = (
+  { __typename?: 'Query' }
+  & { survey: (
+    { __typename?: 'SurveyResponse' }
+    & { survey?: Maybe<(
+      { __typename?: 'Survey' }
+      & SurveySnippetFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'message' | 'field'>
+    )>> }
+  ) }
+);
+
 export type SurveysQueryVariables = Exact<{
   limit: Scalars['Int'];
   offset: Scalars['Int'];
@@ -426,6 +457,23 @@ export const QuestionsDocument = gql`
 
 export function useQuestionsQuery(options: Omit<Urql.UseQueryArgs<QuestionsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<QuestionsQuery>({ query: QuestionsDocument, ...options });
+};
+export const SurveyDocument = gql`
+    query Survey($survey_id: Int!) {
+  survey(survey_id: $survey_id) {
+    survey {
+      ...SurveySnippet
+    }
+    errors {
+      message
+      field
+    }
+  }
+}
+    ${SurveySnippetFragmentDoc}`;
+
+export function useSurveyQuery(options: Omit<Urql.UseQueryArgs<SurveyQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<SurveyQuery>({ query: SurveyDocument, ...options });
 };
 export const SurveysDocument = gql`
     query Surveys($limit: Int!, $offset: Int!) {

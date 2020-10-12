@@ -4,6 +4,7 @@ import { PaginatedSurveys } from "./object-types";
 import { MyContext } from "../types";
 import { Survey } from "../entities/Survey";
 import { SurveyInput } from "./input-types";
+import { SurveyResponse } from "./object-types";
 import { v4 } from "uuid";
 
 @Resolver()
@@ -51,6 +52,28 @@ export class SurveyResolver {
       total: count,
       hasMore: count - (offset + limit) > 0,
       id: v4(),
+    };
+  }
+
+  @Query(() => SurveyResponse)
+  async survey(
+    @Arg("survey_id", () => Int) survey_id: number,
+    @Ctx() { em }: MyContext
+  ): Promise<SurveyResponse> {
+    const survey = await (em as EntityManager).findOne(Survey, {id: survey_id})
+    if (!survey) {
+      return {
+        errors: [
+          {
+            field: "username",
+            message: "that username doesn't exist",
+          },
+        ],
+      };
+    }
+
+    return {
+      survey,
     };
   }
 }
