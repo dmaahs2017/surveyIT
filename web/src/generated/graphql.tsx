@@ -171,6 +171,10 @@ export type RegularUserFragment = (
 export type SurveySnippetFragment = (
   { __typename?: 'Survey' }
   & Pick<Survey, 'name' | 'description' | 'id'>
+  & { creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  ) }
 );
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -349,6 +353,10 @@ export const SurveySnippetFragmentDoc = gql`
   name
   description
   id
+  creator {
+    id
+    username
+  }
 }
     `;
 export const ChangePasswordDocument = gql`
