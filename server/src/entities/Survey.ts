@@ -26,7 +26,7 @@ export class Survey {
 
   @Field(() => User)
   @ManyToOne(() => User)
-  creator: User;
+  creator!: User;
 
   @OneToMany(() => Question, (question) => question.survey)
   questions: Question[];

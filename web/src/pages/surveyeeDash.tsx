@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/core";
 import { NavBar } from "../components/NavBar";
 import { Wrapper } from "../components/Wrapper";
+import { PagedSurveys } from "../components/survey";
 
 const SurveyeeDash = () => (
   <ThemeProvider theme={theme}>
@@ -22,31 +23,17 @@ const SurveyeeDash = () => (
           Surveyee Dashboard
         </Heading>
         <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-          <Flex
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="column"
-          >
+          <Flex flexDirection="column">
             <Heading textAlign="center">Available Surveys</Heading>
-            <List styleType="disc">
-              <ListItem>Survey Details Component</ListItem>
-            </List>
+            {PagedSurveys(6, 3)}
           </Flex>
-          <Flex
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="column"
-          >
+          <Flex alignItems="center" flexDirection="column">
             <Heading textAlign="center">Completed Surveys</Heading>
             <List styleType="disc">
               <ListItem>Survey Details Component</ListItem>
             </List>
           </Flex>
-          <Flex
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="column"
-          >
+          <Flex alignItems="center" flexDirection="column">
             <Heading textAlign="center">Other</Heading>
             <List styleType="disc">
               <ListItem>Survey Details Component</ListItem>

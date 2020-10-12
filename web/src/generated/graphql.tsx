@@ -16,6 +16,7 @@ export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
   surveys: PaginatedSurveys;
+  survey: SurveyResponse;
   questions: PaginatedQuestions;
 };
 
@@ -23,6 +24,11 @@ export type Query = {
 export type QuerySurveysArgs = {
   offset?: Maybe<Scalars['Int']>;
   limit: Scalars['Int'];
+};
+
+
+export type QuerySurveyArgs = {
+  survey_id: Scalars['Int'];
 };
 
 
@@ -48,6 +54,7 @@ export type PaginatedSurveys = {
   surveys: Array<Survey>;
   total: Scalars['Float'];
   hasMore: Scalars['Boolean'];
+  id: Scalars['String'];
 };
 
 export type Survey = {
@@ -58,6 +65,18 @@ export type Survey = {
   creator: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+};
+
+export type SurveyResponse = {
+  __typename?: 'SurveyResponse';
+  errors?: Maybe<Array<FieldError>>;
+  survey?: Maybe<Survey>;
+};
+
+export type FieldError = {
+  __typename?: 'FieldError';
+  field: Scalars['String'];
+  message: Scalars['String'];
 };
 
 export type PaginatedQuestions = {
@@ -125,12 +144,6 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type FieldError = {
-  __typename?: 'FieldError';
-  field: Scalars['String'];
-  message: Scalars['String'];
-};
-
 export type RegisterInput = {
   username: Scalars['String'];
   email: Scalars['String'];
@@ -155,6 +168,11 @@ export type RegularUserFragment = (
   & Pick<User, 'id' | 'username' | 'email' | 'phoneNumber' | 'typeOfUser'>
 );
 
+export type SurveySnippetFragment = (
+  { __typename?: 'Survey' }
+  & Pick<Survey, 'name' | 'description' | 'id'>
+);
+
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
   newPassword: Scalars['String'];
@@ -169,6 +187,20 @@ export type ChangePasswordMutation = (
       { __typename?: 'User' }
       & RegularUserFragment
     )> }
+  ) }
+);
+
+export type CreateQuestionMutationVariables = Exact<{
+  survey_id: Scalars['Int'];
+  q_str: Scalars['String'];
+}>;
+
+
+export type CreateQuestionMutation = (
+  { __typename?: 'Mutation' }
+  & { createQuestion: (
+    { __typename?: 'Question' }
+    & Pick<Question, 'id' | 'question'>
   ) }
 );
 
@@ -266,6 +298,43 @@ export type QuestionsQuery = (
   ) }
 );
 
+export type SurveyQueryVariables = Exact<{
+  survey_id: Scalars['Int'];
+}>;
+
+
+export type SurveyQuery = (
+  { __typename?: 'Query' }
+  & { survey: (
+    { __typename?: 'SurveyResponse' }
+    & { survey?: Maybe<(
+      { __typename?: 'Survey' }
+      & SurveySnippetFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'message' | 'field'>
+    )>> }
+  ) }
+);
+
+export type SurveysQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+}>;
+
+
+export type SurveysQuery = (
+  { __typename?: 'Query' }
+  & { surveys: (
+    { __typename?: 'PaginatedSurveys' }
+    & Pick<PaginatedSurveys, 'total' | 'hasMore' | 'id'>
+    & { surveys: Array<(
+      { __typename?: 'Survey' }
+      & SurveySnippetFragment
+    )> }
+  ) }
+);
+
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
@@ -273,6 +342,13 @@ export const RegularUserFragmentDoc = gql`
   email
   phoneNumber
   typeOfUser
+}
+    `;
+export const SurveySnippetFragmentDoc = gql`
+    fragment SurveySnippet on Survey {
+  name
+  description
+  id
 }
     `;
 export const ChangePasswordDocument = gql`
@@ -287,6 +363,18 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CreateQuestionDocument = gql`
+    mutation createQuestion($survey_id: Int!, $q_str: String!) {
+  createQuestion(survey_id: $survey_id, q_str: $q_str) {
+    id
+    question
+  }
+}
+    `;
+
+export function useCreateQuestionMutation() {
+  return Urql.useMutation<CreateQuestionMutation, CreateQuestionMutationVariables>(CreateQuestionDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
@@ -352,7 +440,7 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
 export const QuestionsDocument = gql`
-    query questions($limit: Int!, $offset: Int!, $survey_id: Int!) {
+    query Questions($limit: Int!, $offset: Int!, $survey_id: Int!) {
   questions(limit: $limit, offset: $offset, survey_id: $survey_id) {
     total
     hasMore
@@ -369,4 +457,37 @@ export const QuestionsDocument = gql`
 
 export function useQuestionsQuery(options: Omit<Urql.UseQueryArgs<QuestionsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<QuestionsQuery>({ query: QuestionsDocument, ...options });
+};
+export const SurveyDocument = gql`
+    query Survey($survey_id: Int!) {
+  survey(survey_id: $survey_id) {
+    survey {
+      ...SurveySnippet
+    }
+    errors {
+      message
+      field
+    }
+  }
+}
+    ${SurveySnippetFragmentDoc}`;
+
+export function useSurveyQuery(options: Omit<Urql.UseQueryArgs<SurveyQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<SurveyQuery>({ query: SurveyDocument, ...options });
+};
+export const SurveysDocument = gql`
+    query Surveys($limit: Int!, $offset: Int!) {
+  surveys(offset: $offset, limit: $limit) {
+    total
+    hasMore
+    id
+    surveys {
+      ...SurveySnippet
+    }
+  }
+}
+    ${SurveySnippetFragmentDoc}`;
+
+export function useSurveysQuery(options: Omit<Urql.UseQueryArgs<SurveysQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<SurveysQuery>({ query: SurveysDocument, ...options });
 };

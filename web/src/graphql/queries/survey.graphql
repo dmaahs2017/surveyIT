@@ -1,0 +1,11 @@
+query Survey($survey_id: Int!) {
+  survey(survey_id: $survey_id) {
+    survey {
+      ...SurveySnippet
+    }
+    errors {
+      message
+      field
+    }
+  }
+}

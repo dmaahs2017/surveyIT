@@ -1,0 +1,5 @@
+fragment SurveySnippet on Survey {
+  name
+  description
+  id
+}

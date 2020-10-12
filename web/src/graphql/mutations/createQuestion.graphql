@@ -1,0 +1,6 @@
+mutation createQuestion($survey_id: Int!, $q_str: String!) {
+  createQuestion(survey_id: $survey_id, q_str: $q_str) {
+    id
+    question
+  }
+}
