@@ -18,14 +18,14 @@ const manageAccount: React.FC<{}> = ({}) => {
       <div className="container">
         <div className="userInfo">
           <Avatar style={{marginLeft:"22.5vw"}} />
-          <Text style={{ textAlign: "center" }}>AccountName</Text>
+          <Text style={{ textAlign: "center" }}>{data?.me?.username}</Text>
           {/* delte from here */}
-          <Text>Name</Text>
-            <p>{data?.me?.username}</p>
-          <Text>Email</Text>
-            <p>{data?.me?.email}</p>
-          <Text>Phone Number</Text>
-          <p>{data?.me?.phoneNumber}</p>
+          <Text className="fieldName">Name</Text>
+            <p className="fieldValue">{data?.me?.username}</p>
+          <Text className="fieldName">Email</Text>
+            <p className="fieldValue">{data?.me?.email}</p>
+          <Text className="fieldName">Phone Number</Text>
+          <p className="fieldValue">{data?.me?.phoneNumber}</p>
           {/*<Text>Income</Text>
           <p>{data?.me?.income}</p>
           <input className="simpleField" type="text" />
@@ -34,6 +34,7 @@ const manageAccount: React.FC<{}> = ({}) => {
           <Text>Gender</Text>
           <p>{data?.me?.gender}</p>
           */}
+          <br></br>
           <Button onClick={() => setEdit(!edit)}>Edit Account</Button>
           {/* To Here */}
         </div>
@@ -90,7 +91,7 @@ const manageAccount: React.FC<{}> = ({}) => {
                 isLoading={isSubmitting}
                 variantColor="teal"
               >
-                Register
+                Update
               </Button>
           </Form>
         )}

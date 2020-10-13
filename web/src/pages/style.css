@@ -65,11 +65,16 @@ html {
   margin-bottom: 0.5vh;
 }
 
-.simpleField {
+.fieldValue {
   margin: 0.2vh;
   border: 1px solid black;
   width: 15vw;
   padding: 0.2em;
+}
+
+.fieldName {
+  margin: 0.2vh;
+  font-weight: bold;
 }
 
 h1 {
