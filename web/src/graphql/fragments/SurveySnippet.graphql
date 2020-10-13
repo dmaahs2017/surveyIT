@@ -2,4 +2,8 @@ fragment SurveySnippet on Survey {
   name
   description
   id
+  creator {
+    id
+    username
+  }
 }

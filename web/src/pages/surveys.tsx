@@ -1,23 +1,41 @@
 import React from "react";
-import { useSurveysQuery, useQuestionsQuery } from "../generated/graphql";
-import { SurveyTemplate } from "../components/survey";
-import { Text } from "@chakra-ui/core";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  useDisclosure,
+  Text,
+} from "@chakra-ui/core";
 
 const Surveys = () => {
-  const [{ data }] = useSurveysQuery({
-    variables: {
-      offset: 0,
-      limit: 10,
-    },
-    notifyOnNetworkStatusChange: true,
-  });
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <>
+      <Button onClick={onOpen}>Open Modal</Button>
 
-  if (data) {
-    return data.surveys.surveys.map((s) =>
-      SurveyTemplate(s.name, s.description)
-    );
-  }
-  return <Text>FUCK ME</Text>;
-};
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>"hi"</Text>
+          </ModalBody>
 
+          <ModalFooter>
+            <Button variantColor="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant="ghost">Secondary Action</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}
 export default Surveys;
