@@ -1,8 +1,8 @@
 import { Resolver, Mutation, Arg, Ctx, Query } from "type-graphql";
+import { getConnection } from "typeorm";
 import { MyContext } from "../types";
 import { User } from "../entities/User";
 import argon2 from "argon2";
-import { EntityManager } from "@mikro-orm/postgresql";
 import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from "../constants";
 import { v4 } from "uuid";
 import { sendEmail } from "../utils/sendEmail";
@@ -12,20 +12,20 @@ import { RegisterInput, UsernamePasswordInput } from "./input-types";
 @Resolver()
 export class UserResolver {
   @Query(() => User, { nullable: true })
-  async me(@Ctx() { req, em }: MyContext) {
+  async me(@Ctx() { req }: MyContext) {
     // you are not logged in
     if (!req.session.userId) {
       return null;
     }
 
-    const user = await em.findOne(User, { id: req.session.userId });
+    const user = await User.findOne(req.session.userId);
     return user;
   }
 
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: RegisterInput,
-    @Ctx() { em, req }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     let hasSpecialCharRegexp = new RegExp("[!@#$%^&*)(+=._-]{1,}");
     if (!hasSpecialCharRegexp.test(options.password)) {
@@ -103,20 +103,20 @@ export class UserResolver {
     const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
-      const result = await (em as EntityManager)
-        .createQueryBuilder(User)
-        .getKnexQuery()
-        .insert({
+      const result = await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values({
           username: options.username,
           email: options.email,
-          phone_number: options.phoneNumber,
-          type_of_user: options.typeOfUser.toUpperCase(),
+          phoneNumber: options.phoneNumber,
+          typeOfUser: options.typeOfUser.toUpperCase(),
           password: hashedPassword,
-          created_at: new Date(),
-          updated_at: new Date(),
         })
-        .returning("*");
-      user = result[0];
+        .returning("*")
+        .execute();
+      user = result.raw[0];
     } catch (err) {
       //|| err.detail.includes("already exists")) {
       // duplicate username error
@@ -146,9 +146,6 @@ export class UserResolver {
     // keep them logged in
     req.session.userId = user.id;
 
-    //this is a weird thing with how the naming works. DB auto converts to snake case but graphql expects camelCase
-    user.phoneNumber = user.phone_number;
-    user.typeOfUser = user.type_of_user;
     return { user };
   }
 
@@ -156,7 +153,7 @@ export class UserResolver {
   async changePassword(
     @Arg("token") token: string,
     @Arg("newPassword") newPassword: string,
-    @Ctx() { redis, em, req }: MyContext
+    @Ctx() { redis, req }: MyContext
   ): Promise<UserResponse> {
     //validate password
     const key = FORGET_PASSWORD_PREFIX + token;
@@ -172,7 +169,9 @@ export class UserResolver {
       };
     }
 
-    const user = await em.findOne(User, { id: parseInt(userId) });
+    const userIdNum = parseInt(userId);
+
+    const user = await User.findOne(userIdNum);
 
     if (!user) {
       return {
@@ -185,22 +184,21 @@ export class UserResolver {
       };
     }
 
-    user.password = await argon2.hash(newPassword);
-    await em.persistAndFlush(user);
-
+    await User.update(
+      { id: userIdNum },
+      { password: await argon2.hash(newPassword) }
+    );
     await redis.del(key);
-
     req.session.userId = user.id;
-
     return { user };
   }
 
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("email") email: string,
-    @Ctx() { em, redis }: MyContext
+    @Ctx() { redis }: MyContext
   ) {
-    const user = await em.findOne(User, { email });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       //no email in the db
       console.log("FAILED");
@@ -225,9 +223,9 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async login(
     @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { em, req }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = await em.findOne(User, { username: options.username });
+    const user = await User.findOne({ where: { username: options.username } });
     if (!user) {
       return {
         errors: [

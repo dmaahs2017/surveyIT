@@ -1,13 +1,21 @@
-import { Entity, PrimaryKey, Property, ManyToOne } from "@mikro-orm/core";
+import {
+  Entity,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+} from "typeorm";
 import { ObjectType, Field } from "type-graphql";
 import { Question } from "./Question";
 import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class QuestionAnswer {
+export class QuestionAnswer extends BaseEntity {
   @Field()
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   id!: number;
 
   @Field(() => Question)
@@ -15,17 +23,17 @@ export class QuestionAnswer {
   question!: Question;
 
   @Field()
-  @Property()
+  @Column()
   answer!: number;
 
   @ManyToOne(() => User)
   user!: User;
 
   @Field(() => String)
-  @Property({ type: "date" })
-  createdAt = new Date();
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Field(() => String)
-  @Property({ type: "date", onUpdate: () => new Date() })
+  @UpdateDateColumn()
   updatedAt = new Date();
 }
