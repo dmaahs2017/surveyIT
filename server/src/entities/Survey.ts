@@ -27,6 +27,10 @@ export class Survey extends BaseEntity {
   @Column()
   description: string;
 
+  @Field()
+  @Column()
+  creatorId: number;
+
   @Field(() => User)
   @ManyToOne(() => User)
   creator!: User;

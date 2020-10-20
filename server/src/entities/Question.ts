@@ -31,6 +31,10 @@ export class Question extends BaseEntity {
   @Column()
   question!: string;
 
+  @Field()
+  @Column()
+  surveyId!: number;
+
   @Field(() => Survey)
   @ManyToOne(() => Survey)
   survey!: Survey;
