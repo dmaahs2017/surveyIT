@@ -46,7 +46,13 @@ export class SurveyResolver {
   async survey(
     @Arg("survey_id", () => Int) survey_id: number
   ): Promise<SurveyResponse> {
-    const survey = await Survey.findOne(survey_id);
+    const survey = await getConnection()
+      .getRepository(Survey)
+      .createQueryBuilder("s")
+      .innerJoinAndSelect("s.creator", "user", 'user.id = s."creatorId"')
+      .where(`s.id = ${survey_id}`)
+      .getOne();
+
     if (!survey) {
       return {
         errors: [
@@ -57,7 +63,6 @@ export class SurveyResolver {
         ],
       };
     }
-
     return {
       survey,
     };
