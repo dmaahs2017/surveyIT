@@ -5,6 +5,7 @@ import { Survey } from "../entities/Survey";
 import { SurveyInput } from "./input-types";
 import { SurveyResponse } from "./object-types";
 import { v4 } from "uuid";
+import {getConnection} from "typeorm";
 
 @Resolver()
 export class SurveyResolver {
@@ -24,10 +25,14 @@ export class SurveyResolver {
     @Arg("limit", () => Int) limit: number,
     @Arg("offset", () => Int, { nullable: true }) offset: number
   ): Promise<PaginatedSurveys> {
-    const [surveys, count] = await Survey.findAndCount({
-      take: limit,
-      skip: offset,
-    });
+    const [surveys, count] = await getConnection()
+      .getRepository(Survey)
+      .createQueryBuilder("s")
+      .innerJoinAndSelect("s.creator", "user", 'user.id = s."creatorId"')
+      .orderBy('s.createdAt', "DESC")
+      .take(limit)
+      .offset(offset)
+      .getManyAndCount()
 
     return {
       surveys: surveys,

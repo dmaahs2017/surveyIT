@@ -32,8 +32,8 @@ export class Survey extends BaseEntity {
   creatorId: number;
 
   @Field(() => User)
-  @ManyToOne(() => User)
-  creator!: User;
+  @ManyToOne(() => User, (user) => user.surveys)
+  creator: User;
 
   @OneToMany(() => Question, (question) => question.survey)
   questions: Question[];
