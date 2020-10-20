@@ -11,14 +11,19 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Text,
   Link,
+  useDisclosure,
 } from "@chakra-ui/core";
+import NextLink from "next/link";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { useRouter } from "next/router";
+import { NewSurveyModal } from "./NewSurveyModal";
 
 export const NavBar = () => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   let greet = data?.me ? "Hi " + data.me.username : "Register/Login";
   let items = null;
   let router = useRouter();
@@ -79,6 +84,11 @@ export const NavBar = () => {
           </Link>
         </Flex>
         <Flex alignItems="center" justifyContent="flex-end">
+          <NextLink href="/">
+            <Button onClick={onOpen} mr="4">
+              <Text>Create New Survey</Text>
+            </Button>
+          </NextLink>
           <Menu>
             <MenuButton as={Button} mr="2" mb="2" mt="2">
               {greet}
@@ -87,6 +97,8 @@ export const NavBar = () => {
           </Menu>
         </Flex>
       </Grid>
+
+      <NewSurveyModal isOpen={isOpen} onClose={onClose} />
     </ThemeProvider>
   );
 };
