@@ -1,28 +1,35 @@
 import {
   Entity,
-  PrimaryKey,
-  Property,
+  PrimaryGeneratedColumn,
+  Column,
   ManyToOne,
   OneToMany,
-} from "@mikro-orm/core";
+  BaseEntity,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { ObjectType, Field } from "type-graphql";
 import { Question } from "./Question";
 import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class Survey {
+export class Survey extends BaseEntity {
   @Field()
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   id!: number;
 
   @Field(() => String)
-  @Property()
-  name!: String;
+  @Column()
+  name!: string;
 
   @Field(() => String)
-  @Property()
-  description: String;
+  @Column()
+  description: string;
+
+  @Field()
+  @Column()
+  creatorId: number;
 
   @Field(() => User)
   @ManyToOne(() => User)
@@ -32,10 +39,10 @@ export class Survey {
   questions: Question[];
 
   @Field(() => String)
-  @Property({ type: "date" })
-  createdAt = new Date();
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Field(() => String)
-  @Property({ type: "date", onUpdate: () => new Date() })
-  updatedAt = new Date();
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

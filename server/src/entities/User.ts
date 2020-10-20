@@ -1,32 +1,40 @@
-import { OneToMany, Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import {
+  OneToMany,
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Column,
+} from "typeorm";
 import { ObjectType, Field } from "type-graphql";
 import { Survey } from "./Survey";
 import { QuestionAnswer } from "./QuestionAnswer";
 
 @ObjectType()
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @Field()
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   id!: number;
 
   @Field()
-  @Property({ type: "text", unique: true })
+  @Column({ unique: true })
   username!: string;
 
   @Field()
-  @Property({ type: "text", unique: true })
+  @Column({ unique: true })
   email!: string;
 
   @Field()
-  @Property({ type: "text", unique: true })
+  @Column({ unique: true })
   phoneNumber!: string;
 
   @Field()
-  @Property({ type: "text" })
+  @Column()
   typeOfUser!: string;
 
-  @Property({ type: "text" })
+  @Column()
   password!: string;
 
   @OneToMany(() => Survey, (survey) => survey.creator)
@@ -36,10 +44,10 @@ export class User {
   answers: QuestionAnswer[];
 
   @Field(() => String)
-  @Property({ type: "date" })
-  createdAt = new Date();
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Field(() => String)
-  @Property({ type: "date", onUpdate: () => new Date() })
-  updatedAt = new Date();
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

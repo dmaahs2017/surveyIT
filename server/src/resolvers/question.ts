@@ -1,30 +1,28 @@
-import { Query, Resolver, Arg, Ctx, Int, Mutation } from "type-graphql";
+import { Query, Resolver, Arg, Int, Mutation } from "type-graphql";
+import { getConnection } from "typeorm";
 import { Question } from "../entities/Question";
 import { PaginatedQuestions } from "./object-types";
-import { MyContext } from "../types";
-import { EntityManager } from "@mikro-orm/postgresql";
 
 @Resolver()
 export class QuestionResolver {
   @Mutation(() => Question)
   async createQuestion(
     @Arg("q_str", () => String) q_str: string,
-    @Arg("survey_id", () => Int) survey_id: number,
-    @Ctx() { em }: MyContext
+    @Arg("survey_id", () => Int) survey_id: number
   ) {
     let question;
     try {
-      let result = await (em as EntityManager)
-        .createQueryBuilder(Question)
-        .getKnexQuery()
-        .insert({
+      let result = await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(Question)
+        .values({
           question: q_str,
-          survey_id: survey_id,
-          created_at: new Date(),
-          updated_at: new Date(),
+          surveyId: survey_id,
         })
-        .returning("*");
-      question = result[0];
+        .returning("*")
+        .execute();
+      question = result.raw[0];
     } catch (err) {
       console.log(err);
     }
@@ -36,22 +34,20 @@ export class QuestionResolver {
   async questions(
     @Arg("limit", () => Int) limit: number,
     @Arg("offset", () => Int) offset: number,
-    @Arg("survey_id", () => Int, { nullable: true }) survey_id: number | null,
-    @Ctx() { em }: MyContext
+    @Arg("survey_id", () => Int, { nullable: true }) survey_id: number | null
   ): Promise<PaginatedQuestions> {
     let questions, count;
     if (survey_id) {
-      [questions, count] = await (em as EntityManager).findAndCount(
-        Question,
-        { survey: { id: survey_id } },
-        { limit: limit, offset: offset }
-      );
+      [questions, count] = await Question.findAndCount({
+        where: { id: survey_id },
+        take: limit,
+        skip: offset,
+      });
     } else {
-      [questions, count] = await (em as EntityManager).findAndCount(
-        Question,
-        {},
-        { limit: limit, offset: offset }
-      );
+      [questions, count] = await Question.findAndCount({
+        take: limit,
+        skip: offset,
+      });
     }
 
     return {

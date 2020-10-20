@@ -31,18 +31,18 @@ import {
   useQuestionsQuery,
 } from "../../generated/graphql";
 
-const Survey: NextPage<{ token: number }> = ({ token }) => {
+const Survey: NextPage<{ id: number }> = ({ id }) => {
   const [q_response] = useQuestionsQuery({
     variables: {
       offset: 0,
       limit: 10,
-      survey_id: token,
+      survey_id: id,
     },
     notifyOnNetworkStatusChange: true,
   });
   const [s_response] = useSurveyQuery({
     variables: {
-      survey_id: token,
+      survey_id: id,
     },
   });
   const [me_response] = useMeQuery();
@@ -51,7 +51,7 @@ const Survey: NextPage<{ token: number }> = ({ token }) => {
   let surveyName = null;
   let surveyDesc = null;
 
-  if (token && q_response.data && s_response.data && me_response.data) {
+  if (id && q_response.data && s_response.data && me_response.data) {
     surveyName = s_response.data.survey.survey.name;
     surveyDesc = s_response.data.survey.survey.description;
 
@@ -132,7 +132,7 @@ const Survey: NextPage<{ token: number }> = ({ token }) => {
 
 Survey.getInitialProps = ({ query }) => {
   return {
-    token: parseInt(query.token),
+    id: parseInt(query.id),
   };
 };
 export default Survey;
