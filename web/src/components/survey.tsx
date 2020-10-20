@@ -1,4 +1,5 @@
 import React from "react";
+import NextLink from "next/link";
 import { useSurveysQuery } from "../generated/graphql";
 import {
   Box,
@@ -10,7 +11,10 @@ import {
   AccordionHeader,
   AccordionPanel,
   Text,
+  Heading,
+  Link,
   AccordionIcon,
+  Stack,
 } from "@chakra-ui/core";
 
 export const SurveyTemplate = (name: string, description: string) => {
@@ -32,19 +36,32 @@ export const SurveyTemplate = (name: string, description: string) => {
   );
 };
 
-export const PagedSurveys = (offset, limit) => {
-  const [{ data }] = useSurveysQuery({
+export const PagedSurveys = (offset: number, limit: number) => {
+  const [surveys_response] = useSurveysQuery({
     variables: {
       offset: offset,
       limit: limit,
     },
-    notifyOnNetworkStatusChange: true,
   });
 
-  if (data) {
-    return data.surveys.surveys.map((s) =>
-      SurveyTemplate(s.name, s.description)
+  if (surveys_response.data) {
+    return (
+      <Stack spacing={8}>
+        {surveys_response.data.surveys.surveys.map((s) =>
+          !s ? null : (
+            <Box>
+              <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>
+                <Link>
+                  <Heading fontSize="l">{s.name}</Heading>
+                </Link>
+              </NextLink>
+              <Text>{s.description}</Text>
+            </Box>
+          )
+        )}
+      </Stack>
     );
+  } else {
+    return <Text>No surveys available</Text>;
   }
-  return <Text>FUCK ME</Text>;
 };
