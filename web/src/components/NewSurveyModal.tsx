@@ -65,7 +65,7 @@ export const NewSurveyModal: React.FC<NewSurveyModalProps> = ({
                 isLoading={isSubmitting}
                 variantColor="teal"
               >
-                Submit Question
+                Create Survey
               </Button>
             </Form>
           )}
