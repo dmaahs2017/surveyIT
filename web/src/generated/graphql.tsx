@@ -62,6 +62,7 @@ export type Survey = {
   id: Scalars['Float'];
   name: Scalars['String'];
   description: Scalars['String'];
+  creatorId: Scalars['Float'];
   creator: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -92,6 +93,7 @@ export type Question = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   question: Scalars['String'];
+  surveyId: Scalars['Float'];
   survey: Survey;
 };
 
@@ -129,7 +131,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationCreateSurveyArgs = {
-  options: SurveyInput;
+  input: SurveyInput;
 };
 
 
@@ -159,7 +161,6 @@ export type UsernamePasswordInput = {
 
 export type SurveyInput = {
   name: Scalars['String'];
-  creator_id: Scalars['Float'];
   description: Scalars['String'];
 };
 
@@ -205,6 +206,20 @@ export type CreateQuestionMutation = (
   & { createQuestion: (
     { __typename?: 'Question' }
     & Pick<Question, 'id' | 'question'>
+  ) }
+);
+
+export type CreateSurveyMutationVariables = Exact<{
+  name: Scalars['String'];
+  description: Scalars['String'];
+}>;
+
+
+export type CreateSurveyMutation = (
+  { __typename?: 'Mutation' }
+  & { createSurvey: (
+    { __typename?: 'Survey' }
+    & Pick<Survey, 'name' | 'description' | 'id'>
   ) }
 );
 
@@ -383,6 +398,19 @@ export const CreateQuestionDocument = gql`
 
 export function useCreateQuestionMutation() {
   return Urql.useMutation<CreateQuestionMutation, CreateQuestionMutationVariables>(CreateQuestionDocument);
+};
+export const CreateSurveyDocument = gql`
+    mutation CreateSurvey($name: String!, $description: String!) {
+  createSurvey(input: {name: $name, description: $description}) {
+    name
+    description
+    id
+  }
+}
+    `;
+
+export function useCreateSurveyMutation() {
+  return Urql.useMutation<CreateSurveyMutation, CreateSurveyMutationVariables>(CreateSurveyDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
