@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { NextPage } from "next";
 import {
   ThemeProvider,
@@ -24,7 +24,7 @@ import {
 } from "@chakra-ui/core";
 import { Wrapper } from "../../components/Wrapper";
 import { NavBar } from "../../components/NavBar";
-import {QuestionInput} from "../../components/QuestionInput";
+import { QuestionInput } from "../../components/QuestionInput";
 import {
   useMeQuery,
   useSurveyQuery,
@@ -46,7 +46,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
     },
   });
   const [me_response] = useMeQuery();
-  const {isOpen, onOpen, onClose} = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   let survey = null;
   let surveyName = null;
   let surveyDesc = null;
@@ -107,7 +107,11 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
               <ModalHeader>New Question</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <QuestionInput meId={me_response.data.me.id} surveyId={s_response.data.survey.survey.id} onClick={onClose}/>
+                <QuestionInput
+                  meId={me_response.data.me.id}
+                  surveyId={s_response.data.survey.survey.id}
+                  onClick={onClose}
+                />
               </ModalBody>
             </ModalContent>
           </Modal>

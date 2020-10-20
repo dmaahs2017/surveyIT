@@ -25,7 +25,7 @@ const SurveyeeDash = () => (
         <Grid templateColumns="repeat(3, 1fr)" gap={6}>
           <Flex flexDirection="column">
             <Heading textAlign="center">Available Surveys</Heading>
-            {PagedSurveys(6, 3)}
+            {PagedSurveys(0, 10)}
           </Flex>
           <Flex alignItems="center" flexDirection="column">
             <Heading textAlign="center">Completed Surveys</Heading>

@@ -37,5 +37,5 @@ const Surveys = () => {
       </Modal>
     </>
   );
-}
+};
 export default Surveys;

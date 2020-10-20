@@ -1,8 +1,8 @@
 import React from "react";
 import { InputField } from "./InputField";
 import { Formik, Form } from "formik";
-import {Button} from "@chakra-ui/core"
-import { useCreateQuestionMutation } from "../generated/graphql"
+import { Button } from "@chakra-ui/core";
+import { useCreateQuestionMutation } from "../generated/graphql";
 
 type QuestionInputProps = InputHTMLAttributes<HTMLInputElement> & {
   surveyId: number;
@@ -16,10 +16,13 @@ export const QuestionInput: React.FC<QuestionInputProps> = ({
   const [, submitQuestion] = useCreateQuestionMutation();
   return (
     <Formik
-      initialValues={{ question: ""}}
+      initialValues={{ question: "" }}
       onSubmit={async (values, { setErrors }) => {
         console.log(values.question);
-        const response = await submitQuestion({survey_id: surveyId, q_str: values.question})
+        const response = await submitQuestion({
+          survey_id: surveyId,
+          q_str: values.question,
+        });
         onClick();
       }}
     >
@@ -41,5 +44,5 @@ export const QuestionInput: React.FC<QuestionInputProps> = ({
         </Form>
       )}
     </Formik>
-  )
-}
+  );
+};
