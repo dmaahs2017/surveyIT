@@ -5,7 +5,7 @@ import { Survey } from "../entities/Survey";
 import { SurveyInput } from "./input-types";
 import { SurveyResponse } from "./object-types";
 import { v4 } from "uuid";
-import {getConnection} from "typeorm";
+import { getConnection } from "typeorm";
 
 @Resolver()
 export class SurveyResolver {
@@ -29,10 +29,10 @@ export class SurveyResolver {
       .getRepository(Survey)
       .createQueryBuilder("s")
       .innerJoinAndSelect("s.creator", "user", 'user.id = s."creatorId"')
-      .orderBy('s.createdAt', "DESC")
+      .orderBy("s.createdAt", "DESC")
       .take(limit)
       .offset(offset)
-      .getManyAndCount()
+      .getManyAndCount();
 
     return {
       surveys: surveys,

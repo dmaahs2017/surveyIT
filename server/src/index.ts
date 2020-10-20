@@ -54,9 +54,9 @@ const main = async () => {
     context: ({ req, res }) => ({ req, res }),
     playground: {
       settings: {
-        "request.credentials": "same-origin"
-      }
-    }
+        "request.credentials": "same-origin",
+      },
+    },
   });
 
   apolloServer.applyMiddleware({
