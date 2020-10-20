@@ -309,10 +309,6 @@ export type QuestionsQuery = (
     & { questions: Array<(
       { __typename?: 'Question' }
       & Pick<Question, 'id' | 'question'>
-      & { survey: (
-        { __typename?: 'Survey' }
-        & Pick<Survey, 'id'>
-      ) }
     )> }
   ) }
 );
@@ -483,9 +479,6 @@ export const QuestionsDocument = gql`
     questions {
       id
       question
-      survey {
-        id
-      }
     }
   }
 }

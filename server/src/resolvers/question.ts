@@ -39,7 +39,7 @@ export class QuestionResolver {
     let questions, count;
     if (survey_id) {
       [questions, count] = await Question.findAndCount({
-        where: { id: survey_id },
+        where: { surveyId: survey_id },
         take: limit,
         skip: offset,
       });

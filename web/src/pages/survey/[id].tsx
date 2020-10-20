@@ -38,7 +38,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
       limit: 10,
       survey_id: id,
     },
-    notifyOnNetworkStatusChange: true,
+    //notifyOnNetworkStatusChange: true,
   });
   const [s_response] = useSurveyQuery({
     variables: {
@@ -51,7 +51,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   let surveyName = null;
   let surveyDesc = null;
 
-  if (id && q_response.data && s_response.data && me_response.data) {
+  if (id && q_response.data && s_response.data?.survey.survey && me_response.data) {
     surveyName = s_response.data.survey.survey.name;
     surveyDesc = s_response.data.survey.survey.description;
 
@@ -132,7 +132,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
 
 Survey.getInitialProps = ({ query }) => {
   return {
-    id: parseInt(query.id),
+    id: parseInt(query.id as string),
   };
 };
 export default Survey;
