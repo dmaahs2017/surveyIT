@@ -52,7 +52,7 @@ export const PagedSurveys = (offset: number, limit: number) => {
             <Box>
               <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>
                 <Link>
-                  <Heading fontSize="l">{s.name}</Heading>
+                  <Heading style={{color: "blue"}} fontSize="l">{s.name}</Heading>
                 </Link>
               </NextLink>
               <Text>{s.description}</Text>
