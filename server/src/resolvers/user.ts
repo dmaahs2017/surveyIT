@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Arg, Ctx, Query } from "type-graphql";
-import {getConnection} from "typeorm"
+import { getConnection } from "typeorm";
 import { MyContext } from "../types";
 import { User } from "../entities/User";
 import argon2 from "argon2";
@@ -168,8 +168,8 @@ export class UserResolver {
         ],
       };
     }
-    
-    const userIdNum = parseInt(userId)
+
+    const userIdNum = parseInt(userId);
 
     const user = await User.findOne(userIdNum);
 
@@ -184,7 +184,10 @@ export class UserResolver {
       };
     }
 
-    await User.update({ id: userIdNum }, { password: await argon2.hash(newPassword) })
+    await User.update(
+      { id: userIdNum },
+      { password: await argon2.hash(newPassword) }
+    );
     await redis.del(key);
     req.session.userId = user.id;
     return { user };
@@ -195,7 +198,7 @@ export class UserResolver {
     @Arg("email") email: string,
     @Ctx() { redis }: MyContext
   ) {
-    const user = await User.findOne({where: { email }});
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       //no email in the db
       console.log("FAILED");
@@ -222,7 +225,7 @@ export class UserResolver {
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = await User.findOne({where: {username: options.username}});
+    const user = await User.findOne({ where: { username: options.username } });
     if (!user) {
       return {
         errors: [

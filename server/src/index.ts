@@ -1,7 +1,7 @@
 import "reflect-metadata";
-import { createConnection } from "typeorm"
+import { createConnection } from "typeorm";
 import { __prod__, COOKIE_NAME } from "./constants";
-import typeormConfig from "./typeorm-config"
+import typeormConfig from "./typeorm-config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";

@@ -22,9 +22,12 @@ export class SurveyResolver {
   @Query(() => PaginatedSurveys)
   async surveys(
     @Arg("limit", () => Int) limit: number,
-    @Arg("offset", () => Int, { nullable: true }) offset: number,
+    @Arg("offset", () => Int, { nullable: true }) offset: number
   ): Promise<PaginatedSurveys> {
-    const [surveys, count] = await Survey.findAndCount({take: limit, skip: offset});
+    const [surveys, count] = await Survey.findAndCount({
+      take: limit,
+      skip: offset,
+    });
 
     return {
       surveys: surveys,
@@ -36,9 +39,9 @@ export class SurveyResolver {
 
   @Query(() => SurveyResponse)
   async survey(
-    @Arg("survey_id", () => Int) survey_id: number,
+    @Arg("survey_id", () => Int) survey_id: number
   ): Promise<SurveyResponse> {
-    const survey = await Survey.findOne(survey_id)
+    const survey = await Survey.findOne(survey_id);
     if (!survey) {
       return {
         errors: [
