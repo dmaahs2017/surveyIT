@@ -31,17 +31,17 @@ export class SurveyResponse {
 
 @ObjectType()
 export class PaginatedSurveys {
-  @Field(() => [Survey])
-  surveys: Survey[];
-
+  @Field(() => [Survey], { nullable: true })
+  surveys?: Survey[];
   @Field()
   total: number;
-
   @Field()
   hasMore: boolean;
-
   @Field()
   id: string;
+
+  @Field(() => [FieldError], {nullable: true})
+  errors?: FieldError[];
 }
 
 @ObjectType()
