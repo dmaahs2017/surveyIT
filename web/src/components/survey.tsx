@@ -1,6 +1,6 @@
 import React from "react";
 import NextLink from "next/link";
-import { useSurveysQuery } from "../generated/graphql";
+import { useMeSurveysQuery, useSurveysQuery } from "../generated/graphql";
 import {
   Box,
   ThemeProvider,
@@ -43,11 +43,45 @@ export const PagedSurveys = (offset: number, limit: number) => {
       limit: limit,
     },
   });
+  
+  const surveys = surveys_response.data?.surveys.surveys
 
-  if (surveys_response.data) {
+  if (surveys && surveys.length > 0) {
     return (
       <Stack spacing={8}>
-        {surveys_response.data.surveys.surveys.map((s) =>
+        {surveys.map((s) =>
+          !s ? null : (
+            <Box>
+              <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>
+                <Link>
+                  <Heading style={{color: "blue"}} fontSize="l">{s.name}</Heading>
+                </Link>
+              </NextLink>
+              <Text>{s.description}</Text>
+            </Box>
+          )
+        )}
+      </Stack>
+    );
+  } else {
+    return <Text>No surveys available</Text>;
+  }
+};
+
+export const PagedMeSurveys = (offset: number, limit: number) => {
+  const [surveys_response] = useMeSurveysQuery({
+    variables: {
+      offset: offset,
+      limit: limit,
+    },
+  });
+  
+  const surveys = surveys_response.data?.meSurveys.surveys
+
+  if (surveys && surveys.length > 0) {
+    return (
+      <Stack spacing={8}>
+        {surveys.map((s) =>
           !s ? null : (
             <Box>
               <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>

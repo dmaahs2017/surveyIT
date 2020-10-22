@@ -1,5 +1,5 @@
-query Surveys($limit: Int!, $offset: Int!) {
-  surveys(offset: $offset, limit: $limit) {
+query MeSurveys($limit: Int!, $offset: Int!) {
+  meSurveys(offset: $offset, limit: $limit) {
     total
     hasMore
     id
@@ -8,6 +8,6 @@ query Surveys($limit: Int!, $offset: Int!) {
     }
     errors {
       ...StdFieldError
-    } 
+    }
   }
 }

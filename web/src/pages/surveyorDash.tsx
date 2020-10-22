@@ -11,39 +11,36 @@ import {
 } from "@chakra-ui/core";
 import { Wrapper } from "../components/Wrapper";
 import { NavBar } from "../components/NavBar";
+import { PagedMeSurveys } from "../components/survey";
 
 const SurveyorDash = () => (
   <ThemeProvider theme={theme}>
     <NavBar />
     <Wrapper>
       <CSSReset />
-      <Grid
-        templateColumns="repeat(1, 1fr)"
-        gap={6}
-        templateRows="repeat(3, 1fr)"
-      >
-        <Heading textAlign="center">Surveyor Dashboard</Heading>
+      <Flex flexDirection="column">
+        <Heading mb="3rem" textAlign="center">
+          Surveyor Dashboard
+        </Heading>
         <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-          <Flex justifyContent="center" flexDirection="column">
-            <Heading textAlign="center">Open Surveys</Heading>
+          <Flex flexDirection="column">
+            <Heading textAlign="center">Your Open Surveys</Heading>
+            {PagedMeSurveys(0, 1)}
+          </Flex>
+          <Flex alignItems="center" flexDirection="column">
+            <Heading textAlign="center">Your Closed Surveys</Heading>
             <List styleType="disc">
-              <ListItem>Survey Preview Components</ListItem>
+              <ListItem>Survey Details Component</ListItem>
             </List>
           </Flex>
-          <Flex justifyContent="center" flexDirection="column">
-            <Heading textAlign="center">Closed Surveys</Heading>
-            <List styleType="disc">
-              <ListItem>Survey Preview Components</ListItem>
-            </List>
-          </Flex>
-          <Flex justifyContent="center" flexDirection="column">
+          <Flex alignItems="center" flexDirection="column">
             <Heading textAlign="center">Other</Heading>
             <List styleType="disc">
-              <ListItem>Survey Preview Components</ListItem>
+              <ListItem>Survey Details Component</ListItem>
             </List>
           </Flex>
         </Grid>
-      </Grid>
+      </Flex>
     </Wrapper>
   </ThemeProvider>
 );
