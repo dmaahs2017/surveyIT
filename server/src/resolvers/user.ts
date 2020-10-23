@@ -7,7 +7,11 @@ import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from "../constants";
 import { v4 } from "uuid";
 import { sendEmail } from "../utils/sendEmail";
 import { UserResponse } from "./object-types";
-import { RegisterInput, UsernamePasswordInput } from "./input-types";
+import {
+  UpdateUserInput,
+  RegisterInput,
+  UsernamePasswordInput,
+} from "./input-types";
 
 @Resolver()
 export class UserResolver {
@@ -269,5 +273,53 @@ export class UserResolver {
         resolve(true);
       })
     );
+  }
+
+  @Mutation(() => UserResponse)
+  async updateUser(
+    @Arg("input") input: UpdateUserInput,
+    @Ctx() { req }: MyContext
+  ): Promise<UserResponse> {
+    const userId = req.session.userId;
+    if (!userId) {
+      return {
+        errors: [
+          {
+            field: "N/a",
+            message: "not logged in, can't update user",
+          },
+        ],
+      };
+    }
+
+    const user = await User.findOne(userId);
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "id",
+            message: "User does not exist",
+          },
+        ],
+      };
+    }
+
+    user.email = input.email;
+    user.phoneNumber = input.phoneNumber;
+    user.username = input.username;
+
+    try {
+      const updatedUser = await user.save();
+      return { user: updatedUser };
+    } catch (err) {
+      return {
+        errors: [
+          {
+            field: "input",
+            message: err.detail,
+          },
+        ],
+      };
+    }
   }
 }

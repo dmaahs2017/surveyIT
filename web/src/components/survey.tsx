@@ -43,8 +43,8 @@ export const PagedSurveys = (offset: number, limit: number) => {
       limit: limit,
     },
   });
-  
-  const surveys = surveys_response.data?.surveys.surveys
+
+  const surveys = surveys_response.data?.surveys.surveys;
 
   if (surveys && surveys.length > 0) {
     return (
@@ -54,7 +54,9 @@ export const PagedSurveys = (offset: number, limit: number) => {
             <Box>
               <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>
                 <Link>
-                  <Heading style={{color: "blue"}} fontSize="l">{s.name}</Heading>
+                  <Heading style={{ color: "blue" }} fontSize="l">
+                    {s.name}
+                  </Heading>
                 </Link>
               </NextLink>
               <Text>{s.description}</Text>
@@ -75,8 +77,8 @@ export const PagedMeSurveys = (offset: number, limit: number) => {
       limit: limit,
     },
   });
-  
-  const surveys = surveys_response.data?.meSurveys.surveys
+
+  const surveys = surveys_response.data?.meSurveys.surveys;
 
   if (surveys && surveys.length > 0) {
     return (
