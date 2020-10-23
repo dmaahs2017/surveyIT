@@ -1,6 +1,6 @@
 import React from "react";
-import { label, Formik, Field, Form } from "formik";
-import { Text, Checkbox, Box, Button } from "@chakra-ui/core";
+import { Formik, Field, Form } from "formik";
+import { Box, Button } from "@chakra-ui/core";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
 import { useRegisterMutation } from "../generated/graphql";

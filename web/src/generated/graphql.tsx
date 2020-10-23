@@ -112,6 +112,7 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
+  updateUser: UserResponse;
   createSurvey: Survey;
   createQuestion: Question;
 };
@@ -135,6 +136,11 @@ export type MutationForgotPasswordArgs = {
 
 export type MutationLoginArgs = {
   options: UsernamePasswordInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: UpdateUserInput;
 };
 
 
@@ -165,6 +171,12 @@ export type RegisterInput = {
 export type UsernamePasswordInput = {
   username: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type UpdateUserInput = {
+  username: Scalars['String'];
+  email: Scalars['String'];
+  phoneNumber: Scalars['String'];
 };
 
 export type SurveyInput = {
@@ -285,6 +297,27 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
+    )> }
+  ) }
+);
+
+export type UpdateUserMutationVariables = Exact<{
+  username: Scalars['String'];
+  email: Scalars['String'];
+  phoneNumber: Scalars['String'];
+}>;
+
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser: (
     { __typename?: 'UserResponse' }
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
@@ -502,6 +535,23 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($username: String!, $email: String!, $phoneNumber: String!) {
+  updateUser(input: {username: $username, email: $email, phoneNumber: $phoneNumber}) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function useUpdateUserMutation() {
+  return Urql.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument);
 };
 export const MeDocument = gql`
     query Me {

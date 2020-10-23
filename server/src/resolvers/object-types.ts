@@ -40,7 +40,7 @@ export class PaginatedSurveys {
   @Field()
   id: string;
 
-  @Field(() => [FieldError], {nullable: true})
+  @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
 }
 

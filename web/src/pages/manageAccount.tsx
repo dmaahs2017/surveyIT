@@ -1,13 +1,17 @@
 import React, { useState } from "react";
+import { toErrorMap } from "../utils/toErrorMap";
 import { NavBar } from "../components/NavBar";
-import { Heading, Avatar, Text, Button, Input, Box } from "@chakra-ui/core";
-import { useMeQuery } from "../generated/graphql";
+import { Heading, Avatar, Text, Button, Box } from "@chakra-ui/core";
+import { useUpdateUserMutation, useMeQuery } from "../generated/graphql";
 import { InputField } from "../components/InputField";
 import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
 
 const manageAccount: React.FC<{}> = ({}) => {
   const [{ data }] = useMeQuery();
+  const [, updateUser] = useUpdateUserMutation();
   const [edit, setEdit] = useState(false);
+  const router = useRouter();
   //if use doesn't want to edit
   if (!edit) {
     return (
@@ -52,13 +56,27 @@ const manageAccount: React.FC<{}> = ({}) => {
             <Avatar style={{ marginLeft: "22.5vw" }} />
             <Text style={{ textAlign: "center" }}>AccountName</Text>
             <Formik
-              initialValues={{
-                username: data?.me?.username,
-                email: data?.me?.email,
-                phoneNumber: data?.me?.phoneNumber,
-              }}
+              initialValues={
+                data?.me
+                  ? {
+                      username: data.me.username,
+                      email: data.me.email,
+                      phoneNumber: data.me.phoneNumber,
+                    }
+                  : {
+                      username: "",
+                      email: "",
+                      phoneNumber: "",
+                    }
+              }
               onSubmit={async (values, { setErrors }) => {
                 console.log(values);
+                const response = await updateUser(values);
+                if (response.data?.updateUser.errors) {
+                  setErrors(toErrorMap(response.data?.updateUser.errors));
+                } else if (response.data?.updateUser.user) {
+                  setEdit(false);
+                }
               }}
             >
               {({ isSubmitting }) => (

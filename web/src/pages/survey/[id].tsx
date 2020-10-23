@@ -51,7 +51,12 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   let surveyName = null;
   let surveyDesc = null;
 
-  if (id && q_response.data && s_response.data?.survey.survey && me_response.data) {
+  if (
+    id &&
+    q_response.data &&
+    s_response.data?.survey.survey &&
+    me_response.data
+  ) {
     surveyName = s_response.data.survey.survey.name;
     surveyDesc = s_response.data.survey.survey.description;
 

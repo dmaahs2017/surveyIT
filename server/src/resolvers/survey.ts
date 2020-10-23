@@ -26,7 +26,6 @@ export class SurveyResolver {
     @Arg("offset", () => Int, { nullable: true }) offset: number,
     @Ctx() { req }: MyContext
   ): Promise<PaginatedSurveys> {
-
     let userId = req.session.userId;
     if (!userId) {
       return {
@@ -36,10 +35,10 @@ export class SurveyResolver {
         errors: [
           {
             field: "n/A",
-            message: "Log in to view your surveys"
-          }
-        ]
-      }
+            message: "Log in to view your surveys",
+          },
+        ],
+      };
     }
 
     const [surveys, count] = await getConnection()

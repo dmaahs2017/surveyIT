@@ -1,0 +1,17 @@
+mutation UpdateUser(
+  $username: String!
+  $email: String!
+  $phoneNumber: String!
+) {
+  updateUser(
+    input: { username: $username, email: $email, phoneNumber: $phoneNumber }
+  ) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
