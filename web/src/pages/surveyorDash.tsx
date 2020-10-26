@@ -3,9 +3,7 @@ import {
   ThemeProvider,
   CSSReset,
   theme,
-  Grid,
   Heading,
-  Flex,
   List,
   ListItem,
 } from "@chakra-ui/core";
@@ -15,8 +13,8 @@ import { PagedMeSurveys } from "../components/survey";
 
 const SurveyorDash = () => (
   <ThemeProvider theme={theme}>
-    <Wrapper>
     <NavBar />
+    <Wrapper>
       <CSSReset />
       <div className="container">
         <Heading as="h1" textAlign="center">
