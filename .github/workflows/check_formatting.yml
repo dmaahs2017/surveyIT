@@ -1,11 +1,10 @@
-name: Check Formatting
+name: Format
 on:
   pull_request:
-    branches: 
-      - master
+    branches: [master]
 jobs:
   format_check:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
@@ -13,9 +12,15 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12.x"
-      - name: Format
+      - name: install yarn
+        run: npm install -g yarn
+      - name: Format Server
         run: |
           cd server
-          npm run fmt:c
-          cd ../web
-          npm run fmt:c
+          yarn install
+          yarn fmt:c
+      - name: Format Web
+        run: |
+          cd web
+          yarn install
+          yarn fmt:c
