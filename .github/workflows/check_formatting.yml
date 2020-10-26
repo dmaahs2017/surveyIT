@@ -12,10 +12,14 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12.x"
-      - name: Format
+      - name: Format Server
         run: |
           npm install -g yarn
-          cd server
+          cd web
+          yarn install
           yarn fmt:c
-          cd ../web
+      - name: Format Server
+        run: |
+          cd ../server
+          yarn install
           yarn fmt:c
