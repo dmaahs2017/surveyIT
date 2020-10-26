@@ -26,6 +26,18 @@ html {
   margin: 1em;
 }
 
+.columnsToVertical {
+  display: flex;
+  justify-content: space-between;
+  margin: 1em;
+  text-align: center;
+}
+
+.col {
+  width: 25%;
+  margin: 1%;
+}
+
 .col1 {
   width: 25%;
   margin: 1%;
@@ -97,5 +109,15 @@ html * {
 
   .col3 {
     width: 0%;
+  }
+
+  .columnsToVertical {
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+  }
+
+  .col {
+    width: 90%
   }
 }
