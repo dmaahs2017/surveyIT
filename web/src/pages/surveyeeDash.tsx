@@ -35,7 +35,7 @@ const SurveyeeDash = () => (
               Completed Surveys:{" "}
             </Heading>
             <List styleType="disc">
-                <ListItem>Survey Details Component</ListItem>
+              <ListItem>Survey Details Component</ListItem>
             </List>
           </div>
           <div className="col">
@@ -44,12 +44,12 @@ const SurveyeeDash = () => (
                 Other:{" "}
               </Heading>
               <List styleType="disc">
-                  <ListItem>Survey Details Component</ListItem>
+                <ListItem>Survey Details Component</ListItem>
               </List>
             </div>
           </div>
         </div>
-    </div>
+      </div>
     </Wrapper>
   </ThemeProvider>
 );

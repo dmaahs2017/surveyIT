@@ -33,7 +33,7 @@ const SurveyorDash = () => (
               Your Closed Surveys:{" "}
             </Heading>
             <List styleType="disc">
-                <ListItem>Survey Details Component</ListItem>
+              <ListItem>Survey Details Component</ListItem>
             </List>
           </div>
           <div className="col">
@@ -42,12 +42,12 @@ const SurveyorDash = () => (
                 Other:{" "}
               </Heading>
               <List styleType="disc">
-                  <ListItem>Survey Details Component</ListItem>
+                <ListItem>Survey Details Component</ListItem>
               </List>
             </div>
           </div>
         </div>
-    </div>
+      </div>
     </Wrapper>
   </ThemeProvider>
 );

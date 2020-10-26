@@ -38,7 +38,9 @@ const manageAccount: React.FC<{}> = ({}) => {
           <p>{data?.me?.gender}</p>
           */}
             <br></br>
-            <Button mt={4} variantColor="teal" onClick={() => setEdit(!edit)}>Edit Account</Button>
+            <Button mt={4} variantColor="teal" onClick={() => setEdit(!edit)}>
+              Edit Account
+            </Button>
             {/* To Here */}
           </div>
         </div>
