@@ -14,9 +14,8 @@ jobs:
           node-version: "12.x"
       - name: Format
         run: |
+          npm install -g yarn
           cd server
-          npm install
-          npm run fmt:c
+          yarn fmt:c
           cd ../web
-          npm install
-          npm run fmt:c
+          yarn fmt:c
