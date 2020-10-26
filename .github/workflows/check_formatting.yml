@@ -14,12 +14,12 @@ jobs:
           node-version: "12.x"
       - name: install yarn
         run: npm install -g yarn
-      - name: Format Server
+      - name: Check Formatting in server
         run: |
           cd server
           yarn install
           yarn fmt:c
-      - name: Format Web
+      - name: Check Formatting in web
         run: |
           cd web
           yarn install
