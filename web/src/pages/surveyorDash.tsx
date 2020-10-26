@@ -15,6 +15,7 @@ import { PagedMeSurveys } from "../components/survey";
 
 const SurveyorDash = () => (
   <ThemeProvider theme={theme}>
+    <Wrapper>
     <NavBar />
       <CSSReset />
       <div className="container">
@@ -49,6 +50,7 @@ const SurveyorDash = () => (
           </div>
         </div>
     </div>
+    </Wrapper>
   </ThemeProvider>
 );
 

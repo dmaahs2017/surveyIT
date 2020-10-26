@@ -18,29 +18,38 @@ const SurveyeeDash = () => (
     <NavBar />
     <Wrapper>
       <CSSReset />
-      <Flex flexDirection="column">
-        <Heading mb="3rem" textAlign="center">
-          Surveyee Dashboard
+      <div className="container">
+        <Heading as="h1" textAlign="center">
+          Surveyor Dashboard
         </Heading>
-        <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-          <Flex flexDirection="column">
-            <Heading textAlign="center">Available Surveys</Heading>
+
+        <div className="columnsToVertical">
+          <div className="col">
+            <Heading as="h2" className="title">
+              Available Surveys:{" "}
+            </Heading>
             {PagedSurveys(0, 10)}
-          </Flex>
-          <Flex alignItems="center" flexDirection="column">
-            <Heading textAlign="center">Completed Surveys</Heading>
+          </div>
+          <div className="col">
+            <Heading as="h2" className="title">
+              Completed Surveys:{" "}
+            </Heading>
             <List styleType="disc">
-              <ListItem>Survey Details Component</ListItem>
+                <ListItem>Survey Details Component</ListItem>
             </List>
-          </Flex>
-          <Flex alignItems="center" flexDirection="column">
-            <Heading textAlign="center">Other</Heading>
-            <List styleType="disc">
-              <ListItem>Survey Details Component</ListItem>
-            </List>
-          </Flex>
-        </Grid>
-      </Flex>
+          </div>
+          <div className="col">
+            <div>
+              <Heading as="h2" className="title">
+                Other:{" "}
+              </Heading>
+              <List styleType="disc">
+                  <ListItem>Survey Details Component</ListItem>
+              </List>
+            </div>
+          </div>
+        </div>
+    </div>
     </Wrapper>
   </ThemeProvider>
 );
