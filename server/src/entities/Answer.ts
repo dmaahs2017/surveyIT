@@ -13,10 +13,18 @@ import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class QuestionAnswer extends BaseEntity {
+export class Answer extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Field()
+  @Column()
+  answer!: number;
+
+  @Field()
+  @Column()
+  questionId!: number;
 
   @Field(() => Question)
   @ManyToOne(() => Question)
@@ -24,8 +32,9 @@ export class QuestionAnswer extends BaseEntity {
 
   @Field()
   @Column()
-  answer!: number;
+  userId!: number;
 
+  @Field(() => User)
   @ManyToOne(() => User)
   user!: User;
 

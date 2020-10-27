@@ -14,31 +14,35 @@ import {
   FormErrorMessage,
   Button,
   useDisclosure,
+  Flex,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/core";
 import { Wrapper } from "../../components/Wrapper";
 import { NavBar } from "../../components/NavBar";
 import { QuestionInput } from "../../components/QuestionInput";
+import { QuestionResponse } from "../../components/QuestionResopnse";
+import { FieldArray, Formik, Form } from "formik";
+import { useRouter } from "next/router";
 import {
   useMeQuery,
   useSurveyQuery,
   useQuestionsQuery,
+  useSubmitSurveyMutation,
 } from "../../generated/graphql";
 
 const Survey: NextPage<{ id: number }> = ({ id }) => {
+  const router = useRouter();
   const [q_response] = useQuestionsQuery({
     variables: {
       offset: 0,
       limit: 10,
       survey_id: id,
     },
-    //notifyOnNetworkStatusChange: true,
   });
   const [s_response] = useSurveyQuery({
     variables: {
@@ -47,6 +51,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   });
   const [me_response] = useMeQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [, submitResponse] = useSubmitSurveyMutation();
   let survey = null;
   let surveyName = null;
   let surveyDesc = null;
@@ -59,30 +64,60 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   ) {
     surveyName = s_response.data.survey.survey.name;
     surveyDesc = s_response.data.survey.survey.description;
+    const surveyId = s_response.data.survey.survey.id;
 
+    //if not creator of survey
     if (s_response.data.survey.survey.creator.id != me_response.data.me?.id) {
-      const questions = q_response.data.questions.questions.map((q) => (
-        <>
-          <FormLabel>{q.question}</FormLabel>
-          <Input />
-          <FormHelperText>Helper Text</FormHelperText>
-          <FormErrorMessage>Error message</FormErrorMessage>
-        </>
-      ));
-
       survey = (
         <Wrapper>
           <ThemeProvider theme={theme}>
             <CSSReset />
-            <Heading>{surveyName}</Heading>
-            <Text>{surveyDesc}</Text>
-            <Box>
-              <FormControl>{questions}</FormControl>
-            </Box>
+            <Flex flexDir="row-reverse" justifyContent="space-around">
+              <Heading>{surveyName}</Heading>
+              <Text>{surveyDesc}</Text>
+              <Formik
+                initialValues={{
+                  responses: q_response.data.questions.questions,
+                }}
+                onSubmit={async (values, { setErrors }) => {
+                  let answers = [];
+                  for (let i = 0; i < values.responses.length; i++) {
+                    answers.push({
+                      answer: parseInt(values.responses[i].answer),
+                      questionId: values.responses[i].id,
+                    });
+                  }
+                  const response = await submitResponse({
+                    surveyId: surveyId,
+                    answers: answers,
+                  });
+
+                  if (response) {
+                    router.push("/surveyeeDash");
+                  }
+                }}
+              >
+                <Form>
+                  <FieldArray
+                    name="responses"
+                    render={() =>
+                      q_response.data?.questions.questions.map((q, i) => (
+                        <>
+                          <FormLabel>{q.question}</FormLabel>
+                          {QuestionResponse(i)}
+                        </>
+                      ))
+                    }
+                  />
+                  <Button type="submit">Submit</Button>
+                </Form>
+              </Formik>
+            </Flex>
           </ThemeProvider>
         </Wrapper>
       );
     } else {
+      //else creator of survey
       const questions = q_response.data.questions.questions.map((q) => (
         <>
           <FormLabel>{q.question}</FormLabel>
