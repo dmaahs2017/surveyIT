@@ -3,6 +3,7 @@ import { InputField } from "./InputField";
 import { Formik, Form } from "formik";
 import { Button } from "@chakra-ui/core";
 import { useCreateQuestionMutation } from "../generated/graphql";
+import { useRouter } from "next/router";
 
 type QuestionInputProps = InputHTMLAttributes<HTMLInputElement> & {
   surveyId: number;
@@ -14,6 +15,7 @@ export const QuestionInput: React.FC<QuestionInputProps> = ({
   onClick,
 }) => {
   const [, submitQuestion] = useCreateQuestionMutation();
+  const router = useRouter();
   return (
     <Formik
       initialValues={{ question: "" }}
@@ -23,6 +25,7 @@ export const QuestionInput: React.FC<QuestionInputProps> = ({
           survey_id: surveyId,
           q_str: values.question,
         });
+        router.reload();
         onClick();
       }}
     >
