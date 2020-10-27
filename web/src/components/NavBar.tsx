@@ -15,7 +15,6 @@ import {
   Link,
   useDisclosure,
 } from "@chakra-ui/core";
-import NextLink from "next/link";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { useRouter } from "next/router";
 import { NewSurveyModal } from "./NewSurveyModal";
@@ -70,32 +69,32 @@ export const NavBar = () => {
     );
   }
 
-  return (
-    <ThemeProvider theme={theme}>
-      <CSSReset />
-      <Grid
-        templateColumns="repeat(2, 1fr)"
-        gap={6}
-        backgroundColor="purple.500"
-      >
-        <Flex alignItems="center">
-          <Link href="/" ml="2">
-            <Heading ml={2}>SurveyIT</Heading>
-          </Link>
-        </Flex>
-        <Flex alignItems="center" justifyContent="flex-end">
-          <Button onClick={onOpen} mr="4">
-            <Text>Create New Survey</Text>
-          </Button>
-          <Menu>
-            <MenuButton as={Button} mr="2" mb="2" mt="2">
-              {greet}
-              <MenuList>{items}</MenuList>
-            </MenuButton>
-          </Menu>
-        </Flex>
-      </Grid>
-      
+  if (data?.me?.typeOfUser === "SURVEYOR") {
+    return (
+      <ThemeProvider theme={theme}>
+        <CSSReset />
+        <Grid
+          templateColumns="repeat(2, 1fr)"
+          gap={6}
+          backgroundColor="purple.500"
+        >
+          <Flex alignItems="center">
+            <Link href="/" ml="2">
+              <Heading ml={2}>SurveyIT</Heading>
+            </Link>
+          </Flex>
+          <Flex alignItems="center" justifyContent="flex-end">
+            <Button onClick={onOpen} mr="4">
+              <Text>Create New Survey</Text>
+            </Button>
+            <Menu>
+              <MenuButton as={Button} mr="2" mb="2" mt="2">
+                {greet}
+                <MenuList>{items}</MenuList>
+              </MenuButton>
+            </Menu>
+          </Flex>
+        </Grid>
         <NewSurveyModal isOpen={isOpen} onClose={onClose} />
       </ThemeProvider>
     );
