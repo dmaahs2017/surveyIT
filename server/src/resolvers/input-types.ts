@@ -1,6 +1,21 @@
 import { InputType, Field } from "type-graphql";
 
 @InputType()
+class Answer {
+  @Field()
+  questionId: number;
+  @Field()
+  answer: number;
+}
+
+@InputType()
+export class SurveySubmission {
+  @Field()
+  surveyId: number;
+  @Field(() => [Answer])
+  answers: [Answer];
+}
+@InputType()
 export class UpdateUserInput {
   @Field()
   username: string;

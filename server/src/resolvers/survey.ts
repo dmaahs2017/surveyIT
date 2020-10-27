@@ -1,8 +1,9 @@
 import { Resolver, Arg, Ctx, Query, Int, Mutation } from "type-graphql";
-import { PaginatedSurveys } from "./object-types";
+import { FieldError, PaginatedSurveys } from "./object-types";
 import { MyContext } from "../types";
 import { Survey } from "../entities/Survey";
-import { SurveyInput } from "./input-types";
+import { Answer } from "../entities/Answer";
+import { SurveySubmission, SurveyInput } from "./input-types";
 import { SurveyResponse } from "./object-types";
 import { v4 } from "uuid";
 import { getConnection } from "typeorm";
@@ -105,5 +106,64 @@ export class SurveyResolver {
     return {
       survey,
     };
+  }
+
+  @Mutation(() => [FieldError])
+  async submitSurvey(
+    @Arg("submission", () => SurveySubmission) submission: SurveySubmission,
+    @Ctx() { req }: MyContext
+  ): Promise<FieldError[]> {
+    if (!submission) {
+      return [
+        {
+          field: "submission",
+          message: "submission is empty",
+        },
+      ];
+    }
+
+    const userId = req.session.userId;
+    if (!userId) {
+      return [
+        {
+          field: "userId",
+          message: "not logged in",
+        },
+      ];
+    }
+
+    let errors: FieldError[] = [];
+    for (let i = 0; i < submission.answers.length; i++) {
+      let answer = new Answer();
+      answer.questionId = submission.answers[i].questionId;
+      answer.userId = userId;
+      answer.answer = submission.answers[i].answer;
+
+      let existsingResponse = await Answer.findOne({
+        where: { questionId: answer.questionId, userId: userId },
+      });
+      if (existsingResponse) {
+        errors.push({
+          field: `questionId: ${answer.questionId}`,
+          message: "This user has already responded to this question",
+        });
+      } else if (answer.answer < 0 || answer.answer > 4) {
+        errors.push({
+          field: `questionId: ${answer.questionId}`,
+          message: "Answer must be between [0, 4]",
+        });
+      } else {
+        try {
+          answer.save();
+        } catch (err) {
+          errors.push({
+            field: `questionId: ${answer.questionId}`,
+            message: err.message,
+          });
+        }
+      }
+    }
+
+    return errors;
   }
 }
