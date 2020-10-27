@@ -1,0 +1,6 @@
+mutation SubmitSurvey($surveyId: Int!, $answers: [Answer!]!) {
+  submitSurvey(submission: { surveyId: $surveyId, answers: $answers }) {
+    field
+    message
+  }
+}

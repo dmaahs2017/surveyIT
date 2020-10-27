@@ -114,6 +114,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   updateUser: UserResponse;
   createSurvey: Survey;
+  submitSurvey: Array<FieldError>;
   createQuestion: Question;
 };
 
@@ -146,6 +147,11 @@ export type MutationUpdateUserArgs = {
 
 export type MutationCreateSurveyArgs = {
   input: SurveyInput;
+};
+
+
+export type MutationSubmitSurveyArgs = {
+  submission: SurveySubmission;
 };
 
 
@@ -182,6 +188,16 @@ export type UpdateUserInput = {
 export type SurveyInput = {
   name: Scalars['String'];
   description: Scalars['String'];
+};
+
+export type SurveySubmission = {
+  surveyId: Scalars['Int'];
+  answers: Array<Answer>;
+};
+
+export type Answer = {
+  questionId: Scalars['Int'];
+  answer: Scalars['Int'];
 };
 
 export type RegularUserFragment = (
@@ -306,6 +322,20 @@ export type RegisterMutation = (
       & RegularUserFragment
     )> }
   ) }
+);
+
+export type SubmitSurveyMutationVariables = Exact<{
+  surveyId: Scalars['Int'];
+  answers: Array<Answer>;
+}>;
+
+
+export type SubmitSurveyMutation = (
+  { __typename?: 'Mutation' }
+  & { submitSurvey: Array<(
+    { __typename?: 'FieldError' }
+    & Pick<FieldError, 'field' | 'message'>
+  )> }
 );
 
 export type UpdateUserMutationVariables = Exact<{
@@ -535,6 +565,18 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const SubmitSurveyDocument = gql`
+    mutation SubmitSurvey($surveyId: Int!, $answers: [Answer!]!) {
+  submitSurvey(submission: {surveyId: $surveyId, answers: $answers}) {
+    field
+    message
+  }
+}
+    `;
+
+export function useSubmitSurveyMutation() {
+  return Urql.useMutation<SubmitSurveyMutation, SubmitSurveyMutationVariables>(SubmitSurveyDocument);
 };
 export const UpdateUserDocument = gql`
     mutation UpdateUser($username: String!, $email: String!, $phoneNumber: String!) {

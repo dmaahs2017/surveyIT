@@ -18,13 +18,13 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/core";
 import { Wrapper } from "../../components/Wrapper";
 import { NavBar } from "../../components/NavBar";
 import { QuestionInput } from "../../components/QuestionInput";
+import { QuestionResponse } from "../../components/QuestionResopnse";
 import {
   useMeQuery,
   useSurveyQuery,
@@ -59,13 +59,14 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   ) {
     surveyName = s_response.data.survey.survey.name;
     surveyDesc = s_response.data.survey.survey.description;
+    let surveyId = s_response.data.survey.survey.id;
 
+    //if not creator of survey
     if (s_response.data.survey.survey.creator.id != me_response.data.me?.id) {
       const questions = q_response.data.questions.questions.map((q) => (
         <>
           <FormLabel>{q.question}</FormLabel>
-          <Input />
-          <FormHelperText>Helper Text</FormHelperText>
+          <QuestionResponse surveyId={surveyId} questionId={q.id} />
           <FormErrorMessage>Error message</FormErrorMessage>
         </>
       ));
@@ -83,6 +84,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
         </Wrapper>
       );
     } else {
+      //else creator of survey
       const questions = q_response.data.questions.questions.map((q) => (
         <>
           <FormLabel>{q.question}</FormLabel>
