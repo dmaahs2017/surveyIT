@@ -84,11 +84,9 @@ export const NavBar = () => {
           </Link>
         </Flex>
         <Flex alignItems="center" justifyContent="flex-end">
-          <NextLink href="/">
-            <Button onClick={onOpen} mr="4">
-              <Text>Create New Survey</Text>
-            </Button>
-          </NextLink>
+          <Button onClick={onOpen} mr="4">
+            <Text>Create New Survey</Text>
+          </Button>
           <Menu>
             <MenuButton as={Button} mr="2" mb="2" mt="2">
               {greet}
