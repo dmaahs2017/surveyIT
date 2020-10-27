@@ -59,7 +59,6 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
     surveyName = s_response.data.survey.survey.name;
     surveyDesc = s_response.data.survey.survey.description;
 
-
     // owner of survey
     if (s_response.data.survey.survey.creator.id == me_response.data.me?.id) {
       const questions = q_response.data.questions.questions.map((q) => (
