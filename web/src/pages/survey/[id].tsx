@@ -26,8 +26,8 @@ import { Wrapper } from "../../components/Wrapper";
 import { NavBar } from "../../components/NavBar";
 import { QuestionInput } from "../../components/QuestionInput";
 import { QuestionResponse } from "../../components/QuestionResopnse";
-import {FieldArray, Formik, Form} from "formik"
-import {useRouter} from "next/router"
+import { FieldArray, Formik, Form } from "formik";
+import { useRouter } from "next/router";
 import {
   useMeQuery,
   useSurveyQuery,
@@ -73,39 +73,41 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
           <ThemeProvider theme={theme}>
             <CSSReset />
             <Flex flexDir="row-reverse" justifyContent="space-around">
-            <Heading>{surveyName}</Heading>
-            <Text>{surveyDesc}</Text>
+              <Heading>{surveyName}</Heading>
+              <Text>{surveyDesc}</Text>
               <Formik
-                initialValues={{ responses: q_response.data.questions.questions }}
+                initialValues={{
+                  responses: q_response.data.questions.questions,
+                }}
                 onSubmit={async (values, { setErrors }) => {
                   let answers = [];
-                  for (let i = 0; i<values.responses.length; i++) {
+                  for (let i = 0; i < values.responses.length; i++) {
                     answers.push({
                       answer: parseInt(values.responses[i].answer),
-                      questionId: values.responses[i].id
-                    })
+                      questionId: values.responses[i].id,
+                    });
                   }
                   const response = await submitResponse({
                     surveyId: surveyId,
-                    answers: answers
-                  })
+                    answers: answers,
+                  });
 
                   if (response) {
-                    router.push("/surveyeeDash")
+                    router.push("/surveyeeDash");
                   }
                 }}
               >
                 <Form>
                   <FieldArray
                     name="responses"
-                    render={() => (
+                    render={() =>
                       q_response.data?.questions.questions.map((q, i) => (
                         <>
                           <FormLabel>{q.question}</FormLabel>
                           {QuestionResponse(i)}
                         </>
                       ))
-                    )}
+                    }
                   />
                   <Button type="submit">Submit</Button>
                 </Form>
