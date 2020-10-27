@@ -20,7 +20,7 @@ const manageAccount: React.FC<{}> = ({}) => {
         <Heading style={{ textAlign: "center" }}>Account</Heading>
         <div className="container">
           <div className="userInfo">
-            <Avatar style={{ marginLeft: "22.5vw" }} />
+            <Avatar style={{ marginLeft: "21.5vw" }} />
             <Text style={{ textAlign: "center" }}>{data?.me?.username}</Text>
             {/* delte from here */}
             <Text className="fieldName">Name</Text>
@@ -38,7 +38,9 @@ const manageAccount: React.FC<{}> = ({}) => {
           <p>{data?.me?.gender}</p>
           */}
             <br></br>
-            <Button onClick={() => setEdit(!edit)}>Edit Account</Button>
+            <Button mt={4} variantColor="teal" onClick={() => setEdit(!edit)}>
+              Edit Account
+            </Button>
             {/* To Here */}
           </div>
         </div>
@@ -53,8 +55,8 @@ const manageAccount: React.FC<{}> = ({}) => {
         <Heading style={{ textAlign: "center" }}>Account</Heading>
         <div className="container">
           <div className="userInfo">
-            <Avatar style={{ marginLeft: "22.5vw" }} />
-            <Text style={{ textAlign: "center" }}>AccountName</Text>
+            <Avatar style={{ marginLeft: "21.5vw" }} />
+            <Text style={{ textAlign: "center" }}>{data?.me?.username}</Text>
             <Formik
               initialValues={
                 data?.me

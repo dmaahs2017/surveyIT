@@ -70,35 +70,64 @@ export const NavBar = () => {
     );
   }
 
-  return (
-    <ThemeProvider theme={theme}>
-      <CSSReset />
-      <Grid
-        templateColumns="repeat(2, 1fr)"
-        gap={6}
-        backgroundColor="purple.500"
-      >
-        <Flex alignItems="center">
-          <Link href="/" ml="2">
-            <Heading ml={2}>SurveyIT</Heading>
-          </Link>
-        </Flex>
-        <Flex alignItems="center" justifyContent="flex-end">
-          <NextLink href="/">
-            <Button onClick={onOpen} mr="4">
-              <Text>Create New Survey</Text>
-            </Button>
-          </NextLink>
-          <Menu>
-            <MenuButton as={Button} mr="2" mb="2" mt="2">
-              {greet}
-              <MenuList>{items}</MenuList>
-            </MenuButton>
-          </Menu>
-        </Flex>
-      </Grid>
+  if (data?.me?.typeOfUser === "SURVEYOR") {
+    return (
+      <ThemeProvider theme={theme}>
+        <CSSReset />
+        <Grid
+          templateColumns="repeat(2, 1fr)"
+          gap={6}
+          backgroundColor="purple.500"
+        >
+          <Flex alignItems="center">
+            <Link href="/" ml="2">
+              <Heading ml={2}>SurveyIT</Heading>
+            </Link>
+          </Flex>
+          <Flex alignItems="center" justifyContent="flex-end">
+            <NextLink href="/">
+              <Button onClick={onOpen} mr="4">
+                <Text>Create New Survey</Text>
+              </Button>
+            </NextLink>
+            <Menu>
+              <MenuButton as={Button} mr="2" mb="2" mt="2">
+                {greet}
+                <MenuList>{items}</MenuList>
+              </MenuButton>
+            </Menu>
+          </Flex>
+        </Grid>
 
-      <NewSurveyModal isOpen={isOpen} onClose={onClose} />
-    </ThemeProvider>
-  );
+        <NewSurveyModal isOpen={isOpen} onClose={onClose} />
+      </ThemeProvider>
+    );
+  } else {
+    return (
+      <ThemeProvider theme={theme}>
+        <CSSReset />
+        <Grid
+          templateColumns="repeat(2, 1fr)"
+          gap={6}
+          backgroundColor="purple.500"
+        >
+          <Flex alignItems="center">
+            <Link href="/" ml="2">
+              <Heading ml={2}>SurveyIT</Heading>
+            </Link>
+          </Flex>
+          <Flex alignItems="center" justifyContent="flex-end">
+            <Menu>
+              <MenuButton as={Button} mr="2" mb="2" mt="2">
+                {greet}
+                <MenuList>{items}</MenuList>
+              </MenuButton>
+            </Menu>
+          </Flex>
+        </Grid>
+
+        <NewSurveyModal isOpen={isOpen} onClose={onClose} />
+      </ThemeProvider>
+    );
+  }
 };
