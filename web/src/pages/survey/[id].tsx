@@ -72,9 +72,9 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
         <Wrapper>
           <ThemeProvider theme={theme}>
             <CSSReset />
-            <Flex flexDir="row-reverse" justifyContent="space-around">
-              <Heading>{surveyName}</Heading>
-              <Text>{surveyDesc}</Text>
+            <Heading>{surveyName}</Heading>
+            <Text className="surveyDescription">{surveyDesc}</Text>
+            <div>
               <Formik
                 initialValues={{
                   responses: q_response.data.questions.questions,
@@ -102,17 +102,17 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
                     name="responses"
                     render={() =>
                       q_response.data?.questions.questions.map((q, i) => (
-                        <>
-                          <FormLabel>{q.question}</FormLabel>
+                        <div style={{textAlign:"center"}}>
+                          <FormLabel><p className="surveyQuestion">{q.question}</p></FormLabel>
                           {QuestionResponse(i)}
-                        </>
+                        </div>
                       ))
                     }
                   />
                   <Button type="submit">Submit</Button>
                 </Form>
               </Formik>
-            </Flex>
+            </div>
           </ThemeProvider>
         </Wrapper>
       );

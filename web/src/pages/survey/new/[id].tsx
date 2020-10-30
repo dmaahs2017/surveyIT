@@ -34,7 +34,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   const [q_response] = useQuestionsQuery({
     variables: {
       offset: 0,
-      limit: 10,
+      limit: 100,
       survey_id: id,
     },
     //notifyOnNetworkStatusChange: true,
@@ -71,10 +71,12 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
 
       survey = (
         <>
+        <p>hello</p>
           <Wrapper>
             <ThemeProvider theme={theme}>
               <CSSReset />
               <Heading>{surveyName}</Heading>
+              <br></br><br></br><br></br><br></br><br></br><br></br><br></br>
               <Text>{surveyDesc}</Text>
               <Box>
                 <FormControl>{questions}</FormControl>

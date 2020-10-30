@@ -28,7 +28,7 @@ const SurveyeeDash = () => (
             <Heading as="h2" className="title">
               Available Surveys:{" "}
             </Heading>
-            {PagedSurveys(0, 10)}
+            {PagedSurveys(0, 100)}
           </div>
           <div className="col">
             <Heading as="h2" className="title">

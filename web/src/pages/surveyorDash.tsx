@@ -26,7 +26,7 @@ const SurveyorDash = () => (
             <Heading as="h2" className="title">
               Your Open Surveys:{" "}
             </Heading>
-            {PagedMeSurveys(0, 1)}
+            {PagedMeSurveys(0, 100)}
           </div>
           <div className="col">
             <Heading as="h2" className="title">
