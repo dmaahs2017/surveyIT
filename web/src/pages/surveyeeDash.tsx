@@ -28,7 +28,7 @@ const SurveyeeDash = () => (
             <Heading as="h2" className="title">
               Available Surveys:{" "}
             </Heading>
-            <div style={{overflowY:"scroll"}}>
+            <div className="availableSurveys">
             {PagedSurveys(0, 100)}
             </div>
           </div>

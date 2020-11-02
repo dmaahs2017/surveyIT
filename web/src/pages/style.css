@@ -175,3 +175,8 @@ html * {
     padding-bottom: 0.3em;
     padding-left: 2em;
   }
+
+  .availableSurveys {
+    overflow-y: scroll;
+    max-height: 40vw;
+  }
