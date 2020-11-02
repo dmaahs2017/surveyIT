@@ -1,10 +1,10 @@
 import React from "react";
 import { Field } from "formik";
-import { Box, Text } from "@chakra-ui/core";
+import { Box, Text, Flex } from "@chakra-ui/core";
 
 export const QuestionResponse = (i: number) => {
   return (
-    <div className="questionContainer">
+    <Flex className="questionContainer">
       <div className="surveyAnswer">      
         <Text mr="2">
           <Field className="radioButton" type="radio" name={"responses[" + i + "].answer"} value="0" />
@@ -38,6 +38,6 @@ export const QuestionResponse = (i: number) => {
         </Text>
       </div>
       
-    </div>
+    </Flex>
   );
 };

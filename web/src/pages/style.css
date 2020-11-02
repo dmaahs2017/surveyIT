@@ -18,19 +18,13 @@ html {
 .container {
   padding: 1%;
   height: 95vh;
+  overflow: hidden;
 }
 
 .columns {
   display: flex;
   justify-content: space-between;
   margin: 1em;
-}
-
-.columnsToVertical {
-  display: flex;
-  justify-content: space-between;
-  margin: 1em;
-  text-align: center;
 }
 
 .col {
@@ -102,6 +96,22 @@ html * {
   font-family: Arial;
 }
 
+.columnsToVertical {
+  justify-content: space-between;
+  margin: 1em;
+  text-align: center;
+}
+
+.surveyContainer {
+  max-width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.submitButton {
+  margin-left: 90%;
+}
+
 @media (max-aspect-ratio: 4/3) {
   .col1 {
     width: 40%;
@@ -124,10 +134,17 @@ html * {
   .col {
     width: 90%;
   }
+
+  .surveyContainer {
+    max-width: 90%;
+  }
+
+  .submitButton {
+    margin-left: 80%;
+  }
 }
 
   .questionContainer {
-    display: flex;
     justify-content: space-evenly;
   }
 

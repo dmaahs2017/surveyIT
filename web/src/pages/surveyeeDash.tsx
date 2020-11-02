@@ -23,12 +23,14 @@ const SurveyeeDash = () => (
           Surveyor Dashboard
         </Heading>
 
-        <div className="columnsToVertical">
+        <Flex className="columnsToVertical">
           <div className="col">
             <Heading as="h2" className="title">
               Available Surveys:{" "}
             </Heading>
+            <div style={{overflowY:"scroll"}}>
             {PagedSurveys(0, 100)}
+            </div>
           </div>
           <div className="col">
             <Heading as="h2" className="title">
@@ -48,7 +50,7 @@ const SurveyeeDash = () => (
               </List>
             </div>
           </div>
-        </div>
+        </Flex>
       </div>
     </Wrapper>
   </ThemeProvider>

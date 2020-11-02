@@ -69,7 +69,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
     //if not creator of survey
     if (s_response.data.survey.survey.creator.id != me_response.data.me?.id) {
       survey = (
-        <Wrapper>
+        <div className="surveyContainer">
           <ThemeProvider theme={theme}>
             <CSSReset />
             <Heading>{surveyName}</Heading>
@@ -109,12 +109,12 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
                       ))
                     }
                   />
-                  <Button type="submit">Submit</Button>
+                  <div className="submitButton"><Button type="submit">Submit</Button></div>
                 </Form>
               </Formik>
             </div>
           </ThemeProvider>
-        </Wrapper>
+        </div>
       );
     } else {
       //else creator of survey
@@ -165,7 +165,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   return (
     <>
       <NavBar />
-      {survey}
+        {survey}
     </>
   );
 };
