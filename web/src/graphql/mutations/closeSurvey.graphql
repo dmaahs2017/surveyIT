@@ -1,0 +1,11 @@
+mutation CloseSurvey($surveyId: Int!, $closeAt: DateTime) {
+  closeSurvey(surveyId: $surveyId, closeAt: $closeAt) {
+    errors {
+      field
+      message
+    }
+    survey {
+      ...SurveySnippet
+    }
+  }
+}

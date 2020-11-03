@@ -2,6 +2,8 @@ fragment SurveySnippet on Survey {
   name
   description
   id
+  opensAt
+  closesAt
   creator {
     id
     username
