@@ -110,7 +110,7 @@ html * {
 }
 
 .submitButton {
-  margin-left: 90%;
+  margin-left: 85%;
 }
 
 @media (max-aspect-ratio: 4/3) {
@@ -184,4 +184,5 @@ html * {
   .availableSurveys {
     overflow-y: scroll;
     max-height: 40vw;
+    padding-top: 0.5em;
   }

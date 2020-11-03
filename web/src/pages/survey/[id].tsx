@@ -74,7 +74,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
             <CSSReset />
             <Heading>{surveyName}</Heading>
             <Text className="surveyDescription">{surveyDesc}</Text>
-            <div>
+            <div style={{overflowY:"scroll", overflowX:"hidden", maxHeight:"80vw"}}>
               <Formik
                 initialValues={{
                   responses: q_response.data.questions.questions,
