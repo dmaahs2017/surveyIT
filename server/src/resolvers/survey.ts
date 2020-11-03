@@ -21,6 +21,82 @@ export class SurveyResolver {
     }).save();
   }
 
+  @Mutation(() => SurveyResponse)
+  async closeSurvey(
+    @Arg("surveyId", () => Int) surveyId: number,
+    @Ctx() { req }: MyContext,
+    @Arg("closeAt", { nullable: true }) closeAt?: Date
+  ): Promise<SurveyResponse> {
+    const userId = req.session.userId;
+    if (!userId) {
+      return {
+        errors: [
+          {
+            field: "userId",
+            message: "Not Logged In",
+          },
+        ],
+      };
+    }
+
+    let survey = await Survey.findOne({
+      where: { id: surveyId, creatorId: userId },
+    });
+
+    if (!survey) {
+      return {
+        errors: [
+          {
+            field: "surveyId or creatorId",
+            message: "You do not own this survey",
+          },
+        ],
+      };
+    }
+
+    const now = new Date();
+    if (survey.closesAt && survey.closesAt < now && !closeAt) {
+      return {
+        errors: [
+          {
+            field: "closesAt",
+            message: "Survey already closed",
+          },
+        ],
+      };
+    } else if (closeAt && closeAt < now) {
+      return {
+        errors: [
+          {
+            field: "closeAt",
+            message:
+              "Cannot schedule a survey to close in the past. Must schedule a future date and time",
+          },
+        ],
+      };
+    }
+
+    if (closeAt) {
+      survey.closesAt = closeAt;
+    } else {
+      survey.closesAt = now;
+    }
+
+    try {
+      survey.save();
+    } catch (e) {
+      return {
+        errors: [
+          {
+            field: "surveyId or creatorId",
+            message: e,
+          },
+        ],
+      };
+    }
+    return { survey };
+  }
+
   @Query(() => PaginatedSurveys)
   async meSurveys(
     @Arg("limit", () => Int) limit: number,
