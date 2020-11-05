@@ -69,12 +69,14 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
     //if not creator of survey
     if (s_response.data.survey.survey.creator.id != me_response.data.me?.id) {
       survey = (
-        <div className="surveyContainer">
+          <div className="surveyScrollbar">
+            <NavBar />
           <ThemeProvider theme={theme}>
             <CSSReset />
+            <div className="surveyContainer">    
             <Heading>{surveyName}</Heading>
             <Text className="surveyDescription">{surveyDesc}</Text>
-            <div style={{overflowY:"scroll", overflowX:"hidden", maxHeight:"80vw"}}>
+            
               <Formik
                 initialValues={{
                   responses: q_response.data.questions.questions,
@@ -129,6 +131,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
 
       survey = (
         <>
+        <NavBar />
           <Wrapper>
             <ThemeProvider theme={theme}>
               <CSSReset />
@@ -164,7 +167,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
 
   return (
     <>
-      <NavBar />
+      
         {survey}
     </>
   );

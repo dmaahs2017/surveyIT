@@ -186,3 +186,10 @@ html * {
     max-height: 40vw;
     padding-top: 0.5em;
   }
+
+  .surveyScrollbar {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 90vw;
+    height: 100vh;
+  }
