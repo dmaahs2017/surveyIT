@@ -15,6 +15,7 @@ export class SurveySubmission {
   @Field(() => [Answer])
   answers: [Answer];
 }
+
 @InputType()
 export class UpdateUserInput {
   @Field()
@@ -29,8 +30,12 @@ export class UpdateUserInput {
 export class SurveyInput {
   @Field()
   name!: string;
-  @Field()
+  @Field({ nullable: true })
   description?: string;
+  @Field({ nullable: true })
+  closesAt?: Date;
+  @Field({ nullable: true })
+  opensAt?: Date;
 }
 
 @InputType()

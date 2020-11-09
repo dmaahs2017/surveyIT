@@ -10,6 +10,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export type Query = {
@@ -70,11 +72,14 @@ export type Survey = {
   id: Scalars['Float'];
   name: Scalars['String'];
   description: Scalars['String'];
+  opensAt?: Maybe<Scalars['DateTime']>;
+  closesAt?: Maybe<Scalars['DateTime']>;
   creatorId: Scalars['Float'];
   creator: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
+
 
 export type FieldError = {
   __typename?: 'FieldError';
@@ -114,6 +119,8 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   updateUser: UserResponse;
   createSurvey: Survey;
+  closeSurvey: SurveyResponse;
+  openSurvey: SurveyResponse;
   submitSurvey: Array<FieldError>;
   createQuestion: Question;
 };
@@ -147,6 +154,18 @@ export type MutationUpdateUserArgs = {
 
 export type MutationCreateSurveyArgs = {
   input: SurveyInput;
+};
+
+
+export type MutationCloseSurveyArgs = {
+  closeAt?: Maybe<Scalars['DateTime']>;
+  surveyId: Scalars['Int'];
+};
+
+
+export type MutationOpenSurveyArgs = {
+  openAt?: Maybe<Scalars['DateTime']>;
+  surveyId: Scalars['Int'];
 };
 
 
@@ -187,7 +206,9 @@ export type UpdateUserInput = {
 
 export type SurveyInput = {
   name: Scalars['String'];
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  closesAt?: Maybe<Scalars['DateTime']>;
+  opensAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type SurveySubmission = {
@@ -212,7 +233,7 @@ export type StdFieldErrorFragment = (
 
 export type SurveySnippetFragment = (
   { __typename?: 'Survey' }
-  & Pick<Survey, 'name' | 'description' | 'id'>
+  & Pick<Survey, 'name' | 'description' | 'id' | 'opensAt' | 'closesAt'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -232,6 +253,26 @@ export type ChangePasswordMutation = (
     & { user?: Maybe<(
       { __typename?: 'User' }
       & RegularUserFragment
+    )> }
+  ) }
+);
+
+export type CloseSurveyMutationVariables = Exact<{
+  surveyId: Scalars['Int'];
+  closeAt?: Maybe<Scalars['DateTime']>;
+}>;
+
+
+export type CloseSurveyMutation = (
+  { __typename?: 'Mutation' }
+  & { closeSurvey: (
+    { __typename?: 'SurveyResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, survey?: Maybe<(
+      { __typename?: 'Survey' }
+      & SurveySnippetFragment
     )> }
   ) }
 );
@@ -299,6 +340,26 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'logout'>
+);
+
+export type OpenSurveyMutationVariables = Exact<{
+  surveyId: Scalars['Int'];
+  openAt?: Maybe<Scalars['DateTime']>;
+}>;
+
+
+export type OpenSurveyMutation = (
+  { __typename?: 'Mutation' }
+  & { openSurvey: (
+    { __typename?: 'SurveyResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, survey?: Maybe<(
+      { __typename?: 'Survey' }
+      & SurveySnippetFragment
+    )> }
+  ) }
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -470,6 +531,8 @@ export const SurveySnippetFragmentDoc = gql`
   name
   description
   id
+  opensAt
+  closesAt
   creator {
     id
     username
@@ -488,6 +551,23 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CloseSurveyDocument = gql`
+    mutation CloseSurvey($surveyId: Int!, $closeAt: DateTime) {
+  closeSurvey(surveyId: $surveyId, closeAt: $closeAt) {
+    errors {
+      field
+      message
+    }
+    survey {
+      ...SurveySnippet
+    }
+  }
+}
+    ${SurveySnippetFragmentDoc}`;
+
+export function useCloseSurveyMutation() {
+  return Urql.useMutation<CloseSurveyMutation, CloseSurveyMutationVariables>(CloseSurveyDocument);
 };
 export const CreateQuestionDocument = gql`
     mutation createQuestion($survey_id: Int!, $q_str: String!) {
@@ -548,6 +628,23 @@ export const LogoutDocument = gql`
 
 export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
+};
+export const OpenSurveyDocument = gql`
+    mutation OpenSurvey($surveyId: Int!, $openAt: DateTime) {
+  openSurvey(surveyId: $surveyId, openAt: $openAt) {
+    errors {
+      field
+      message
+    }
+    survey {
+      ...SurveySnippet
+    }
+  }
+}
+    ${SurveySnippetFragmentDoc}`;
+
+export function useOpenSurveyMutation() {
+  return Urql.useMutation<OpenSurveyMutation, OpenSurveyMutationVariables>(OpenSurveyDocument);
 };
 export const RegisterDocument = gql`
     mutation Register($username: String!, $email: String!, $phoneNumber: String!, $typeOfUser: String!, $password: String!) {

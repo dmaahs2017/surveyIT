@@ -12,8 +12,10 @@ import redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
+import { registerEnumsWithGraphql } from "./register-enums";
 
 const main = async () => {
+  registerEnumsWithGraphql();
   const conn = await createConnection(typeormConfig);
   await conn.runMigrations();
 
