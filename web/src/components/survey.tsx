@@ -97,7 +97,7 @@ export const PagedMeSurveys = (
             return null;
           } else {
             return (
-              <Box>
+              <Box border="2px" borderColor="grey" borderRadius="md">
                 <Text fontSize="xl" fontWeight="bold" display="inline" mr="3">
                 {s.name}
               </Text>
