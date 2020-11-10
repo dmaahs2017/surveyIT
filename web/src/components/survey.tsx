@@ -1,6 +1,7 @@
 import React from "react";
 import NextLink from "next/link";
 import { useMeSurveysQuery, useSurveysQuery } from "../generated/graphql";
+import { getSurveyStatusFromDates } from "../utils/datetime";
 import {
   Box,
   ThemeProvider,
@@ -49,20 +50,24 @@ export const PagedSurveys = (offset: number, limit: number) => {
   if (surveys && surveys.length > 0) {
     return (
       <Stack spacing={8}>
-        {surveys.map((s) =>
-          !s ? null : (
-            <Box>
-              <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>
-                <Link>
-                  <Heading style={{ color: "blue" }} fontSize="l">
-                    {s.name}
-                  </Heading>
-                </Link>
-              </NextLink>
-              <Text>{s.description}</Text>
-            </Box>
-          )
-        )}
+        {surveys.map((s) => {
+          if (!s || getSurveyStatusFromDates(s.opensAt, s.closesAt) != "Open") {
+            return null;
+          } else {
+            return (
+              <Box>
+                <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>
+                  <Link>
+                    <Heading style={{ color: "blue" }} fontSize="l">
+                      {s.name}
+                    </Heading>
+                  </Link>
+                </NextLink>
+                <Text>{s.description}</Text>
+              </Box>
+            );
+          }
+        })}
       </Stack>
     );
   } else {
@@ -70,7 +75,11 @@ export const PagedSurveys = (offset: number, limit: number) => {
   }
 };
 
-export const PagedMeSurveys = (offset: number, limit: number) => {
+export const PagedMeSurveys = (
+  offset: number,
+  limit: number,
+  open: "Open" | "Closed" | "New"
+) => {
   const [surveys_response] = useMeSurveysQuery({
     variables: {
       offset: offset,
@@ -83,15 +92,18 @@ export const PagedMeSurveys = (offset: number, limit: number) => {
   if (surveys && surveys.length > 0) {
     return (
       <Stack spacing={8}>
-        {surveys.map((s) =>
-          !s ? null : (
-            <Box>
-              <Text fontSize="xl" fontWeight="bold" display="inline" mr="3">
+        {surveys.map((s) => {
+          if (!s || getSurveyStatusFromDates(s.opensAt, s.closesAt) != open) {
+            return null;
+          } else {
+            return (
+              <Box>
+                <Text fontSize="xl" fontWeight="bold" display="inline" mr="3">
                 {s.name}
               </Text>
               <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>
-                <Link>
-                  <Text
+                  <Link>
+                    <Text
                     mr="5"
                     display="inline"
                     style={{ color: "blue" }}
@@ -106,15 +118,16 @@ export const PagedMeSurveys = (offset: number, limit: number) => {
                 as={`/survey/results/${s.id}`}
               >
                 <Link>
-                  <Text display="inline" style={{ color: "blue" }} fontSize="l">
+                    <Text display="inline" style={{ color: "blue" }} fontSize="l">
                     Results
                   </Text>
-                </Link>
-              </NextLink>
-              <Text>{s.description}</Text>
-            </Box>
-          )
-        )}
+                  </Link>
+                </NextLink>
+                <Text>{s.description}</Text>
+              </Box>
+            );
+          }
+        })}
       </Stack>
     );
   } else {
