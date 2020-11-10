@@ -99,28 +99,32 @@ export const PagedMeSurveys = (
             return (
               <Box border="2px" borderColor="grey" borderRadius="md">
                 <Text fontSize="xl" fontWeight="bold" display="inline" mr="3">
-                {s.name}
-              </Text>
-              <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>
+                  {s.name}
+                </Text>
+                <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>
                   <Link>
                     <Text
-                    mr="5"
-                    display="inline"
-                    style={{ color: "blue" }}
-                    fontSize="l"
-                  >
-                    Manage
-                  </Text>
-                </Link>
-              </NextLink>
-              <NextLink
-                href="/survey/results/[token]"
-                as={`/survey/results/${s.id}`}
-              >
-                <Link>
-                    <Text display="inline" style={{ color: "blue" }} fontSize="l">
-                    Results
-                  </Text>
+                      mr="5"
+                      display="inline"
+                      style={{ color: "blue" }}
+                      fontSize="l"
+                    >
+                      Manage
+                    </Text>
+                  </Link>
+                </NextLink>
+                <NextLink
+                  href="/survey/results/[token]"
+                  as={`/survey/results/${s.id}`}
+                >
+                  <Link>
+                    <Text
+                      display="inline"
+                      style={{ color: "blue" }}
+                      fontSize="l"
+                    >
+                      Results
+                    </Text>
                   </Link>
                 </NextLink>
                 <Text>{s.description}</Text>
