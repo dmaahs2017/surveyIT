@@ -9,7 +9,7 @@ export const getSurveyStatusFromDates = (
       const closesDate = new Date(closesDateStr);
       return opensDate < now && closesDate > now ? "Open" : "Closed";
     } else {
-      return opensDate < now ? "Open" : "Closed";
+      return opensDate < now ? "Open" : "Scheduled To Open";
     }
   } else {
     return "New";
