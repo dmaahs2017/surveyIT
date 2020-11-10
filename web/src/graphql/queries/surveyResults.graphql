@@ -1,0 +1,12 @@
+query SurveyResults($survey_id: Int!) {
+  surveyResults(survey_id: $survey_id) {
+    results {
+      answerCount
+      question
+      qid
+    }
+    errors {
+      ...StdFieldError
+    }
+  }
+}
