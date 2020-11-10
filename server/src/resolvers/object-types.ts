@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Int, Field, ObjectType } from "type-graphql";
 import { User } from "../entities/User";
 import { Survey } from "../entities/Survey";
 import { Question } from "../entities/Question";
@@ -9,6 +9,25 @@ export class FieldError {
   field: string;
   @Field()
   message: string;
+}
+
+@ObjectType()
+export class Result {
+  @Field(() => [Int])
+  answerCount: number[];
+  @Field()
+  question: string;
+  @Field()
+  qid: number;
+}
+
+@ObjectType()
+export class SurveyResults {
+  @Field(() => [Result], { nullable: true })
+  results?: Result[];
+
+  @Field(() => FieldError, { nullable: true })
+  errors?: FieldError[];
 }
 
 @ObjectType()

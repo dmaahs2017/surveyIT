@@ -4,7 +4,7 @@ import { MyContext } from "../types";
 import { Survey } from "../entities/Survey";
 import { Answer } from "../entities/Answer";
 import { SurveySubmission, SurveyInput } from "./input-types";
-import { SurveyResponse } from "./object-types";
+import { SurveyResponse, SurveyResults } from "./object-types";
 import { v4 } from "uuid";
 import { getConnection } from "typeorm";
 
@@ -341,5 +341,53 @@ export class SurveyResolver {
     }
 
     return errors;
+  }
+
+  //This function is utter garbage but it works :)
+  @Query(() => SurveyResults)
+  async surveyResults(
+    @Arg("survey_id", () => Int) survey_id: number
+  ): Promise<SurveyResults> {
+    let response = await getConnection()
+      .getRepository(Answer)
+      .createQueryBuilder("a")
+      .innerJoin("a.question", "question", 'question.id = a."questionId"')
+      .innerJoin("question.survey", "survey", 'survey.id = question."surveyId"')
+      .where(`survey.id = ${survey_id}`)
+      .select(["question.question", "a.answer", "question.id"])
+      .getRawMany();
+
+    let response2 = response.map((s) => {
+      return {
+        answer: s.a_answer,
+        question: s.question_question,
+        questionId: s.question_id,
+      };
+    });
+    let qids: { qid: number; question: string; answerCount: number[] }[] = [];
+    response2.map((x) => {
+      if (
+        !qids.find((n) => {
+          return n.qid === x.questionId;
+        })
+      ) {
+        qids.push({
+          qid: x.questionId,
+          question: x.question,
+          answerCount: new Array(5),
+        });
+      }
+    });
+
+    qids.map((qi) => {
+      qi.answerCount = [0, 0, 0, 0, 0];
+      response2.map((x) => {
+        if (qi.qid == x.questionId) {
+          qi.answerCount[x.answer] += 1;
+        }
+      });
+    });
+
+    return { results: qids };
   }
 }
