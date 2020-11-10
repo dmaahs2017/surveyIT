@@ -33,7 +33,10 @@ import {
   useSurveyQuery,
   useQuestionsQuery,
   useSubmitSurveyMutation,
+  useCloseSurveyMutation,
+  useOpenSurveyMutation,
 } from "../../generated/graphql";
+import { getSurveyStatusFromDates } from "../../utils/datetime";
 
 const Survey: NextPage<{ id: number }> = ({ id }) => {
   const router = useRouter();
@@ -52,9 +55,12 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   const [me_response] = useMeQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [, submitResponse] = useSubmitSurveyMutation();
+  const [, closeSurvey] = useCloseSurveyMutation();
+  const [, openSurvey] = useOpenSurveyMutation();
   let survey = null;
   let surveyName = null;
   let surveyDesc = null;
+  let surveyStatus = null;
 
   if (
     id &&
@@ -64,6 +70,10 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   ) {
     surveyName = s_response.data.survey.survey.name;
     surveyDesc = s_response.data.survey.survey.description;
+    surveyStatus = getSurveyStatusFromDates(
+      s_response.data.survey.survey.opensAt,
+      s_response.data.survey.survey.closesAt
+    );
     const surveyId = s_response.data.survey.survey.id;
 
     //if not creator of survey
@@ -126,14 +136,32 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
           <FormErrorMessage>Error message</FormErrorMessage>
         </>
       ));
-
       survey = (
         <>
           <Wrapper>
             <ThemeProvider theme={theme}>
               <CSSReset />
               <Heading>{surveyName}</Heading>
-              <Text>{surveyDesc}</Text>
+              <Text fontSize="lg">{surveyDesc}</Text>
+              <Heading as="h3" fontSize="base">
+                Survey Status: {surveyStatus}
+              </Heading>
+              <Button
+                onClick={async () => {
+                  await openSurvey({ surveyId });
+                  router.reload();
+                }}
+              >
+                Open Survey
+              </Button>
+              <Button
+                onClick={async () => {
+                  await closeSurvey({ surveyId });
+                  router.reload();
+                }}
+              >
+                Close Survey
+              </Button>
               <Box>
                 <FormControl>{questions}</FormControl>
               </Box>
