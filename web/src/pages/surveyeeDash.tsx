@@ -3,8 +3,6 @@ import {
   ThemeProvider,
   CSSReset,
   theme,
-  Flex,
-  Grid,
   Heading,
   List,
   ListItem,

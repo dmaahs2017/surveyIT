@@ -23,10 +23,14 @@ const SurveyorDash = () => (
 
         <div className="columnsToVertical">
           <div className="col">
+            <Heading as="h2">Unopened Surveys:</Heading>
+            {PagedMeSurveys(0, 10, "New")}
+          </div>
+          <div className="col">
             <Heading as="h2" className="title">
               Your Open Surveys:{" "}
             </Heading>
-            {PagedMeSurveys(0, 100)}
+            {PagedMeSurveys(0, 10, "Open")}
           </div>
           <div className="col">
             <Heading as="h2" className="title">

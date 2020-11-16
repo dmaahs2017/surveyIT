@@ -1,7 +1,7 @@
 import { Int, InputType, Field } from "type-graphql";
 
 @InputType()
-class Answer {
+export class AnswerInput {
   @Field(() => Int)
   questionId: number;
   @Field(() => Int)
@@ -12,9 +12,10 @@ class Answer {
 export class SurveySubmission {
   @Field(() => Int)
   surveyId: number;
-  @Field(() => [Answer])
-  answers: [Answer];
+  @Field(() => [AnswerInput])
+  answers: [AnswerInput];
 }
+
 @InputType()
 export class UpdateUserInput {
   @Field()
@@ -29,8 +30,12 @@ export class UpdateUserInput {
 export class SurveyInput {
   @Field()
   name!: string;
-  @Field()
+  @Field({ nullable: true })
   description?: string;
+  @Field({ nullable: true })
+  closesAt?: Date;
+  @Field({ nullable: true })
+  opensAt?: Date;
 }
 
 @InputType()

@@ -27,6 +27,14 @@ export class Survey extends BaseEntity {
   @Column()
   description: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  opensAt?: Date;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  closesAt?: Date;
+
   @Field()
   @Column()
   creatorId: number;

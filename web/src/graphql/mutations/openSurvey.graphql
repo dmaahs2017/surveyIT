@@ -1,0 +1,11 @@
+mutation OpenSurvey($surveyId: Int!, $openAt: DateTime) {
+  openSurvey(surveyId: $surveyId, openAt: $openAt) {
+    errors {
+      field
+      message
+    }
+    survey {
+      ...SurveySnippet
+    }
+  }
+}
