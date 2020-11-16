@@ -36,7 +36,9 @@ const SurveyorDash = () => (
             <Heading as="h2" className="title">
               Your Closed Surveys:{" "}
             </Heading>
-            {PagedMeSurveys(0, 10, "Closed")}
+            <List styleType="disc">
+              <ListItem>Survey Details Component</ListItem>
+            </List>
           </div>
           <div className="col">
             <div>
