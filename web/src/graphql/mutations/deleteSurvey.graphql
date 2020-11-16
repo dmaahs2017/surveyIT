@@ -1,0 +1,5 @@
+mutation DeleteSurvey($surveyId: Int!) {
+  deleteSurvey(surveyId: $surveyId) {
+    ...StdFieldError
+  }
+}

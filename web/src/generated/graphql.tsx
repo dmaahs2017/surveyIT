@@ -141,6 +141,7 @@ export type Mutation = {
   closeSurvey: SurveyResponse;
   openSurvey: SurveyResponse;
   submitSurvey: Array<FieldError>;
+  deleteSurvey: Array<FieldError>;
   createQuestion: Question;
 };
 
@@ -190,6 +191,11 @@ export type MutationOpenSurveyArgs = {
 
 export type MutationSubmitSurveyArgs = {
   submission: SurveySubmission;
+};
+
+
+export type MutationDeleteSurveyArgs = {
+  surveyId: Scalars['Int'];
 };
 
 
@@ -322,6 +328,19 @@ export type CreateSurveyMutation = (
     { __typename?: 'Survey' }
     & Pick<Survey, 'name' | 'description' | 'id'>
   ) }
+);
+
+export type DeleteSurveyMutationVariables = Exact<{
+  surveyId: Scalars['Int'];
+}>;
+
+
+export type DeleteSurveyMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteSurvey: Array<(
+    { __typename?: 'FieldError' }
+    & StdFieldErrorFragment
+  )> }
 );
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -631,6 +650,17 @@ export const CreateSurveyDocument = gql`
 
 export function useCreateSurveyMutation() {
   return Urql.useMutation<CreateSurveyMutation, CreateSurveyMutationVariables>(CreateSurveyDocument);
+};
+export const DeleteSurveyDocument = gql`
+    mutation DeleteSurvey($surveyId: Int!) {
+  deleteSurvey(surveyId: $surveyId) {
+    ...StdFieldError
+  }
+}
+    ${StdFieldErrorFragmentDoc}`;
+
+export function useDeleteSurveyMutation() {
+  return Urql.useMutation<DeleteSurveyMutation, DeleteSurveyMutationVariables>(DeleteSurveyDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {

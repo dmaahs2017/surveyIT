@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NextPage } from "next";
 import {
   ThemeProvider,
+  Grid,
   CSSReset,
   theme,
   Heading,
@@ -36,6 +37,7 @@ import {
   useSubmitSurveyMutation,
   useCloseSurveyMutation,
   useOpenSurveyMutation,
+  useDeleteSurveyMutation,
 } from "../../generated/graphql";
 import { getSurveyStatusFromDates } from "../../utils/datetime";
 
@@ -58,6 +60,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   const [, submitResponse] = useSubmitSurveyMutation();
   const [, closeSurvey] = useCloseSurveyMutation();
   const [, openSurvey] = useOpenSurveyMutation();
+  const [, deleteSurvey] = useDeleteSurveyMutation();
   let survey = null;
   let surveyName = null;
   let surveyDesc = null;
@@ -135,13 +138,13 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
       );
     } else {
       //else creator of survey
-      const questions = q_response.data.questions.questions.map((q) => (
-        <>
-          <FormLabel>{q.question}</FormLabel>
-          <Input />
-          <FormHelperText>Helper Text</FormHelperText>
-          <FormErrorMessage>Error message</FormErrorMessage>
-        </>
+      const questions = q_response.data.questions.questions.map((q, i) => (
+        <Box mb="20px">
+          <Text fontSize="lg" display="inline" fontWeight="bold">
+            Question {i + 1}:
+          </Text>
+          <Text display="inline"> {q.question}</Text>
+        </Box>
       ));
       const opensAt = s_response.data.survey.survey.opensAt;
       const closesAt = s_response.data.survey.survey.closesAt;
@@ -151,7 +154,20 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
           <Wrapper>
             <ThemeProvider theme={theme}>
               <CSSReset />
-              <Heading>{surveyName}</Heading>
+              <Grid templateColumns="repeat(2, 1fr)">
+                <Heading>{surveyName}</Heading>
+                <Flex justifyContent="flex-end">
+                  <Button
+                    variantColor="red"
+                    onClick={async () => {
+                      await deleteSurvey({ surveyId });
+                      router.push("/surveyorDash");
+                    }}
+                  >
+                    Delete Survey
+                  </Button>
+                </Flex>
+              </Grid>
               <Text fontSize="lg">{surveyDesc}</Text>
               <Heading as="h3" fontSize="base">
                 Survey Status: {surveyStatus}
