@@ -71,12 +71,10 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
 
       survey = (
         <>
-        <p>hello</p>
           <Wrapper>
             <ThemeProvider theme={theme}>
               <CSSReset />
               <Heading>{surveyName}</Heading>
-              <br></br><br></br><br></br><br></br><br></br><br></br><br></br>
               <Text>{surveyDesc}</Text>
               <Box>
                 <FormControl>{questions}</FormControl>
