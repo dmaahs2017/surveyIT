@@ -80,14 +80,14 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
     //if not creator of survey
     if (s_response.data.survey.survey.creator.id != me_response.data.me?.id) {
       survey = (
-          <div className="surveyScrollbar">
-            <NavBar />
+        <div className="surveyScrollbar">
+          <NavBar />
           <ThemeProvider theme={theme}>
             <CSSReset />
-            <div className="surveyContainer">    
-            <Heading>{surveyName}</Heading>
-            <Text className="surveyDescription">{surveyDesc}</Text>
-            
+            <div className="surveyContainer">
+              <Heading>{surveyName}</Heading>
+              <Text className="surveyDescription">{surveyDesc}</Text>
+
               <Formik
                 initialValues={{
                   responses: q_response.data.questions.questions,
@@ -115,14 +115,18 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
                     name="responses"
                     render={() =>
                       q_response.data?.questions.questions.map((q, i) => (
-                        <div style={{textAlign:"center"}}>
-                          <FormLabel><p className="surveyQuestion">{q.question}</p></FormLabel>
+                        <div style={{ textAlign: "center" }}>
+                          <FormLabel>
+                            <p className="surveyQuestion">{q.question}</p>
+                          </FormLabel>
                           {QuestionResponse(i)}
                         </div>
                       ))
                     }
                   />
-                  <div className="submitButton"><Button type="submit">Submit</Button></div>
+                  <div className="submitButton">
+                    <Button type="submit">Submit</Button>
+                  </div>
                 </Form>
               </Formik>
             </div>
@@ -143,7 +147,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
       const closesAt = s_response.data.survey.survey.closesAt;
       survey = (
         <>
-        <NavBar />
+          <NavBar />
           <Wrapper>
             <ThemeProvider theme={theme}>
               <CSSReset />
@@ -268,12 +272,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
     survey = <Text>Failed</Text>;
   }
 
-  return (
-    <>
-      
-        {survey}
-    </>
-  );
+  return <>{survey}</>;
 };
 
 Survey.getInitialProps = ({ query }) => {
