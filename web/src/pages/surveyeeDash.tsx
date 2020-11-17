@@ -5,6 +5,7 @@ import {
   theme,
   Heading,
   List,
+  Flex,
   ListItem,
 } from "@chakra-ui/core";
 import { NavBar } from "../components/NavBar";
@@ -21,7 +22,7 @@ const SurveyeeDash = () => (
           Surveyor Dashboard
         </Heading>
 
-        <Flex className="columnsToVertical">
+        <Flex flexDir="column">
           <div className="col">
             <Heading as="h2" className="title">
               Available Surveys:{" "}

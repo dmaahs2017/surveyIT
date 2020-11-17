@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import {
   ThemeProvider,
   CSSReset,
+  Button,
   Tooltip,
   theme,
   Flex,
@@ -21,6 +22,8 @@ import {
   useSurveyResultsQuery,
 } from "../../../generated/graphql";
 import { answerToString } from "../../../utils/answerToString";
+import { jsonResultsToCsv } from "../../../utils/jsonToCsv";
+import { downloadCsvFile } from "../../../utils/downloads";
 
 const Survey: NextPage<{ id: number }> = ({ id }) => {
   const [q_response] = useQuestionsQuery({
@@ -54,6 +57,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   ) {
     surveyName = s_response.data.survey.survey.name;
     surveyDesc = s_response.data.survey.survey.description;
+    const resultsCsv = jsonResultsToCsv(s_results.data.surveyResults.results);
 
     //if not creator of survey
     if (s_response.data.survey.survey.creator.id != me_response.data.me?.id) {
@@ -125,7 +129,17 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
               <CSSReset />
               <Heading>{surveyName}</Heading>
               <Text fontSize="xl">{surveyDesc}</Text>
-              <Box>{results}</Box>
+              <Box mb="30px">{results}</Box>
+              <Button
+                onClick={() => {
+                  downloadCsvFile(
+                    resultsCsv,
+                    surveyName.replace(" ", "-") + "-results"
+                  );
+                }}
+              >
+                Download Results as CSV
+              </Button>
             </ThemeProvider>
           </Wrapper>
         </>
