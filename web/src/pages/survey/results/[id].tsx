@@ -3,11 +3,15 @@ import { NextPage } from "next";
 import {
   ThemeProvider,
   CSSReset,
+  Tooltip,
   theme,
+  Flex,
   Heading,
+  SimpleGrid,
   Text,
   Box,
 } from "@chakra-ui/core";
+import { QuestionIcon } from "@chakra-ui/icons";
 import { Wrapper } from "../../../components/Wrapper";
 import { NavBar } from "../../../components/NavBar";
 import {
@@ -63,27 +67,56 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
       );
     } else {
       //else creator of survey
-      const results = s_results.data.surveyResults.results?.map((r) => (
-        <>
-          <Text fontWeight="bold">{r.question}</Text>
-          {r.answerCount.map((n, i) => (
+      const results = (
+        <SimpleGrid columns={7} justifyItems="center">
+          <Text fontStyle="underline" mb="15px">
+            Question
+          </Text>
+          <Text>Strongly Disagree</Text>
+          <Text>Disagree</Text>
+          <Text>Neutral</Text>
+          <Text>Disagree</Text>
+          <Text>Strongly Agree</Text>
+          <Flex>
+            <Text>Summary Stats</Text>
+            <Tooltip
+              label="The labels 'Strongly Disagree' to 'Strongly Agree' are represented as integers 0-4 resepectively. These are then used to calculate the summary statistics"
+              aria-label="The labels 'Strongly Disagree' to 'Strongly Agree' are represented as integers 0-4 resepectively. These are then used to calculate the summary statistics"
+            >
+              <QuestionIcon w={3} h={3} />
+            </Tooltip>
+          </Flex>
+
+          {s_results.data.surveyResults.results.map((r) => (
             <>
-              <Text display="inline" fontStyle="italic">
-                {answerToString(i)}
+              <Text fontWeight="bold" mr="3px">
+                {r.question}:
               </Text>
-              <Text display="inline" fontWeight="semibold" mr="3">
-                : {n}
-              </Text>
+              {r.answerCount.map((n) => (
+                <Text fontWeight="semibold" mr="3">
+                  {n}
+                </Text>
+              ))}
+
+              <SimpleGrid columns={3} mb="20px">
+                <Text mr="3" fontStyle="italic" textDecor="underline">
+                  Mean
+                </Text>
+                <Text mr="3" fontStyle="italic" textDecor="underline">
+                  Median
+                </Text>
+                <Text mr="3" fontStyle="italic" textDecor="underline">
+                  Mode
+                </Text>
+
+                <Text>{r.summaryStats.mean}</Text>
+                <Text>{r.summaryStats.median}</Text>
+                <Text>{r.summaryStats.mode}</Text>
+              </SimpleGrid>
             </>
           ))}
-          <Text display="inline" fontStyle="italic">
-            Total Responses
-          </Text>
-          <Text display="inline" fontWeight="semibold">
-            : {r.answerCount.reduce((a, b) => a + b)}
-          </Text>
-        </>
-      ));
+        </SimpleGrid>
+      );
 
       survey = (
         <>

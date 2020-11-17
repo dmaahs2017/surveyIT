@@ -4,9 +4,14 @@ import { MyContext } from "../types";
 import { Survey } from "../entities/Survey";
 import { Answer } from "../entities/Answer";
 import { SurveySubmission, SurveyInput } from "./input-types";
-import { SurveyResponse, SurveyResults } from "./object-types";
+import {
+  SummaryStatistics,
+  SurveyResponse,
+  SurveyResults,
+} from "./object-types";
 import { v4 } from "uuid";
 import { getConnection } from "typeorm";
+import { summaryStatistics } from "../utils/summaryStatistics";
 
 @Resolver()
 export class SurveyResolver {
@@ -364,7 +369,14 @@ export class SurveyResolver {
         questionId: s.question_id,
       };
     });
-    let qids: { qid: number; question: string; answerCount: number[] }[] = [];
+
+    let qids: {
+      qid: number;
+      question: string;
+      answerCount: number[];
+      summaryStats: SummaryStatistics;
+    }[] = [];
+
     response2.map((x) => {
       if (
         !qids.find((n) => {
@@ -375,6 +387,7 @@ export class SurveyResolver {
           qid: x.questionId,
           question: x.question,
           answerCount: new Array(5),
+          summaryStats: { mean: -1, median: -1, mode: -1 },
         });
       }
     });
@@ -385,6 +398,7 @@ export class SurveyResolver {
         if (qi.qid == x.questionId) {
           qi.answerCount[x.answer] += 1;
         }
+        qi.summaryStats = summaryStatistics(qi.answerCount);
       });
     });
 
