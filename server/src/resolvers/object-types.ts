@@ -1,4 +1,4 @@
-import { Int, Field, ObjectType } from "type-graphql";
+import { Float, Int, Field, ObjectType } from "type-graphql";
 import { User } from "../entities/User";
 import { Survey } from "../entities/Survey";
 import { Question } from "../entities/Question";
@@ -12,9 +12,21 @@ export class FieldError {
 }
 
 @ObjectType()
+export class SummaryStatistics {
+  @Field(() => Float)
+  mean: number;
+  @Field(() => Float)
+  median: number;
+  @Field(() => Float)
+  mode: number;
+}
+
+@ObjectType()
 export class Result {
   @Field(() => [Int])
   answerCount: number[];
+  @Field(() => SummaryStatistics)
+  summaryStats: SummaryStatistics;
   @Field()
   question: string;
   @Field()

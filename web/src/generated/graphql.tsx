@@ -108,8 +108,16 @@ export type SurveyResults = {
 export type Result = {
   __typename?: 'Result';
   answerCount: Array<Scalars['Int']>;
+  summaryStats: SummaryStatistics;
   question: Scalars['String'];
   qid: Scalars['Float'];
+};
+
+export type SummaryStatistics = {
+  __typename?: 'SummaryStatistics';
+  mean: Scalars['Float'];
+  median: Scalars['Float'];
+  mode: Scalars['Float'];
 };
 
 export type PaginatedQuestions = {
@@ -540,6 +548,10 @@ export type SurveyResultsQuery = (
     & { results?: Maybe<Array<(
       { __typename?: 'Result' }
       & Pick<Result, 'answerCount' | 'question' | 'qid'>
+      & { summaryStats: (
+        { __typename?: 'SummaryStatistics' }
+        & Pick<SummaryStatistics, 'mean' | 'median' | 'mode'>
+      ) }
     )>>, errors?: Maybe<(
       { __typename?: 'FieldError' }
       & StdFieldErrorFragment
@@ -829,6 +841,11 @@ export const SurveyResultsDocument = gql`
   surveyResults(survey_id: $survey_id) {
     results {
       answerCount
+      summaryStats {
+        mean
+        median
+        mode
+      }
       question
       qid
     }
