@@ -19,7 +19,7 @@ export function summaryStatistics(values: number[]): SummaryStatistics {
   const mid = Math.floor(n / 2);
   return {
     mean: total / n,
-    median: n % 2 === 0 ? flattend[mid] : (flattend[mid] + flattend[mid]) / 2,
+    median: n % 2 === 0 ? flattend[mid] : (flattend[mid] + flattend[mid + 1]) / 2,
     mode: mode,
   };
 }
