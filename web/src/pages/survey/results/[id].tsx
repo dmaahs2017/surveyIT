@@ -93,11 +93,9 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
 
           {s_results.data.surveyResults.results.map((r) => (
             <>
-                <Box mb="10px">
-                    <Text fontWeight="bold">
-                        {r.question}:
-                    </Text>
-                </Box>
+              <Box mb="10px">
+                <Text fontWeight="bold">{r.question}:</Text>
+              </Box>
               {r.answerCount.map((n) => (
                 <Text fontWeight="semibold" mr="3">
                   {n}

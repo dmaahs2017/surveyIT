@@ -16,7 +16,7 @@ export function summaryStatistics(values: number[]): SummaryStatistics {
 
   flattend.sort();
 
-  const mid = Math.floor(n/2);
+  const mid = Math.floor(n / 2);
   return {
     mean: total / n,
     median: n % 2 === 0 ? flattend[mid] : (flattend[mid] + flattend[mid]) / 2,
