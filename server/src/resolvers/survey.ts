@@ -3,6 +3,7 @@ import { FieldError, PaginatedSurveys } from "./object-types";
 import { MyContext } from "../types";
 import { Survey } from "../entities/Survey";
 import { Answer } from "../entities/Answer";
+import { Question } from "../entities/Question";
 import { SurveySubmission, SurveyInput } from "./input-types";
 import { SurveyResponse, SurveyResults } from "./object-types";
 import { v4 } from "uuid";
@@ -389,5 +390,57 @@ export class SurveyResolver {
     });
 
     return { results: qids };
+  }
+
+  @Mutation(() => [FieldError])
+  async deleteSurvey(
+    @Arg("surveyId", () => Int) surveyId: number,
+    @Ctx() { req }: MyContext
+  ): Promise<FieldError[]> {
+    const userId = req.session.userId;
+    if (!userId) {
+      return [
+        {
+          field: "userId",
+          message: "not logged in",
+        },
+      ];
+    }
+
+    let survey = await Survey.findOne({
+      where: { id: surveyId, creatorId: userId },
+    });
+
+    if (userId != survey?.creatorId) {
+      return [
+        {
+          field: "userId",
+          message: "Not authorized to delete this survey",
+        },
+      ];
+    }
+
+    let questions = await Question.find({ where: { surveyId } });
+
+    //delte all answers for each question
+    questions.map((q) => {
+      Answer.delete({ questionId: q.id });
+    });
+
+    //delete all questions
+    Question.remove(questions);
+
+    //delete the survey
+    if (survey) {
+      survey.remove();
+      return [];
+    }
+
+    return [
+      {
+        field: "n/a",
+        message: "Nothing Removed",
+      },
+    ];
   }
 }

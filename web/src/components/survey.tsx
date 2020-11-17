@@ -78,7 +78,7 @@ export const PagedSurveys = (offset: number, limit: number) => {
 export const PagedMeSurveys = (
   offset: number,
   limit: number,
-  open: "Open" | "Closed" | "New"
+  status: "Open" | "Closed" | "New"
 ) => {
   const [surveys_response] = useMeSurveysQuery({
     variables: {
@@ -93,7 +93,7 @@ export const PagedMeSurveys = (
     return (
       <Stack spacing={8}>
         {surveys.map((s) => {
-          if (!s || getSurveyStatusFromDates(s.opensAt, s.closesAt) != open) {
+          if (!s || getSurveyStatusFromDates(s.opensAt, s.closesAt) != status) {
             return null;
           } else {
             return (
