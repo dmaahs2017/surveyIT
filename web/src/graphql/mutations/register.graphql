@@ -4,6 +4,8 @@ mutation Register(
   $phoneNumber: String!
   $typeOfUser: String!
   $password: String!
+  $gender: String!
+  $income: String!
 ) {
   register(
     options: {
@@ -12,6 +14,8 @@ mutation Register(
       phoneNumber: $phoneNumber
       typeOfUser: $typeOfUser
       password: $password
+      gender: $gender
+      income: $income
     }
   ) {
     errors {

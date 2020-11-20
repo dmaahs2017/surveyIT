@@ -115,6 +115,8 @@ export class UserResolver {
           username: options.username,
           email: options.email,
           phoneNumber: options.phoneNumber,
+          gender: options.gender,
+          income: options.income,
           typeOfUser: options.typeOfUser.toUpperCase(),
           password: hashedPassword,
         })
@@ -307,6 +309,8 @@ export class UserResolver {
     user.email = input.email;
     user.phoneNumber = input.phoneNumber;
     user.username = input.username;
+    //user.gender = input.gender;
+
 
     try {
       const updatedUser = await user.save();

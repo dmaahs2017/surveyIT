@@ -1,7 +1,6 @@
 import React from "react";
 import { Formik, Field, Form } from "formik";
 import { Box, Button } from "@chakra-ui/core";
-import { Select } from "@chakra-ui/core";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
 import { useRegisterMutation } from "../generated/graphql";
@@ -26,6 +25,8 @@ const Register: React.FC<registerProps> = ({}) => {
             typeOfUser: "",
             isSurveyor: false,
             password: "",
+            gender: "",
+            income: "",
           }}
           onSubmit={async (values, { setErrors }) => {
             values.typeOfUser = values.isSurveyor ? "surveyor" : "surveyee";
@@ -65,6 +66,25 @@ const Register: React.FC<registerProps> = ({}) => {
                   label="Phone Number"
                 />
               </Box>
+
+              <Box mt={4}>
+                <InputField
+                  name="gender"
+                  placeholder="gender"
+                  label="Gender"
+                  type="gender"
+                />
+              </Box>
+
+              <Box mt={4}>
+                <InputField
+                  name="income"
+                  placeholder="income"
+                  label="Income"
+                  type="income"
+                />
+              </Box>
+
               <Box mt={4}>
                 <InputField
                   name="password"
@@ -73,19 +93,19 @@ const Register: React.FC<registerProps> = ({}) => {
                   type="password"
                 />
               </Box>
-
-              <Box mt={4}>
-                Gender
-                <Select placeholder= "Select Gender">
+{/*
+             <Box mt={4}>
+                Gender: 
+                <Field name = "gender" as = "select">
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>
-                </Select>
+                  </Field>
               </Box>
 
               <Box mt={4}>
-                Income
-                <Select placeholder= "Select Income">
+                Income: 
+                <Field name = "income" as = "select">
                   <option value="0to20">$0 to $20,000</option>
                   <option value="20to40">$20,000 to $40,000</option>
                   <option value="40to60">$40,000 to $60,000</option>
@@ -101,8 +121,9 @@ const Register: React.FC<registerProps> = ({}) => {
                   <option value="800to900">$800,000 to $900,000</option>
                   <option value="900to1000">$900,000 to $1,000,000</option>
                   <option value="1000+">$1,000,000+</option>
-                </Select>
+                  </Field>
               </Box>
+*/}
 
               <Box mt={4}>
                 <label>
