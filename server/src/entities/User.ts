@@ -35,9 +35,11 @@ export class User extends BaseEntity {
   typeOfUser!: string;
 
   @Field()
+  @Column()
   gender!: string;
 
   @Field()
+  @Column()
   income!: string;
 
   @Column()

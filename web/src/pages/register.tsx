@@ -67,23 +67,6 @@ const Register: React.FC<registerProps> = ({}) => {
                 />
               </Box>
 
-              <Box mt={4}>
-                <InputField
-                  name="gender"
-                  placeholder="gender"
-                  label="Gender"
-                  type="gender"
-                />
-              </Box>
-
-              <Box mt={4}>
-                <InputField
-                  name="income"
-                  placeholder="income"
-                  label="Income"
-                  type="income"
-                />
-              </Box>
 
               <Box mt={4}>
                 <InputField
@@ -92,8 +75,8 @@ const Register: React.FC<registerProps> = ({}) => {
                   label="Password"
                   type="password"
                 />
-              </Box>
-{/*
+          </Box> 
+
              <Box mt={4}>
                 Gender: 
                 <Field name = "gender" as = "select">
@@ -106,24 +89,23 @@ const Register: React.FC<registerProps> = ({}) => {
               <Box mt={4}>
                 Income: 
                 <Field name = "income" as = "select">
-                  <option value="0to20">$0 to $20,000</option>
-                  <option value="20to40">$20,000 to $40,000</option>
-                  <option value="40to60">$40,000 to $60,000</option>
-                  <option value="60to80">$60,000 to $80,000</option>
-                  <option value="80to100">$80,000 to $100,000</option>
-                  <option value="100to200">$100,000 to $200,000</option>
-                  <option value="200to300">$200,000 to $300,000</option>
-                  <option value="300to400">$300,000 to $400,000</option>
-                  <option value="400to500">$400,000 to $500,000</option>
-                  <option value="500to600">$500,000 to $600,000</option>
-                  <option value="600to700">$600,000 to $700,000</option>
-                  <option value="700to800">$700,000 to $800,000</option>
-                  <option value="800to900">$800,000 to $900,000</option>
-                  <option value="900to1000">$900,000 to $1,000,000</option>
-                  <option value="1000+">$1,000,000+</option>
+                  <option value="$0 to $20,000">$0 to $20,000</option>
+                  <option value="$20,000 to $40,000">$20,000 to $40,000</option>
+                  <option value="$40,000 to $60,000">$40,000 to $60,000</option>
+                  <option value="$60,000 to $80,000">$60,000 to $80,000</option>
+                  <option value="$80,000 to $100,000">$80,000 to $100,000</option>
+                  <option value="$100,000 to $200,000">$100,000 to $200,000</option>
+                  <option value="$200,000 to $300,000">$200,000 to $300,000</option>
+                  <option value="$300,000 to $400,00">$300,000 to $400,000</option>
+                  <option value="$400,000 to $500,00">$400,000 to $500,000</option>
+                  <option value="$500,000 to $600,000">$500,000 to $600,000</option>
+                  <option value="$600,000 to $700,000">$600,000 to $700,000</option>
+                  <option value="$700,000 to $800,000">$700,000 to $800,000</option>
+                  <option value="$800,000 to $900,000">$800,000 to $900,000</option>
+                  <option value="$900,000 to $1,000,000">$900,000 to $1,000,000</option>
+                  <option value="$1,000,000+">$1,000,000+</option>
                   </Field>
               </Box>
-*/}
 
               <Box mt={4}>
                 <label>
