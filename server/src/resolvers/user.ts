@@ -311,7 +311,6 @@ export class UserResolver {
     user.username = input.username;
     //user.gender = input.gender;
 
-
     try {
       const updatedUser = await user.save();
       return { user: updatedUser };
