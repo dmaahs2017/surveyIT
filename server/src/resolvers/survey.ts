@@ -20,9 +20,13 @@ export class SurveyResolver {
   async createSurvey(
     @Arg("input") input: SurveyInput,
     @Ctx() { req }: MyContext
-  ) {
+  ): Promise<Survey> {
+    const obfuscationRate = 1.8;
     return Survey.create({
       ...input,
+      availablePoints: input.allocatedMoney * obfuscationRate,
+      rewardsRate:
+        (input.allocatedMoney * obfuscationRate) / input.numGuarenteedResponses,
       creatorId: req.session.userId,
     }).save();
   }
@@ -344,6 +348,11 @@ export class SurveyResolver {
           });
         }
       }
+    }
+
+    if (errors.length === 0) {
+      //then submission is successful and give the user pts
+      //TODO
     }
 
     return errors;
