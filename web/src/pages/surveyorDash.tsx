@@ -4,10 +4,8 @@ import {
   CSSReset,
   theme,
   Heading,
-  List,
   Flex,
   Box,
-  ListItem,
 } from "@chakra-ui/core";
 import { Wrapper } from "../components/Wrapper";
 import { NavBar } from "../components/NavBar";
@@ -19,31 +17,29 @@ const SurveyorDash = () => {
       <NavBar />
       <Wrapper>
         <CSSReset />
-        <div className="container">
-          <Heading as="h1" textAlign="center">
-            Surveyor Dashboard
-          </Heading>
+        <Heading as="h1" textAlign="center">
+          Surveyor Dashboard
+        </Heading>
+        <Flex flexDir="column">
+          <Box>
+            <Heading as="h2">Unopened Surveys:</Heading>
+            {PagedMeSurveys(0, 10, "New")}
+          </Box>
 
-          <Flex flexDir="column">
-            <Box>
-              <Heading as="h2">Unopened Surveys:</Heading>
-              {PagedMeSurveys(0, 10, "New")}
-            </Box>
+          <Box>
+            <Heading as="h2" className="title">
+              Your Open Surveys:{" "}
+            </Heading>
+            {PagedMeSurveys(0, 10, "Open")}
+          </Box>
 
-            <Box>
-              <Heading as="h2" className="title">
-                Your Open Surveys:{" "}
-              </Heading>
-              {PagedMeSurveys(0, 10, "Open")}
-            </Box>
-
-            <Box>
-              <Heading as="h2" className="title">
-                Your Closed Surveys:{" "}
-              </Heading>
-              {PagedMeSurveys(0, 10, "Closed")}
-            </Box>
-            {/* commentting this out for now since we have no "Other" components for the dashboard
+          <Box>
+            <Heading as="h2" className="title">
+              Your Closed Surveys:{" "}
+            </Heading>
+            {PagedMeSurveys(0, 10, "Closed")}
+          </Box>
+          {/* commentting this out for now since we have no "Other" components for the dashboard
           <Box>
             <Heading as="h2" className="title">
                 Other:{" "}
@@ -53,11 +49,10 @@ const SurveyorDash = () => {
               </List>
             </Box>
             */}
-          </Flex>
-        </Grid>
-      </Flex>
-    </Wrapper>
-  </ThemeProvider>
-);
+        </Flex>
+      </Wrapper>
+    </ThemeProvider>
+  );
+};
 
 export default SurveyorDash;
