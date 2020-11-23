@@ -3,7 +3,7 @@ import { createConnection } from "typeorm";
 import { User } from "./entities/User";
 import { Survey } from "./entities/Survey";
 import { Question } from "./entities/Question";
-import { QuestionAnswer } from "./entities/QuestionAnswer";
+import { Answer } from "./entities/Answer";
 
 export default {
   type: "postgres",
@@ -12,5 +12,5 @@ export default {
   password: "postgres",
   logging: true,
   synchronize: true,
-  entities: [User, Survey, Question, QuestionAnswer],
+  entities: [User, Survey, Question, Answer],
 } as Parameters<typeof createConnection>[0];

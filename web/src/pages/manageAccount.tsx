@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toErrorMap } from "../utils/toErrorMap";
 import { NavBar } from "../components/NavBar";
-import { Heading, Avatar, Text, Button, Box } from "@chakra-ui/core";
+import { Heading, Avatar, Text, Button, Box, Flex } from "@chakra-ui/core";
 import { useUpdateUserMutation, useMeQuery } from "../generated/graphql";
 import { InputField } from "../components/InputField";
 import { Form, Formik } from "formik";
@@ -20,9 +20,10 @@ const manageAccount: React.FC<{}> = ({}) => {
         <Heading style={{ textAlign: "center" }}>Account</Heading>
         <div className="container">
           <div className="userInfo">
-            <Avatar style={{ marginLeft: "22.5vw" }} />
+            <div style={{ textAlign: "center" }}>
+              <Avatar />
+            </div>
             <Text style={{ textAlign: "center" }}>{data?.me?.username}</Text>
-            {/* delte from here */}
             <Text className="fieldName">Name</Text>
             <p className="fieldValue">{data?.me?.username}</p>
             <Text className="fieldName">Email</Text>
@@ -38,8 +39,9 @@ const manageAccount: React.FC<{}> = ({}) => {
           <p>{data?.me?.gender}</p>
           */}
             <br></br>
-            <Button onClick={() => setEdit(!edit)}>Edit Account</Button>
-            {/* To Here */}
+            <Button mt={4} variantColor="teal" onClick={() => setEdit(!edit)}>
+              Edit Account
+            </Button>
           </div>
         </div>
       </div>
@@ -53,8 +55,8 @@ const manageAccount: React.FC<{}> = ({}) => {
         <Heading style={{ textAlign: "center" }}>Account</Heading>
         <div className="container">
           <div className="userInfo">
-            <Avatar style={{ marginLeft: "22.5vw" }} />
-            <Text style={{ textAlign: "center" }}>AccountName</Text>
+            <Avatar style={{ marginLeft: "21.5vw" }} />
+            <Text style={{ textAlign: "center" }}>{data?.me?.username}</Text>
             <Formik
               initialValues={
                 data?.me

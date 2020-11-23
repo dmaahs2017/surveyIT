@@ -10,7 +10,7 @@ import {
 } from "typeorm";
 import { ObjectType, Field } from "type-graphql";
 import { Survey } from "./Survey";
-import { QuestionAnswer } from "./QuestionAnswer";
+import { Answer } from "./Answer";
 
 @ObjectType()
 @Entity()
@@ -39,6 +39,6 @@ export class Question extends BaseEntity {
   @ManyToOne(() => Survey)
   survey!: Survey;
 
-  @OneToMany(() => QuestionAnswer, (qa) => qa.question)
-  answers!: QuestionAnswer[];
+  @OneToMany(() => Answer, (qa) => qa.question)
+  answers!: Answer[];
 }

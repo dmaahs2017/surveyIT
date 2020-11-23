@@ -38,7 +38,7 @@ export const NewSurveyModal: React.FC<NewSurveyModalProps> = ({
                 description: values.desc,
               });
               if (response.data)
-                router.push(`/server/edit/${response.data?.createSurvey.id}`);
+                router.push(`/survey/${response.data?.createSurvey.id}`);
             } else {
               setErrors({
                 name: "Please enter a value",

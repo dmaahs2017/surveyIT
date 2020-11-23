@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { ObjectType, Field } from "type-graphql";
 import { Survey } from "./Survey";
-import { QuestionAnswer } from "./QuestionAnswer";
+import { Answer } from "./Answer";
 
 @ObjectType()
 @Entity()
@@ -48,8 +48,8 @@ export class User extends BaseEntity {
   @OneToMany(() => Survey, (survey) => survey.creator)
   surveys: Survey[];
 
-  @OneToMany(() => QuestionAnswer, (qa) => qa.user)
-  answers: QuestionAnswer[];
+  @OneToMany(() => Answer, (qa) => qa.user)
+  answers: Answer[];
 
   @Field(() => String)
   @CreateDateColumn()

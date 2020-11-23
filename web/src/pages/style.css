@@ -18,12 +18,18 @@ html {
 .container {
   padding: 1%;
   height: 95vh;
+  overflow: hidden;
 }
 
 .columns {
   display: flex;
   justify-content: space-between;
   margin: 1em;
+}
+
+.col {
+  width: 25%;
+  margin: 1%;
 }
 
 .col1 {
@@ -51,11 +57,14 @@ html {
 }
 
 .userInfo {
-  width: 50vw;
+  width: 50%;
   margin: auto;
   text-align: left;
   border: 2px solid #7851a9;
   padding: 1vw;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
 }
 
 .profilePic {
@@ -67,8 +76,10 @@ html {
 
 .fieldValue {
   margin: 0.2vh;
-  border: 1px solid black;
-  width: 15vw;
+  /*border: 1px solid black;*/
+  background-color: rgba(192, 192, 192, 0.3);
+  min-width: 18em;
+  width: 50%;
   padding: 0.2em;
 }
 
@@ -86,6 +97,22 @@ html * {
   font-family: Arial;
 }
 
+.columnsToVertical {
+  justify-content: space-between;
+  margin: 1em;
+  text-align: center;
+}
+
+.surveyContainer {
+  max-width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.submitButton {
+  margin-left: 85%;
+}
+
 @media (max-aspect-ratio: 4/3) {
   .col1 {
     width: 40%;
@@ -98,4 +125,71 @@ html * {
   .col3 {
     width: 0%;
   }
+
+  .columnsToVertical {
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+  }
+
+  .col {
+    width: 90%;
+  }
+
+  .surveyContainer {
+    max-width: 90%;
+  }
+
+  .submitButton {
+    margin-left: 80%;
+  }
+
+  .userInfo {
+    width: 90%;
+  }
+}
+
+.questionContainer {
+  justify-content: space-evenly;
+}
+
+.surveyAnswer {
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.radioButton {
+  border: 0px;
+  width: 100%;
+  height: 1.3em;
+}
+
+.smallText {
+  font-size: 0.8em;
+}
+
+.surveyDescription {
+  color: #373737;
+  margin-bottom: 1em;
+}
+
+.surveyQuestion {
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.1em;
+  padding-bottom: 0.3em;
+  padding-left: 2em;
+}
+
+.availableSurveys {
+  overflow-y: scroll;
+  max-height: 40vw;
+  padding-top: 0.5em;
+}
+
+.surveyScrollbar {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 90vw;
+  height: 100vh;
 }
