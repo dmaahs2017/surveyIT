@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
   Column,
 } from "typeorm";
-import { Int, ObjectType, Field } from "type-graphql";
+import { Float, ObjectType, Field } from "type-graphql";
 import { Survey } from "./Survey";
 import { Answer } from "./Answer";
 
@@ -30,8 +30,8 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   phoneNumber!: string;
 
-  @Field(() => Int)
-  @Column()
+  @Field(() => Float)
+  @Column({ type: "float" })
   rewards!: number;
 
   @Field()

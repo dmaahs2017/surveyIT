@@ -4,6 +4,7 @@ import { MyContext } from "../types";
 import { Survey } from "../entities/Survey";
 import { Answer } from "../entities/Answer";
 import { Question } from "../entities/Question";
+import { User } from "../entities/User";
 import { SurveySubmission, SurveyInput } from "./input-types";
 import {
   SummaryStatistics,
@@ -351,8 +352,14 @@ export class SurveyResolver {
     }
 
     if (errors.length === 0) {
-      //then submission is successful and give the user pts
-      //TODO
+      let submitter = await User.findOneOrFail({ where: { id: userId } });
+      let survey = await Survey.findOneOrFail({ id: submission.surveyId });
+
+      submitter.rewards += survey.rewardsRate;
+      survey.availablePoints -= survey.rewardsRate;
+
+      submitter.save();
+      survey.save();
     }
 
     return errors;
