@@ -53,7 +53,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
     q_response.data &&
     s_response.data?.survey.survey &&
     me_response.data &&
-    s_results.data
+    s_results.data?.surveyResults.results
   ) {
     surveyName = s_response.data.survey.survey.name;
     surveyDesc = s_response.data.survey.survey.description;
@@ -79,7 +79,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
           <Text>Strongly Disagree</Text>
           <Text>Disagree</Text>
           <Text>Neutral</Text>
-          <Text>Disagree</Text>
+          <Text>Agree</Text>
           <Text>Strongly Agree</Text>
           <Flex>
             <Text>Summary Stats</Text>
@@ -93,9 +93,9 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
 
           {s_results.data.surveyResults.results.map((r) => (
             <>
-              <Text fontWeight="bold" mr="3px">
-                {r.question}:
-              </Text>
+              <Box mb="10px">
+                <Text fontWeight="bold">{r.question}:</Text>
+              </Box>
               {r.answerCount.map((n) => (
                 <Text fontWeight="semibold" mr="3">
                   {n}
@@ -113,9 +113,9 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
                   Mode
                 </Text>
 
-                <Text>{r.summaryStats.mean}</Text>
-                <Text>{r.summaryStats.median}</Text>
-                <Text>{r.summaryStats.mode}</Text>
+                <Text>{r.summaryStats.mean.toFixed(2)}</Text>
+                <Text>{r.summaryStats.median.toFixed(2)}</Text>
+                <Text>{r.summaryStats.mode.toFixed(2)}</Text>
               </SimpleGrid>
             </>
           ))}
