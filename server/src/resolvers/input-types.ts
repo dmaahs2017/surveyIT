@@ -57,5 +57,9 @@ export class RegisterInput {
   @Field()
   phoneNumber: string;
   @Field()
+  gender: string;
+  @Field()
+  income: string;
+  @Field()
   typeOfUser: string;
 }
