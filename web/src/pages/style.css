@@ -104,9 +104,9 @@ html * {
 }
 
 .surveyContainer {
-  max-width: 70%;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 90%;
+  margin-left: 5vw;
+  margin-right: 5vw;
 }
 
 .submitButton {
@@ -171,6 +171,8 @@ html * {
 .surveyDescription {
   color: #373737;
   margin-bottom: 1em;
+  font-style: italic;
+  text-align: center;
 }
 
 .surveyQuestion {
@@ -192,4 +194,13 @@ html * {
   overflow-x: hidden;
   max-height: 90vw;
   height: 100vh;
+}
+
+.modalContainer {
+  margin: 5px;
+}
+
+.surveyCreationContainer {
+  margin-left: 5vw;
+  margin-right: 5vw;
 }

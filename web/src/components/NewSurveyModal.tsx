@@ -26,53 +26,55 @@ export const NewSurveyModal: React.FC<NewSurveyModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Create New Survey</ModalHeader>
+        <ModalContent>
+          <div className="modalContainer">
+            <ModalHeader>Create New Survey</ModalHeader>
 
-        <Formik
-          initialValues={{ name: "", desc: "" }}
-          onSubmit={async (values, { setErrors }) => {
-            if (values.name !== "" && values.desc !== "") {
-              const response = await createSurvey({
-                name: values.name,
-                description: values.desc,
-              });
-              if (response.data)
-                router.push(`/survey/${response.data?.createSurvey.id}`);
-            } else {
-              setErrors({
-                name: "Please enter a value",
-                desc: "Please enter a value",
-              });
-            }
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              <InputField
-                name="name"
-                placeholder="Enter new survey name"
-                label="Name"
-              />
-              <InputField
-                name="desc"
-                placeholder="Enter a description for your survey"
-                label="Description"
-              />
-              <Button
-                mt={4}
-                type="submit"
-                isLoading={isSubmitting}
-                variantColor="teal"
-              >
-                Create Survey
-              </Button>
-            </Form>
-          )}
-        </Formik>
-        <ModalCloseButton />
-        <ModalBody></ModalBody>
-      </ModalContent>
+            <Formik
+              initialValues={{ name: "", desc: "" }}
+              onSubmit={async (values, { setErrors }) => {
+                if (values.name !== "" && values.desc !== "") {
+                  const response = await createSurvey({
+                    name: values.name,
+                    description: values.desc,
+                  });
+                  if (response.data)
+                    router.push(`/survey/${response.data?.createSurvey.id}`);
+                } else {
+                  setErrors({
+                    name: "Please enter a value",
+                    desc: "Please enter a value",
+                  });
+                }
+              }}
+            >
+              {({ isSubmitting }) => (
+                <Form>
+                  <InputField
+                    name="name"
+                    placeholder="Enter new survey name"
+                    label="Name:"
+                  />
+                  <InputField
+                    name="desc"
+                    placeholder="Enter a description for your survey"
+                    label="Description:"
+                  />
+                  <Button
+                    mt={4}
+                    type="submit"
+                    isLoading={isSubmitting}
+                    variantColor="teal"
+                  >
+                    Create Survey
+                  </Button>
+                </Form>
+              )}
+            </Formik>
+            <ModalCloseButton />
+            <ModalBody></ModalBody>
+          </div>
+        </ModalContent>  
     </Modal>
   );
 };

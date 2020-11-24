@@ -41,6 +41,8 @@ import {
 } from "../../generated/graphql";
 import { getSurveyStatusFromDates } from "../../utils/datetime";
 
+
+
 const Survey: NextPage<{ id: number }> = ({ id }) => {
   const router = useRouter();
   const [q_response] = useQuestionsQuery({
@@ -89,7 +91,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
           <ThemeProvider theme={theme}>
             <CSSReset />
             <div className="surveyContainer">
-              <Heading>{surveyName}</Heading>
+              <Heading textAlign="center">{surveyName}</Heading>
               <Text className="surveyDescription">{surveyDesc}</Text>
 
               <Formik
@@ -159,155 +161,140 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
         </>
       );
       let modalDateOptions = (
-        <Flex flexDirection="column">
-          <p>You can immediately open or close your survey:</p>
-          <Button
-            mr="3"
-            mt="3"
-            mb="3"
-            onClick={async () => {
-              await openSurvey({ surveyId });
-              router.reload();
-            }}
-          >
-            Open Survey
-          </Button>
-          <Button
-            mr="3"
-            mt="3"
-            mb="3"
-            onClick={async () => {
-              await closeSurvey({ surveyId });
-              router.reload();
-            }}
-          >
-            Close Survey
-          </Button>
-          <p>Alternatively, schedule a date:</p>
-          <Formik
-            initialValues={{ date: new Date() }}
-            onSubmit={async (values) => {
-              await openSurvey({ surveyId, openAt: values.date });
-              router.reload();
-            }}
-          >
-            {({ isSubmitting }) => (
-              <Form>
-                <Box mr="3">
-                  <InputField
-                    name="date"
-                    label="Schedule a Date to Open the survey"
-                    type="date"
-                  />
-                  <Button type="submit" isLoading={isSubmitting}>
-                    Schedule Open Date
-                  </Button>
-                </Box>
-              </Form>
-            )}
-          </Formik>
-          <br></br>
-          <Formik
-            initialValues={{ date: new Date() }}
-            onSubmit={async (values) => {
-              await closeSurvey({ surveyId, closeAt: values.date });
-              router.reload();
-            }}
-          >
-            {({ isSubmitting }) => (
-              <Form>
-                <Box>
-                  <InputField
-                    name="date"
-                    label="Schedule a Date to Close the survey"
-                    type="date"
-                  />
-                  <Button type="submit" isLoading={isSubmitting}>
-                    Schedule Close Date
-                  </Button>
-                </Box>
-              </Form>
-            )}
-          </Formik>
-        </Flex>
-      );
+      <Flex flexDirection="column">
+        <p>You can immediately open or close your survey:</p>
+        <Button
+          mr="3"
+          mt="3"
+          mb="3"
+          onClick={async () => {
+            await openSurvey({ surveyId });
+            router.reload();
+          }}
+        >
+          Open Survey
+        </Button>
+        <Button
+          mr="3"
+          mt="3"
+          mb="3"
+          onClick={async () => {
+            await closeSurvey({ surveyId });
+            router.reload();
+          }}
+        >
+          Close Survey
+        </Button>
+        <p>Alternatively, schedule a date:</p>
+        <Formik
+          initialValues={{ date: new Date() }}
+          onSubmit={async (values) => {
+            await openSurvey({ surveyId, openAt: values.date });
+            router.reload();
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <Box mr="3">
+                <InputField
+                  name="date"
+                  label="Schedule a Date to Open the survey"
+                  type="date"
+                />
+                <Button type="submit" isLoading={isSubmitting}>
+                  Schedule Open Date
+                </Button>
+              </Box>
+            </Form>
+          )}
+        </Formik>
+        <br></br>
+        <Formik
+          initialValues={{ date: new Date() }}
+          onSubmit={async (values) => {
+            await closeSurvey({ surveyId, closeAt: values.date });
+            router.reload();
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <Box>
+                <InputField
+                  name="date"
+                  label="Schedule a Date to Close the survey"
+                  type="date"
+                />
+                <Button type="submit" isLoading={isSubmitting}>
+                  Schedule Close Date
+                </Button>
+              </Box>
+            </Form>
+          )}
+        </Formik>
+      </Flex>
+    );
       survey = (
         <>
+        <div className="surveyScrollbar">
           <NavBar />
-          <Wrapper>
-            <ThemeProvider theme={theme}>
-              <CSSReset />
-              <Grid templateColumns="repeat(2, 1fr)">
-                <Heading>{surveyName}</Heading>
-                <Flex justifyContent="flex-end">
-                  <Button
-                    variantColor="red"
-                    onClick={async () => {
-                      await deleteSurvey({ surveyId });
-                      router.push("/surveyorDash");
-                    }}
-                  >
-                    Delete Survey
-                  </Button>
-                </Flex>
-              </Grid>
-              <Text fontSize="lg">{surveyDesc}</Text>
-              <Heading as="h3" fontSize="base">
-                Survey Status: {surveyStatus}
-              </Heading>
-              <Text display="inline" fontWeight="bold">
-                Opens At
-              </Text>
-              <Text display="inline" mr="3">
-                :{" "}
-                {opensAt
-                  ? new Date(opensAt).toLocaleDateString()
-                  : "Not Scheduled"}
-              </Text>
+            <Wrapper>
+            <div className="surveyContainer">
+              <ThemeProvider theme={theme}>
+                <CSSReset />
+                    <Heading textAlign="center">{surveyName}</Heading>
+                  <Text className="surveyDescription">{surveyDesc}</Text>
+                  <Heading as="h3" fontSize="base">
+                    Survey Status: {surveyStatus}
+                  </Heading>
+                  <Text display="inline" fontWeight="bold">
+                    Opens At
+                  </Text>
+                  <Text display="inline" mr="3">
+                    :{" "}
+                    {opensAt
+                      ? new Date(opensAt).toLocaleDateString()
+                      : "Not Scheduled"}
+                  </Text>
 
-              <Text display="inline" fontWeight="bold">
-                Closes At
-              </Text>
-              <Text display="inline">
-                :{" "}
-                {closesAt
-                  ? new Date(closesAt).toLocaleDateString()
-                  : "Not Scheduled"}
-              </Text>
-              <br></br>
-              <Button
-                style={{ marginTop: 10, marginBottom: 10 }}
-                onClick={() => {
-                  onOpen();
-                  setModalState("Date Options");
-                }}
-              >
-                Open/Close Options
-              </Button>
-              <Box>
-                <FormControl>{questions}</FormControl>
-              </Box>
-            </ThemeProvider>
-            {surveyStatus === "New" || surveyStatus === "Scheduled To Open" ? (
-              <Button
-                onClick={() => {
-                  onOpen();
-                  setModalState("New Question");
-                }}
-              >
-                "Add a new question"
-              </Button>
-            ) : null}
-          </Wrapper>
+                  <Text display="inline" fontWeight="bold">
+                    Closes At
+                  </Text>
+                  <Text display="inline">
+                    :{" "}
+                    {closesAt
+                      ? new Date(closesAt).toLocaleDateString()
+                      : "Not Scheduled"}
+                  </Text>
+                  <br></br>
+                  <Button style={{marginTop:10, marginBottom:10}} onClick={() => { onOpen(); setModalState("Date Options") }}>Open/Close Options</Button>
+                  <Box>
+                    <FormControl>{questions}</FormControl>
+                  </Box>
+                </ThemeProvider>
+                {surveyStatus === "New" || surveyStatus === "Scheduled To Open" ? (
+                  <Button onClick={() => { onOpen(); setModalState("New Question") }} >"Add a new question"</Button>
+                ) : null}
+                <Flex justifyContent="flex-end">
+                      <Button
+                        variantColor="red"
+                        onClick={async () => {
+                          await deleteSurvey({ surveyId });
+                          router.push("/surveyorDash");
+                        }}
+                      >
+                        Delete Survey
+                      </Button>
+                </Flex>
+              </div>
+            </Wrapper>
+          </div>
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>New Question</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                {modalState === "New Question"
-                  ? modalNewQuestion
-                  : modalDateOptions}
+              {modalState === "New Question" ? modalNewQuestion : modalDateOptions }
               </ModalBody>
             </ModalContent>
           </Modal>
