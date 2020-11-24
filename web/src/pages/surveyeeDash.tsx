@@ -15,6 +15,7 @@ import { NavBar } from "../components/NavBar";
 import { Wrapper } from "../components/Wrapper";
 import { PagedSurveys } from "../components/survey";
 import { useMeQuery } from "../generated/graphql";
+import { Rewards } from "../components/Rewards.tsx";
 
 const SurveyeeDash = () => {
   const [me] = useMeQuery();
@@ -49,6 +50,7 @@ const SurveyeeDash = () => {
               <Text display="inline" fontStyle="italic" fontWeight="semibold">
                 {me.data?.me?.rewards}
               </Text>
+              <Rewards />
             </Box>
           </Box>
         </Flex>
