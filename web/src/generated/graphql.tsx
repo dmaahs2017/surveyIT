@@ -59,7 +59,7 @@ export type User = {
   username: Scalars['String'];
   email: Scalars['String'];
   phoneNumber: Scalars['String'];
-  rewards: Scalars['Int'];
+  rewards: Scalars['Float'];
   typeOfUser: Scalars['String'];
   gender: Scalars['String'];
   income: Scalars['String'];
@@ -265,7 +265,7 @@ export type AnswerInput = {
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email' | 'phoneNumber' | 'gender' | 'income' | 'typeOfUser'>
+  & Pick<User, 'id' | 'username' | 'email' | 'phoneNumber' | 'gender' | 'income' | 'typeOfUser' | 'rewards'>
 );
 
 export type StdFieldErrorFragment = (
@@ -602,6 +602,7 @@ export const RegularUserFragmentDoc = gql`
   gender
   income
   typeOfUser
+  rewards
 }
     `;
 export const StdFieldErrorFragmentDoc = gql`
