@@ -6,13 +6,13 @@ import { Answer } from "../entities/Answer";
 import { Question } from "../entities/Question";
 import { SurveySubmission, SurveyInput } from "./input-types";
 import {
-  SummaryStatistics,
+  //SummaryStatistics,
   SurveyResponse,
   SurveyResults,
 } from "./object-types";
 import { v4 } from "uuid";
 import { getConnection } from "typeorm";
-import { summaryStatistics } from "../utils/summaryStatistics";
+//import { summaryStatistics } from "../utils/summaryStatistics";
 
 @Resolver()
 export class SurveyResolver {
@@ -356,54 +356,36 @@ export class SurveyResolver {
   ): Promise<SurveyResults> {
     let response = await getConnection()
       .getRepository(Answer)
-      .createQueryBuilder("a")
-      .innerJoin("a.question", "question", 'question.id = a."questionId"')
-      .innerJoin("question.survey", "survey", 'survey.id = question."surveyId"')
+      .createQueryBuilder("answer")
+      .innerJoin("answer.user", "user", "user.id = answer.userId")
+      .innerJoin(
+        "answer.question",
+        "question",
+        "question.id = answer.questionId"
+      )
+      .innerJoin("question.survey", "survey", "survey.id = question.surveyId")
+      .select([
+        "question.question as question",
+        "user.gender as userGender",
+        "user.income as userIncome",
+        "answer.answer as answer",
+        "user.id as userId",
+      ])
       .where(`survey.id = ${survey_id}`)
-      .select(["question.question", "a.answer", "question.id"])
+      .orderBy("user.id")
       .getRawMany();
 
-    let response2 = response.map((s) => {
+    const results = response.map((r) => {
       return {
-        answer: s.a_answer,
-        question: s.question_question,
-        questionId: s.question_id,
+        question: r.question,
+        userGender: r.usergender,
+        userIncome: r.userincome,
+        answer: r.answer,
+        userId: r.userid,
       };
     });
 
-    let qids: {
-      qid: number;
-      question: string;
-      answerCount: number[];
-      summaryStats: SummaryStatistics;
-    }[] = [];
-
-    response2.map((x) => {
-      if (
-        !qids.find((n) => {
-          return n.qid === x.questionId;
-        })
-      ) {
-        qids.push({
-          qid: x.questionId,
-          question: x.question,
-          answerCount: new Array(5),
-          summaryStats: { mean: -1, median: -1, mode: -1 },
-        });
-      }
-    });
-
-    qids.map((qi) => {
-      qi.answerCount = [0, 0, 0, 0, 0];
-      response2.map((x) => {
-        if (qi.qid == x.questionId) {
-          qi.answerCount[x.answer] += 1;
-        }
-        qi.summaryStats = summaryStatistics(qi.answerCount);
-      });
-    });
-
-    return { results: qids };
+    return { results };
   }
 
   @Mutation(() => [FieldError])

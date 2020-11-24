@@ -109,17 +109,11 @@ export type SurveyResults = {
 
 export type Result = {
   __typename?: 'Result';
-  answerCount: Array<Scalars['Int']>;
-  summaryStats: SummaryStatistics;
   question: Scalars['String'];
-  qid: Scalars['Float'];
-};
-
-export type SummaryStatistics = {
-  __typename?: 'SummaryStatistics';
-  mean: Scalars['Float'];
-  median: Scalars['Float'];
-  mode: Scalars['Float'];
+  answer: Scalars['Float'];
+  userId: Scalars['Float'];
+  userIncome: Scalars['String'];
+  userGender: Scalars['String'];
 };
 
 export type PaginatedQuestions = {
@@ -553,11 +547,7 @@ export type SurveyResultsQuery = (
     { __typename?: 'SurveyResults' }
     & { results?: Maybe<Array<(
       { __typename?: 'Result' }
-      & Pick<Result, 'answerCount' | 'question' | 'qid'>
-      & { summaryStats: (
-        { __typename?: 'SummaryStatistics' }
-        & Pick<SummaryStatistics, 'mean' | 'median' | 'mode'>
-      ) }
+      & Pick<Result, 'question' | 'userId' | 'userGender' | 'userIncome' | 'answer'>
     )>>, errors?: Maybe<(
       { __typename?: 'FieldError' }
       & StdFieldErrorFragment
@@ -848,14 +838,11 @@ export const SurveyResultsDocument = gql`
     query SurveyResults($survey_id: Int!) {
   surveyResults(survey_id: $survey_id) {
     results {
-      answerCount
-      summaryStats {
-        mean
-        median
-        mode
-      }
       question
-      qid
+      userId
+      userGender
+      userIncome
+      answer
     }
     errors {
       ...StdFieldError
