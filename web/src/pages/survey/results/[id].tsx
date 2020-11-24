@@ -171,11 +171,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
       );
     }
   } else {
-    survey = (
-      <>
-        <Text>Failed</Text>
-      </>
-    );
+    survey = <Text>Failed</Text>;
   }
 
   return (
