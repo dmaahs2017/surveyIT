@@ -104,6 +104,34 @@ export class UserResolver {
       };
     }
 
+    if (options.typeOfUser.toUpperCase() === "SURVEYEE") {
+      if (
+        ["MALE", "FEMALE", "OTHER"].find(
+          (e) => options.gender.toUpperCase() === e
+        ) === undefined
+      ) {
+        return {
+          errors: [
+            {
+              field: "gender",
+              message: "gender must be MALE | FEMALE | OTHER",
+            },
+          ],
+        };
+      }
+
+      if (options.income === "") {
+        return {
+          errors: [
+            {
+              field: "income",
+              message: "income must not be blank",
+            },
+          ],
+        };
+      }
+    }
+
     const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
@@ -115,7 +143,7 @@ export class UserResolver {
           username: options.username,
           email: options.email,
           phoneNumber: options.phoneNumber,
-          gender: options.gender,
+          gender: options.gender.toUpperCase(),
           income: options.income,
           typeOfUser: options.typeOfUser.toUpperCase(),
           password: hashedPassword,
@@ -130,7 +158,7 @@ export class UserResolver {
         return {
           errors: [
             {
-              field: "unkown",
+              field: "unknown",
               message: "a unique field is already taken",
             },
           ],

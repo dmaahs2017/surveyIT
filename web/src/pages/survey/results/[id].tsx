@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NextPage } from "next";
 import {
   ThemeProvider,
@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/core";
 import { QuestionIcon } from "@chakra-ui/icons";
 import { Wrapper } from "../../../components/Wrapper";
+import { Result } from "../../../components/Result";
 import { NavBar } from "../../../components/NavBar";
 import {
   useMeQuery,
@@ -21,8 +22,11 @@ import {
   useQuestionsQuery,
   useSurveyResultsQuery,
 } from "../../../generated/graphql";
-import { answerToString } from "../../../utils/answerToString";
 import { jsonResultsToCsv } from "../../../utils/jsonToCsv";
+import {
+  fromResultList,
+  groupResultsByGender,
+} from "../../../utils/statsUtils";
 import { downloadCsvFile } from "../../../utils/downloads";
 
 const Survey: NextPage<{ id: number }> = ({ id }) => {
@@ -44,8 +48,9 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
     },
   });
   const [me_response] = useMeQuery();
+  const [groupByGender, setGroupByGender] = useState(false);
   let survey = null;
-  let surveyName = null;
+  let surveyName: string | null = null;
   let surveyDesc = null;
 
   if (
@@ -57,7 +62,9 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   ) {
     surveyName = s_response.data.survey.survey.name;
     surveyDesc = s_response.data.survey.survey.description;
-    const resultsCsv = jsonResultsToCsv(s_results.data.surveyResults.results);
+    const resultsCsv = jsonResultsToCsv(
+      fromResultList(s_results.data.surveyResults.results)
+    );
 
     //if not creator of survey
     if (s_response.data.survey.survey.creator.id != me_response.data.me?.id) {
@@ -90,35 +97,45 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
               <QuestionIcon w={3} h={3} />
             </Tooltip>
           </Flex>
-
-          {s_results.data.surveyResults.results.map((r) => (
-            <>
-              <Box mb="10px">
-                <Text fontWeight="bold">{r.question}:</Text>
-              </Box>
-              {r.answerCount.map((n) => (
-                <Text fontWeight="semibold" mr="3">
-                  {n}
-                </Text>
-              ))}
-
-              <SimpleGrid columns={3} mb="20px">
-                <Text mr="3" fontStyle="italic" textDecor="underline">
-                  Mean
-                </Text>
-                <Text mr="3" fontStyle="italic" textDecor="underline">
-                  Median
-                </Text>
-                <Text mr="3" fontStyle="italic" textDecor="underline">
-                  Mode
-                </Text>
-
-                <Text>{r.summaryStats.mean.toFixed(2)}</Text>
-                <Text>{r.summaryStats.median.toFixed(2)}</Text>
-                <Text>{r.summaryStats.mode.toFixed(2)}</Text>
-              </SimpleGrid>
-            </>
-          ))}
+          {groupByGender
+            ? groupResultsByGender(s_results.data.surveyResults.results).map(
+                (gender, i) => {
+                  let x = fromResultList(gender).map((r, j) => {
+                    return (
+                      <>
+                        {j === 0 ? (
+                          <>
+                            <Box />
+                            <Box />
+                            <Box />
+                            <Heading as="h3" fontSize="2xl">
+                              {i === 0 ? "Male" : i === 1 ? "Female" : "Other"}
+                            </Heading>
+                            <Box />
+                            <Box />
+                            <Box />
+                          </>
+                        ) : null}
+                        <Result
+                          summaryStats={r.summaryStats}
+                          question={r.question}
+                          answerCount={r.answerCount}
+                        />
+                      </>
+                    );
+                  });
+                  return x;
+                }
+              )
+            : fromResultList(s_results.data.surveyResults.results).map((r) => {
+                return (
+                  <Result
+                    summaryStats={r.summaryStats}
+                    question={r.question}
+                    answerCount={r.answerCount}
+                  />
+                );
+              })}
         </SimpleGrid>
       );
 
@@ -127,14 +144,22 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
           <Wrapper>
             <ThemeProvider theme={theme}>
               <CSSReset />
-              <Heading>{surveyName}</Heading>
-              <Text fontSize="xl">{surveyDesc}</Text>
+              <SimpleGrid columns={2}>
+                <Heading>{surveyName}</Heading>
+                <Button
+                  maxW="200px"
+                  onClick={() => setGroupByGender(!groupByGender)}
+                >
+                  {groupByGender ? "Don't Group" : "Group by Gender"}
+                </Button>
+                <Text fontSize="xl">{surveyDesc}</Text>
+              </SimpleGrid>
               <Box mb="30px">{results}</Box>
               <Button
                 onClick={() => {
                   downloadCsvFile(
                     resultsCsv,
-                    surveyName.replace(" ", "-") + "-results"
+                    surveyName?.replace(" ", "-") + "-results"
                   );
                 }}
               >
