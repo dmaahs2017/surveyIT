@@ -23,35 +23,37 @@ export function summaryStatistics(values: number[]): SummaryStatistics {
   let total = 0;
   let mode = 0;
   let flattend: number[] = [];
-  values.map((v, i) => {
-    n += v;
-    total += v * i;
-    if (v > mode) {
-      mode = i;
+  values.map((count, index) => {
+    n += count;
+    total += count * index;
+    if (count > mode) {
+      mode = index;
     }
-    for(let j = 0; j < v; j++ ){
-      flattend.push(i);
-      }
+
+    for (let j = 0; j < count; j++) {
+      flattend.push(index);
+    }
   });
 
   flattend.sort();
 
   const mid = Math.floor(flattend.length / 2);
-  if(flattend.length % 2){//if it's odd number of answers
+  if (flattend.length % 2) {
+    //if it's odd number of answers
     return {
       mean: total / n,
       median: flattend[mid],
       mode: mode,
-    };//end return
-  }//end if
-  else{//if it's even
+    }; //end return
+  } //end if
+  else {
+    //if it's even
     return {
       mean: total / n,
-      median:
-        (flattend[mid] + flattend[mid - 1]) / 2.0,
+      median: (flattend[mid] + flattend[mid - 1]) / 2.0,
       mode: mode,
-    };//end return
-  }//end else
+    }; //end return
+  } //end else
 }
 
 export function groupResultsByGender(
