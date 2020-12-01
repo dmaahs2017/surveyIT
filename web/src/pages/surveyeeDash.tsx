@@ -34,13 +34,8 @@ const SurveyeeDash = () => {
             <Box ml="50px">{PagedSurveys(0, 10)}</Box>
           </Box>
 
-          <Box minH="100px">
-            <Heading as="h2" className="title">
-              Completed Surveys:
-            </Heading>
-          </Box>
 
-          <Box>
+          <Box mt="50px">
             <Heading as="h2" className="title">
               Rewards:{" "}
             </Heading>
@@ -52,6 +47,13 @@ const SurveyeeDash = () => {
               </Text>
               <Rewards />
             </Box>
+          </Box>
+
+        
+          <Box mt="50px" minH="100px">
+            <Heading as="h2" className="title">
+              Completed Surveys:
+            </Heading>
           </Box>
         </Flex>
       </Wrapper>
