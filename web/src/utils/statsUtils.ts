@@ -22,23 +22,35 @@ export function summaryStatistics(values: number[]): SummaryStatistics {
   let n = 0;
   let total = 0;
   let mode = 0;
+  let median = 0;
   let flattend: number[] = [];
-  values.map((v, i) => {
-    n += v;
-    total += v * i;
-    if (v > mode) {
-      mode = i;
+  values.map((count, index) => {
+    n += count;
+    total += count * index;
+    if (count > mode) {
+      mode = index;
     }
-    flattend.push(i);
+
+    for (let j = 0; j < count; j++) {
+      flattend.push(index);
+    }
   });
 
   flattend.sort();
 
-  const mid = Math.floor(n / 2);
+  const mid = Math.floor(flattend.length / 2);
+  if (flattend.length % 2) {
+    //if it's odd number of answers
+    median = flattend[mid];
+  } //end if
+  else {
+    //if it's even
+    median = (flattend[mid] + flattend[mid - 1]) / 2.0;
+  } //end else
+
   return {
     mean: total / n,
-    median:
-      n % 2 === 0 ? flattend[mid] : (flattend[mid] + flattend[mid + 1]) / 2,
+    median: median,
     mode: mode,
   };
 }
