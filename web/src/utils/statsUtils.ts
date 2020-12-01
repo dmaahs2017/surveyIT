@@ -29,18 +29,29 @@ export function summaryStatistics(values: number[]): SummaryStatistics {
     if (v > mode) {
       mode = i;
     }
-    flattend.push(i);
+    for(let j = 0; j < v; j++ ){
+      flattend.push(i);
+      }
   });
 
   flattend.sort();
 
-  const mid = Math.floor(n / 2);
-  return {
-    mean: total / n,
-    median:
-      n % 2 === 0 ? flattend[mid] : (flattend[mid] + flattend[mid + 1]) / 2,
-    mode: mode,
-  };
+  const mid = Math.floor(flattend.length / 2);
+  if(flattend.length % 2){//if it's odd number of answers
+    return {
+      mean: total / n,
+      median: flattend[mid],
+      mode: mode,
+    };//end return
+  }//end if
+  else{//if it's even
+    return {
+      mean: total / n,
+      median:
+        (flattend[mid] + flattend[mid - 1]) / 2.0,
+      mode: mode,
+    };//end return
+  }//end else
 }
 
 export function groupResultsByGender(
