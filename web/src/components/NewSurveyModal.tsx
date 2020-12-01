@@ -6,6 +6,7 @@ import {
   ModalBody,
   ModalContent,
   ModalCloseButton,
+  Box,
 } from "@chakra-ui/core";
 import { InputField } from "./InputField";
 import { Formik, Form } from "formik";
@@ -27,7 +28,7 @@ export const NewSurveyModal: React.FC<NewSurveyModalProps> = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
         <ModalContent>
-          <div className="modalContainer">
+          <Box maxW="90%" ml="3vw" mr="3vw">
             <ModalHeader>Create New Survey</ModalHeader>
 
             <Formik
@@ -73,7 +74,7 @@ export const NewSurveyModal: React.FC<NewSurveyModalProps> = ({
             </Formik>
             <ModalCloseButton />
             <ModalBody></ModalBody>
-          </div>
+          </Box>
         </ModalContent>  
     </Modal>
   );
