@@ -1,5 +1,3 @@
-
-
 export interface SummaryStatistics {
   mean: number;
   median: number;
@@ -41,12 +39,14 @@ export function summaryStatistics(values: number[]): SummaryStatistics {
   flattend.sort();
 
   const mid = Math.floor(flattend.length / 2);
-  if(flattend.length % 2){//if it's odd number of answers
-      median = flattend[mid];
-  }//end if
-  else{//if it's even
-      median = (flattend[mid] + flattend[mid - 1]) / 2.0;
-  }//end else
+  if (flattend.length % 2) {
+    //if it's odd number of answers
+    median = flattend[mid];
+  } //end if
+  else {
+    //if it's even
+    median = (flattend[mid] + flattend[mid - 1]) / 2.0;
+  } //end else
 
   return {
     mean: total / n,
