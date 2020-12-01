@@ -1,3 +1,5 @@
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
+
 export interface SummaryStatistics {
   mean: number;
   median: number;
@@ -22,6 +24,7 @@ export function summaryStatistics(values: number[]): SummaryStatistics {
   let n = 0;
   let total = 0;
   let mode = 0;
+  let median = 0;
   let flattend: number[] = [];
   values.map((v, i) => {
     n += v;
@@ -38,20 +41,17 @@ export function summaryStatistics(values: number[]): SummaryStatistics {
 
   const mid = Math.floor(flattend.length / 2);
   if(flattend.length % 2){//if it's odd number of answers
-    return {
-      mean: total / n,
-      median: flattend[mid],
-      mode: mode,
-    };//end return
+      median = flattend[mid];
   }//end if
   else{//if it's even
-    return {
-      mean: total / n,
-      median:
-        (flattend[mid] + flattend[mid - 1]) / 2.0,
-      mode: mode,
-    };//end return
+      median = (flattend[mid] + flattend[mid - 1]) / 2.0;
   }//end else
+
+  return {
+    mean: total / n,
+    median: median,
+    mode: mode,
+  };
 }
 
 export function groupResultsByGender(
