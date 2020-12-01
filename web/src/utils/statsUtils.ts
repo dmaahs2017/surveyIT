@@ -1,4 +1,4 @@
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
+
 
 export interface SummaryStatistics {
   mean: number;
@@ -26,15 +26,16 @@ export function summaryStatistics(values: number[]): SummaryStatistics {
   let mode = 0;
   let median = 0;
   let flattend: number[] = [];
-  values.map((v, i) => {
-    n += v;
-    total += v * i;
-    if (v > mode) {
-      mode = i;
+  values.map((count, index) => {
+    n += count;
+    total += count * index;
+    if (count > mode) {
+      mode = index;
     }
-    for(let j = 0; j < v; j++ ){
-      flattend.push(i);
-      }
+
+    for (let j = 0; j < count; j++) {
+      flattend.push(index);
+    }
   });
 
   flattend.sort();
