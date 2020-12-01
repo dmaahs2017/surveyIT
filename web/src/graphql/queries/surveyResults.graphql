@@ -1,14 +1,11 @@
 query SurveyResults($survey_id: Int!) {
   surveyResults(survey_id: $survey_id) {
     results {
-      answerCount
-      summaryStats {
-        mean
-        median
-        mode
-      }
       question
-      qid
+      userId
+      userGender
+      userIncome
+      answer
     }
     errors {
       ...StdFieldError

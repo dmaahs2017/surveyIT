@@ -1,4 +1,4 @@
-import { Float, Int, Field, ObjectType } from "type-graphql";
+import { Float, Field, ObjectType } from "type-graphql";
 import { User } from "../entities/User";
 import { Survey } from "../entities/Survey";
 import { Question } from "../entities/Question";
@@ -23,14 +23,16 @@ export class SummaryStatistics {
 
 @ObjectType()
 export class Result {
-  @Field(() => [Int])
-  answerCount: number[];
-  @Field(() => SummaryStatistics)
-  summaryStats: SummaryStatistics;
   @Field()
   question: string;
   @Field()
-  qid: number;
+  answer: number;
+  @Field()
+  userId: number;
+  @Field()
+  userIncome: string;
+  @Field()
+  userGender: string;
 }
 
 @ObjectType()
