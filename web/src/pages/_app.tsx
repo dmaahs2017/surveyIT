@@ -83,7 +83,7 @@ function MyApp({ Component, pageProps }: any) {
       <ThemeProvider theme={theme}>
         <CSSReset />
         <div class="surveyScrollbar">
-            <Component {...pageProps} />
+          <Component {...pageProps} />
         </div>
       </ThemeProvider>
     </Provider>
