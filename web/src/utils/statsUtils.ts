@@ -21,14 +21,15 @@ export interface QuestionBreakdown {
 export function summaryStatistics(values: number[]): SummaryStatistics {
   let n = 0;
   let total = 0;
-  let mode = 0;
+  let modeIndex = 0; 
+    
   let median = 0;
   let flattend: number[] = [];
   values.map((count, index) => {
     n += count;
     total += count * index;
-    if (count > mode) {
-      mode = index;
+    if (count > values[modeIndex]) {
+      modeIndex = index;
     }
 
     for (let j = 0; j < count; j++) {
@@ -51,7 +52,7 @@ export function summaryStatistics(values: number[]): SummaryStatistics {
   return {
     mean: total / n,
     median: median,
-    mode: mode,
+    mode: modeIndex,
   };
 }
 
