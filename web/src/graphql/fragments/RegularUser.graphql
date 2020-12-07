@@ -7,4 +7,5 @@ fragment RegularUser on User {
   income
   typeOfUser
   rewards
+  balance
 }

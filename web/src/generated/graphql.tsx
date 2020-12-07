@@ -57,6 +57,7 @@ export type User = {
   __typename?: 'User';
   id: Scalars['Float'];
   username: Scalars['String'];
+  balance?: Maybe<Scalars['Float']>;
   email: Scalars['String'];
   phoneNumber: Scalars['String'];
   rewards: Scalars['Float'];
@@ -139,6 +140,7 @@ export type Question = {
 export type Mutation = {
   __typename?: 'Mutation';
   register: UserResponse;
+  payBalance: UserResponse;
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
@@ -155,6 +157,14 @@ export type Mutation = {
 
 export type MutationRegisterArgs = {
   options: RegisterInput;
+};
+
+
+export type MutationPayBalanceArgs = {
+  bankPaymentInfo?: Maybe<BankPaymentInfo>;
+  creditCard?: Maybe<Scalars['String']>;
+  amount?: Maybe<Scalars['Float']>;
+  payInFull: Scalars['Boolean'];
 };
 
 
@@ -227,6 +237,11 @@ export type RegisterInput = {
   typeOfUser: Scalars['String'];
 };
 
+export type BankPaymentInfo = {
+  accountNumber: Scalars['String'];
+  routingNumber: Scalars['String'];
+};
+
 export type UsernamePasswordInput = {
   username: Scalars['String'];
   password: Scalars['String'];
@@ -261,7 +276,7 @@ export type AnswerInput = {
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email' | 'phoneNumber' | 'gender' | 'income' | 'typeOfUser' | 'rewards'>
+  & Pick<User, 'id' | 'username' | 'email' | 'phoneNumber' | 'gender' | 'income' | 'typeOfUser' | 'rewards' | 'balance'>
 );
 
 export type StdFieldErrorFragment = (
@@ -411,6 +426,28 @@ export type OpenSurveyMutation = (
     )>>, survey?: Maybe<(
       { __typename?: 'Survey' }
       & SurveySnippetFragment
+    )> }
+  ) }
+);
+
+export type PayBalanceMutationVariables = Exact<{
+  payInFull: Scalars['Boolean'];
+  amount?: Maybe<Scalars['Float']>;
+  creditCard?: Maybe<Scalars['String']>;
+  bankPaymentInfo?: Maybe<BankPaymentInfo>;
+}>;
+
+
+export type PayBalanceMutation = (
+  { __typename?: 'Mutation' }
+  & { payBalance: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
     )> }
   ) }
 );
@@ -597,6 +634,7 @@ export const RegularUserFragmentDoc = gql`
   income
   typeOfUser
   rewards
+  balance
 }
     `;
 export const StdFieldErrorFragmentDoc = gql`
@@ -737,6 +775,23 @@ export const OpenSurveyDocument = gql`
 
 export function useOpenSurveyMutation() {
   return Urql.useMutation<OpenSurveyMutation, OpenSurveyMutationVariables>(OpenSurveyDocument);
+};
+export const PayBalanceDocument = gql`
+    mutation PayBalance($payInFull: Boolean!, $amount: Float, $creditCard: String, $bankPaymentInfo: BankPaymentInfo) {
+  payBalance(payInFull: $payInFull, amount: $amount, creditCard: $creditCard, bankPaymentInfo: $bankPaymentInfo) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function usePayBalanceMutation() {
+  return Urql.useMutation<PayBalanceMutation, PayBalanceMutationVariables>(PayBalanceDocument);
 };
 export const RegisterDocument = gql`
     mutation Register($username: String!, $email: String!, $phoneNumber: String!, $typeOfUser: String!, $password: String!, $gender: String!, $income: String!) {

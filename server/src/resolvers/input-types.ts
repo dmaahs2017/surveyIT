@@ -47,6 +47,14 @@ export class SurveyInput {
 }
 
 @InputType()
+export class BankPaymentInfo {
+  @Field()
+  accountNumber!: string;
+  @Field()
+  routingNumber!: string;
+}
+
+@InputType()
 export class UsernamePasswordInput {
   @Field()
   username: string;
