@@ -24,6 +24,10 @@ export class UpdateUserInput {
   email: string;
   @Field()
   phoneNumber: string;
+  @Field()
+  gender: string;
+  @Field()
+  income: string;
 }
 
 @InputType()
