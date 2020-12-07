@@ -6,7 +6,13 @@ mutation UpdateUser(
   $income: String!
 ) {
   updateUser(
-    input: { username: $username, email: $email, phoneNumber: $phoneNumber, gender: $gender, income: $income }
+    input: {
+      username: $username
+      email: $email
+      phoneNumber: $phoneNumber
+      gender: $gender
+      income: $income
+    }
   ) {
     errors {
       field

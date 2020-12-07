@@ -34,7 +34,7 @@ const manageAccount: React.FC<{}> = ({}) => {
             <p className="fieldValue">{data?.me?.gender}</p>
             <Text className="fieldName">Income</Text>
             <p className="fieldValue">{data?.me?.income}</p>
-          
+
             <br></br>
             <Button mt={4} variantColor="teal" onClick={() => setEdit(!edit)}>
               Edit Account
@@ -62,7 +62,7 @@ const manageAccount: React.FC<{}> = ({}) => {
                       email: data.me.email,
                       phoneNumber: data.me.phoneNumber,
                       gender: data.me.gender,
-                      income: data.me.income
+                      income: data.me.income,
                     }
                   : {
                       username: "",
