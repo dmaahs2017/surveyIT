@@ -108,7 +108,6 @@ const manageAccount: React.FC<{}> = ({}) => {
 
                   <Box mt={4}>
                     <InputField label="gender" name="gender" as="select">
-                      <option value="">Please select a gender</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
                       <option value="Other">Other</option>
@@ -117,9 +116,6 @@ const manageAccount: React.FC<{}> = ({}) => {
 
                   <Box mt={4}>
                     <InputField label="Income" name="income" as="select">
-                      <option value="">
-                        Please select a yearly income estimate
-                      </option>
                       <option value="$0 to $20,000">$0 to $20,000</option>
                       <option value="$20,000 to $40,000">
                         $20,000 to $40,000
