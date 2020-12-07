@@ -1,0 +1,11 @@
+mutation RedeemReward($cost: Float!, $reward: String!) {
+  redeemReward(cost: $cost, reward: $reward) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
