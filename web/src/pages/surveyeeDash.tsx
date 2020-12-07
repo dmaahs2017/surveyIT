@@ -34,7 +34,6 @@ const SurveyeeDash = () => {
             <Box ml="50px">{PagedSurveys(0, 10)}</Box>
           </Box>
 
-
           <Box mt="50px">
             <Heading as="h2" className="title">
               Rewards:{" "}
@@ -49,7 +48,6 @@ const SurveyeeDash = () => {
             </Box>
           </Box>
 
-        
           <Box mt="50px" minH="100px">
             <Heading as="h2" className="title">
               Completed Surveys:
