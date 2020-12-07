@@ -1,4 +1,4 @@
-import { Int, InputType, Field } from "type-graphql";
+import { Float, Int, InputType, Field } from "type-graphql";
 
 @InputType()
 export class AnswerInput {
@@ -36,6 +36,10 @@ export class SurveyInput {
   closesAt?: Date;
   @Field({ nullable: true })
   opensAt?: Date;
+  @Field(() => Float)
+  allocatedMoney!: number;
+  @Field(() => Int)
+  numGuarenteedResponses: number;
 }
 
 @InputType()

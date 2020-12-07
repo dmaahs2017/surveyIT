@@ -8,7 +8,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { ObjectType, Field } from "type-graphql";
+import { Float, ObjectType, Field } from "type-graphql";
 import { Question } from "./Question";
 import { User } from "./User";
 
@@ -34,6 +34,14 @@ export class Survey extends BaseEntity {
   @Field({ nullable: true })
   @Column({ nullable: true })
   closesAt?: Date;
+
+  @Field(() => Float)
+  @Column({ type: "float" })
+  availablePoints!: number;
+
+  @Field(() => Float)
+  @Column({ type: "float" })
+  rewardsRate!: number;
 
   @Field()
   @Column()

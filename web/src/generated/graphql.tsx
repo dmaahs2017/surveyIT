@@ -59,6 +59,7 @@ export type User = {
   username: Scalars['String'];
   email: Scalars['String'];
   phoneNumber: Scalars['String'];
+  rewards: Scalars['Float'];
   typeOfUser: Scalars['String'];
   gender: Scalars['String'];
   income: Scalars['String'];
@@ -82,6 +83,8 @@ export type Survey = {
   description: Scalars['String'];
   opensAt?: Maybe<Scalars['DateTime']>;
   closesAt?: Maybe<Scalars['DateTime']>;
+  availablePoints: Scalars['Float'];
+  rewardsRate: Scalars['Float'];
   creatorId: Scalars['Float'];
   creator: User;
   createdAt: Scalars['String'];
@@ -240,6 +243,8 @@ export type SurveyInput = {
   description?: Maybe<Scalars['String']>;
   closesAt?: Maybe<Scalars['DateTime']>;
   opensAt?: Maybe<Scalars['DateTime']>;
+  allocatedMoney: Scalars['Float'];
+  numGuarenteedResponses: Scalars['Int'];
 };
 
 export type SurveySubmission = {
@@ -254,7 +259,7 @@ export type AnswerInput = {
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email' | 'phoneNumber' | 'gender' | 'income' | 'typeOfUser'>
+  & Pick<User, 'id' | 'username' | 'email' | 'phoneNumber' | 'gender' | 'income' | 'typeOfUser' | 'rewards'>
 );
 
 export type StdFieldErrorFragment = (
@@ -264,7 +269,7 @@ export type StdFieldErrorFragment = (
 
 export type SurveySnippetFragment = (
   { __typename?: 'Survey' }
-  & Pick<Survey, 'name' | 'description' | 'id' | 'opensAt' | 'closesAt'>
+  & Pick<Survey, 'name' | 'description' | 'id' | 'opensAt' | 'closesAt' | 'availablePoints' | 'rewardsRate'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -325,6 +330,8 @@ export type CreateQuestionMutation = (
 export type CreateSurveyMutationVariables = Exact<{
   name: Scalars['String'];
   description: Scalars['String'];
+  allocatedMoney: Scalars['Float'];
+  numGuarenteedResponses: Scalars['Int'];
 }>;
 
 
@@ -585,6 +592,7 @@ export const RegularUserFragmentDoc = gql`
   gender
   income
   typeOfUser
+  rewards
 }
     `;
 export const StdFieldErrorFragmentDoc = gql`
@@ -600,6 +608,8 @@ export const SurveySnippetFragmentDoc = gql`
   id
   opensAt
   closesAt
+  availablePoints
+  rewardsRate
   creator {
     id
     username
@@ -649,8 +659,8 @@ export function useCreateQuestionMutation() {
   return Urql.useMutation<CreateQuestionMutation, CreateQuestionMutationVariables>(CreateQuestionDocument);
 };
 export const CreateSurveyDocument = gql`
-    mutation CreateSurvey($name: String!, $description: String!) {
-  createSurvey(input: {name: $name, description: $description}) {
+    mutation CreateSurvey($name: String!, $description: String!, $allocatedMoney: Float!, $numGuarenteedResponses: Int!) {
+  createSurvey(input: {name: $name, description: $description, allocatedMoney: $allocatedMoney, numGuarenteedResponses: $numGuarenteedResponses}) {
     name
     description
     id

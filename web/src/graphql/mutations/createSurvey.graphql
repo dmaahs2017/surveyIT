@@ -1,5 +1,17 @@
-mutation CreateSurvey($name: String!, $description: String!) {
-  createSurvey(input: { name: $name, description: $description }) {
+mutation CreateSurvey(
+  $name: String!
+  $description: String!
+  $allocatedMoney: Float!
+  $numGuarenteedResponses: Int!
+) {
+  createSurvey(
+    input: {
+      name: $name
+      description: $description
+      allocatedMoney: $allocatedMoney
+      numGuarenteedResponses: $numGuarenteedResponses
+    }
+  ) {
     name
     description
     id

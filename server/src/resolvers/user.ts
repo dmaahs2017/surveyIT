@@ -147,6 +147,7 @@ export class UserResolver {
           income: options.income,
           typeOfUser: options.typeOfUser.toUpperCase(),
           password: hashedPassword,
+          rewards: 0,
         })
         .returning("*")
         .execute();

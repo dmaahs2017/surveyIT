@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import {
   ThemeProvider,
   Grid,
+  SimpleGrid,
   CSSReset,
   theme,
   Heading,
@@ -252,28 +253,68 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
                 </Flex>
               </Grid>
               <Text fontSize="lg">{surveyDesc}</Text>
-              <Heading as="h3" fontSize="base">
-                Survey Status: {surveyStatus}
-              </Heading>
-              <Text display="inline" fontWeight="bold">
-                Opens At
-              </Text>
-              <Text display="inline" mr="3">
-                :{" "}
-                {opensAt
-                  ? new Date(opensAt).toLocaleDateString()
-                  : "Not Scheduled"}
-              </Text>
+              <SimpleGrid columns={3}>
+                <Heading as="h3" fontSize="base">
+                  Survey Status: {surveyStatus}
+                </Heading>
 
-              <Text display="inline" fontWeight="bold">
-                Closes At
-              </Text>
-              <Text display="inline">
-                :{" "}
-                {closesAt
-                  ? new Date(closesAt).toLocaleDateString()
-                  : "Not Scheduled"}
-              </Text>
+                <Box />
+                <Box />
+
+                <Box>
+                  <Text display="inline" fontWeight="bold">
+                    Opens At
+                  </Text>
+                  <Text display="inline" mr="3">
+                    :{" "}
+                    {opensAt
+                      ? new Date(opensAt).toLocaleDateString()
+                      : "Not Scheduled"}
+                  </Text>
+                </Box>
+
+                <Box>
+                  <Text display="inline" fontWeight="bold">
+                    Closes At
+                  </Text>
+                  <Text display="inline">
+                    :{" "}
+                    {closesAt
+                      ? new Date(closesAt).toLocaleDateString()
+                      : "Not Scheduled"}
+                  </Text>
+                </Box>
+
+                <Box />
+
+                <Box>
+                  <Text display="inline" fontWeight="bold">
+                    Points remaining in this survey:{" "}
+                  </Text>
+                  <Text display="inline">
+                    {s_response.data.survey.survey.availablePoints}
+                  </Text>
+                </Box>
+
+                <Box>
+                  <Text display="inline" fontWeight="bold">
+                    Remaining Promoted Responses:{" "}
+                  </Text>
+                  <Text display="inline">
+                    {s_response.data.survey.survey.availablePoints /
+                      s_response.data.survey.survey.rewardsRate}
+                  </Text>
+                </Box>
+
+                <Box>
+                  <Text display="inline" fontWeight="bold">
+                    Rewards Rate:{" "}
+                  </Text>
+                  <Text display="inline">
+                    {s_response.data.survey.survey.rewardsRate} Points
+                  </Text>
+                </Box>
+              </SimpleGrid>
               <br></br>
               <Button
                 style={{ marginTop: 10, marginBottom: 10 }}

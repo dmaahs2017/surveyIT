@@ -55,15 +55,36 @@ export const PagedSurveys = (offset: number, limit: number) => {
             return null;
           } else {
             return (
-              <Box>
-                <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>
-                  <Link>
-                    <Heading style={{ color: "blue" }} fontSize="l">
-                      {s.name}
-                    </Heading>
-                  </Link>
-                </NextLink>
-                <Text>{s.description}</Text>
+              <Box
+                border="2px"
+                borderColor="grey"
+                borderRadius="md"
+                paddingLeft="8px"
+              >
+                <Box>
+                  <NextLink href="/survey/[token]" as={`/survey/${s.id}`}>
+                    <Link>
+                      <Heading
+                        display="inline"
+                        style={{ color: "blue" }}
+                        fontSize="xl"
+                      >
+                        {s.name}
+                      </Heading>
+                      <Text
+                        ml="8px"
+                        display="inline"
+                        fontWeight="semibold"
+                        fontSize="lg"
+                      >
+                        Earn: {s.rewardsRate} points!
+                      </Text>
+                    </Link>
+                  </NextLink>
+                </Box>
+                <Text ml="25px" fontStyle="italic">
+                  {s.description}
+                </Text>
               </Box>
             );
           }
@@ -97,7 +118,12 @@ export const PagedMeSurveys = (
             return null;
           } else {
             return (
-              <Box border="2px" borderColor="grey" borderRadius="md">
+              <Box
+                border="2px"
+                borderColor="grey"
+                borderRadius="md"
+                paddingLeft="8px"
+              >
                 <Text fontSize="xl" fontWeight="bold" display="inline" mr="3">
                   {s.name}
                 </Text>
