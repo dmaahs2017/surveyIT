@@ -6,14 +6,9 @@ import { Answer } from "../entities/Answer";
 import { Question } from "../entities/Question";
 import { User } from "../entities/User";
 import { SurveySubmission, SurveyInput } from "./input-types";
-import {
-  //SummaryStatistics,
-  SurveyResponse,
-  SurveyResults,
-} from "./object-types";
+import { SurveyResponse, SurveyResults } from "./object-types";
 import { v4 } from "uuid";
 import { getConnection } from "typeorm";
-//import { summaryStatistics } from "../utils/summaryStatistics";
 
 @Resolver()
 export class SurveyResolver {
@@ -23,13 +18,23 @@ export class SurveyResolver {
     @Ctx() { req }: MyContext
   ): Promise<Survey> {
     const obfuscationRate = 1.8;
-    return Survey.create({
+    const survey = await Survey.create({
       ...input,
       availablePoints: input.allocatedMoney * obfuscationRate,
       rewardsRate:
         (input.allocatedMoney * obfuscationRate) / input.numGuarenteedResponses,
       creatorId: req.session.userId,
     }).save();
+
+    let user = await User.findOneOrFail(req.session.userId);
+    if (user.balance) {
+      user.balance += input.allocatedMoney;
+    } else {
+      user.balance = input.allocatedMoney;
+    }
+    user.save();
+
+    return survey;
   }
 
   @Mutation(() => SurveyResponse)

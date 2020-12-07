@@ -22,6 +22,10 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   username!: string;
 
+  @Field(() => Float, { nullable: true })
+  @Column({ type: "float", nullable: true })
+  balance?: number;
+
   @Field()
   @Column({ unique: true })
   email!: string;

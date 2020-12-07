@@ -1,0 +1,21 @@
+mutation PayBalance(
+  $payInFull: Boolean!
+  $amount: Float
+  $creditCard: String
+  $bankPaymentInfo: BankPaymentInfo
+) {
+  payBalance(
+    payInFull: $payInFull
+    amount: $amount
+    creditCard: $creditCard
+    bankPaymentInfo: $bankPaymentInfo
+  ) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
