@@ -21,8 +21,8 @@ export interface QuestionBreakdown {
 export function summaryStatistics(values: number[]): SummaryStatistics {
   let n = 0;
   let total = 0;
-  let modeIndex = 0; 
-    
+  let modeIndex = 0;
+
   let median = 0;
   let flattend: number[] = [];
   values.map((count, index) => {
