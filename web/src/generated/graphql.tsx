@@ -233,6 +233,8 @@ export type UpdateUserInput = {
   username: Scalars['String'];
   email: Scalars['String'];
   phoneNumber: Scalars['String'];
+  gender: Scalars['String'];
+  income: Scalars['String'];
 };
 
 export type SurveyInput = {
@@ -449,6 +451,8 @@ export type UpdateUserMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
   phoneNumber: Scalars['String'];
+  gender: Scalars['String'];
+  income: Scalars['String'];
 }>;
 
 
@@ -754,8 +758,8 @@ export function useSubmitSurveyMutation() {
   return Urql.useMutation<SubmitSurveyMutation, SubmitSurveyMutationVariables>(SubmitSurveyDocument);
 };
 export const UpdateUserDocument = gql`
-    mutation UpdateUser($username: String!, $email: String!, $phoneNumber: String!) {
-  updateUser(input: {username: $username, email: $email, phoneNumber: $phoneNumber}) {
+    mutation UpdateUser($username: String!, $email: String!, $phoneNumber: String!, $gender: String!, $income: String!) {
+  updateUser(input: {username: $username, email: $email, phoneNumber: $phoneNumber, gender: $gender, income: $income}) {
     errors {
       field
       message
