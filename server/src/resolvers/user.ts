@@ -338,7 +338,8 @@ export class UserResolver {
     user.email = input.email;
     user.phoneNumber = input.phoneNumber;
     user.username = input.username;
-    //user.gender = input.gender;
+    user.gender = input.gender;
+    user.income = input.income;
 
     try {
       const updatedUser = await user.save();

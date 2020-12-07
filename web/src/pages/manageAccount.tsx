@@ -30,14 +30,11 @@ const manageAccount: React.FC<{}> = ({}) => {
             <p className="fieldValue">{data?.me?.email}</p>
             <Text className="fieldName">Phone Number</Text>
             <p className="fieldValue">{data?.me?.phoneNumber}</p>
-            {/*<Text>Income</Text>
-          <p>{data?.me?.income}</p>
-          <input className="simpleField" type="text" />
-          <p>{data?.me?.education}</p>
-          <input className="simpleField" type="text" />
-          <Text>Gender</Text>
-          <p>{data?.me?.gender}</p>
-          */}
+            <Text className="fieldName">Gender</Text>
+            <p className="fieldValue">{data?.me?.gender}</p>
+            <Text className="fieldName">Income</Text>
+            <p className="fieldValue">{data?.me?.income}</p>
+
             <br></br>
             <Button mt={4} variantColor="teal" onClick={() => setEdit(!edit)}>
               Edit Account
@@ -64,11 +61,15 @@ const manageAccount: React.FC<{}> = ({}) => {
                       username: data.me.username,
                       email: data.me.email,
                       phoneNumber: data.me.phoneNumber,
+                      gender: data.me.gender,
+                      income: data.me.income,
                     }
                   : {
                       username: "",
                       email: "",
                       phoneNumber: "",
+                      gender: "",
+                      income: "",
                     }
               }
               onSubmit={async (values, { setErrors }) => {
@@ -104,6 +105,61 @@ const manageAccount: React.FC<{}> = ({}) => {
                       label="Phone Number"
                     />
                   </Box>
+
+                  <Box mt={4}>
+                    <InputField label="gender" name="gender" as="select">
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </InputField>
+                  </Box>
+
+                  <Box mt={4}>
+                    <InputField label="Income" name="income" as="select">
+                      <option value="$0 to $20,000">$0 to $20,000</option>
+                      <option value="$20,000 to $40,000">
+                        $20,000 to $40,000
+                      </option>
+                      <option value="$40,000 to $60,000">
+                        $40,000 to $60,000
+                      </option>
+                      <option value="$60,000 to $80,000">
+                        $60,000 to $80,000
+                      </option>
+                      <option value="$80,000 to $100,000">
+                        $80,000 to $100,000
+                      </option>
+                      <option value="$100,000 to $200,000">
+                        $100,000 to $200,000
+                      </option>
+                      <option value="$200,000 to $300,000">
+                        $200,000 to $300,000
+                      </option>
+                      <option value="$300,000 to $400,00">
+                        $300,000 to $400,000
+                      </option>
+                      <option value="$400,000 to $500,00">
+                        $400,000 to $500,000
+                      </option>
+                      <option value="$500,000 to $600,000">
+                        $500,000 to $600,000
+                      </option>
+                      <option value="$600,000 to $700,000">
+                        $600,000 to $700,000
+                      </option>
+                      <option value="$700,000 to $800,000">
+                        $700,000 to $800,000
+                      </option>
+                      <option value="$800,000 to $900,000">
+                        $800,000 to $900,000
+                      </option>
+                      <option value="$900,000 to $1,000,000">
+                        $900,000 to $1,000,000
+                      </option>
+                      <option value="$1,000,000+">$1,000,000+</option>
+                    </InputField>
+                  </Box>
+
                   <Button
                     mt={4}
                     type="submit"
