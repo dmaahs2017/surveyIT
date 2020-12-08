@@ -27,7 +27,7 @@ const SurveyorDash = () => {
         <Heading as="h1" textAlign="center">
           Surveyor Dashboard
         </Heading>
-        <Flex flexDir="column">
+        <Flex flexDir="column" textAlign="center" marginTop="4vh">
           <Box mb="10px">
             <Heading as="h2">Unopened Surveys:</Heading>
             {PagedMeSurveys(0, 10, "New")}
