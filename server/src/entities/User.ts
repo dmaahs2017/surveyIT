@@ -6,8 +6,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Column,
+  JoinTable,
+  ManyToMany,
 } from "typeorm";
-import { ObjectType, Field } from "type-graphql";
+import { Float, ObjectType, Field } from "type-graphql";
 import { Survey } from "./Survey";
 import { Answer } from "./Answer";
 
@@ -22,6 +24,10 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   username!: string;
 
+  @Field(() => Float, { nullable: true })
+  @Column({ type: "float", nullable: true })
+  balance?: number;
+
   @Field()
   @Column({ unique: true })
   email!: string;
@@ -29,6 +35,10 @@ export class User extends BaseEntity {
   @Field()
   @Column({ unique: true })
   phoneNumber!: string;
+
+  @Field(() => Float)
+  @Column({ type: "float" })
+  rewards!: number;
 
   @Field()
   @Column()
@@ -47,6 +57,12 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Survey, (survey) => survey.creator)
   surveys: Survey[];
+
+  @ManyToMany(() => Survey, (survey) => survey.usersCompleted, {
+    cascade: true,
+  })
+  @JoinTable({ name: "SurveysTaken" })
+  surveysTaken: Survey[];
 
   @OneToMany(() => Answer, (qa) => qa.user)
   answers: Answer[];

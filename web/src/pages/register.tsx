@@ -81,17 +81,19 @@ const Register: React.FC<registerProps> = ({}) => {
               {isSurveyor ? null : (
                 <>
                   <Box mt={4}>
-                    Gender:
-                    <Field name="gender" as="select">
+                    <InputField label="gender" name="gender" as="select">
+                      <option value="">Please select a gender</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
                       <option value="Other">Other</option>
-                    </Field>
+                    </InputField>
                   </Box>
 
                   <Box mt={4}>
-                    Income:
-                    <Field name="income" as="select">
+                    <InputField label="Income" name="income" as="select">
+                      <option value="">
+                        Please select a yearly income estimate
+                      </option>
                       <option value="$0 to $20,000">$0 to $20,000</option>
                       <option value="$20,000 to $40,000">
                         $20,000 to $40,000
@@ -133,7 +135,7 @@ const Register: React.FC<registerProps> = ({}) => {
                         $900,000 to $1,000,000
                       </option>
                       <option value="$1,000,000+">$1,000,000+</option>
-                    </Field>
+                    </InputField>
                   </Box>
                 </>
               )}

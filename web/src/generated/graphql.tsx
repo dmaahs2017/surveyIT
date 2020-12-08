@@ -57,8 +57,10 @@ export type User = {
   __typename?: 'User';
   id: Scalars['Float'];
   username: Scalars['String'];
+  balance?: Maybe<Scalars['Float']>;
   email: Scalars['String'];
   phoneNumber: Scalars['String'];
+  rewards: Scalars['Float'];
   typeOfUser: Scalars['String'];
   gender: Scalars['String'];
   income: Scalars['String'];
@@ -82,6 +84,8 @@ export type Survey = {
   description: Scalars['String'];
   opensAt?: Maybe<Scalars['DateTime']>;
   closesAt?: Maybe<Scalars['DateTime']>;
+  availablePoints: Scalars['Float'];
+  rewardsRate: Scalars['Float'];
   creatorId: Scalars['Float'];
   creator: User;
   createdAt: Scalars['String'];
@@ -109,17 +113,11 @@ export type SurveyResults = {
 
 export type Result = {
   __typename?: 'Result';
-  answerCount: Array<Scalars['Int']>;
-  summaryStats: SummaryStatistics;
   question: Scalars['String'];
-  qid: Scalars['Float'];
-};
-
-export type SummaryStatistics = {
-  __typename?: 'SummaryStatistics';
-  mean: Scalars['Float'];
-  median: Scalars['Float'];
-  mode: Scalars['Float'];
+  answer: Scalars['Float'];
+  userId: Scalars['Float'];
+  userIncome: Scalars['String'];
+  userGender: Scalars['String'];
 };
 
 export type PaginatedQuestions = {
@@ -142,6 +140,8 @@ export type Question = {
 export type Mutation = {
   __typename?: 'Mutation';
   register: UserResponse;
+  redeemReward: UserResponse;
+  payBalance: UserResponse;
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
@@ -158,6 +158,20 @@ export type Mutation = {
 
 export type MutationRegisterArgs = {
   options: RegisterInput;
+};
+
+
+export type MutationRedeemRewardArgs = {
+  reward: Scalars['String'];
+  cost: Scalars['Float'];
+};
+
+
+export type MutationPayBalanceArgs = {
+  bankPaymentInfo?: Maybe<BankPaymentInfo>;
+  creditCard?: Maybe<Scalars['String']>;
+  amount?: Maybe<Scalars['Float']>;
+  payInFull: Scalars['Boolean'];
 };
 
 
@@ -230,6 +244,11 @@ export type RegisterInput = {
   typeOfUser: Scalars['String'];
 };
 
+export type BankPaymentInfo = {
+  accountNumber: Scalars['String'];
+  routingNumber: Scalars['String'];
+};
+
 export type UsernamePasswordInput = {
   username: Scalars['String'];
   password: Scalars['String'];
@@ -239,6 +258,8 @@ export type UpdateUserInput = {
   username: Scalars['String'];
   email: Scalars['String'];
   phoneNumber: Scalars['String'];
+  gender: Scalars['String'];
+  income: Scalars['String'];
 };
 
 export type SurveyInput = {
@@ -246,6 +267,8 @@ export type SurveyInput = {
   description?: Maybe<Scalars['String']>;
   closesAt?: Maybe<Scalars['DateTime']>;
   opensAt?: Maybe<Scalars['DateTime']>;
+  allocatedMoney: Scalars['Float'];
+  numGuarenteedResponses: Scalars['Int'];
 };
 
 export type SurveySubmission = {
@@ -260,7 +283,7 @@ export type AnswerInput = {
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email' | 'phoneNumber' | 'gender' | 'income' | 'typeOfUser'>
+  & Pick<User, 'id' | 'username' | 'email' | 'phoneNumber' | 'gender' | 'income' | 'typeOfUser' | 'rewards' | 'balance'>
 );
 
 export type StdFieldErrorFragment = (
@@ -270,7 +293,7 @@ export type StdFieldErrorFragment = (
 
 export type SurveySnippetFragment = (
   { __typename?: 'Survey' }
-  & Pick<Survey, 'name' | 'description' | 'id' | 'opensAt' | 'closesAt'>
+  & Pick<Survey, 'name' | 'description' | 'id' | 'opensAt' | 'closesAt' | 'availablePoints' | 'rewardsRate'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -331,6 +354,8 @@ export type CreateQuestionMutation = (
 export type CreateSurveyMutationVariables = Exact<{
   name: Scalars['String'];
   description: Scalars['String'];
+  allocatedMoney: Scalars['Float'];
+  numGuarenteedResponses: Scalars['Int'];
 }>;
 
 
@@ -412,6 +437,48 @@ export type OpenSurveyMutation = (
   ) }
 );
 
+export type PayBalanceMutationVariables = Exact<{
+  payInFull: Scalars['Boolean'];
+  amount?: Maybe<Scalars['Float']>;
+  creditCard?: Maybe<Scalars['String']>;
+  bankPaymentInfo?: Maybe<BankPaymentInfo>;
+}>;
+
+
+export type PayBalanceMutation = (
+  { __typename?: 'Mutation' }
+  & { payBalance: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
+    )> }
+  ) }
+);
+
+export type RedeemRewardMutationVariables = Exact<{
+  cost: Scalars['Float'];
+  reward: Scalars['String'];
+}>;
+
+
+export type RedeemRewardMutation = (
+  { __typename?: 'Mutation' }
+  & { redeemReward: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
+    )> }
+  ) }
+);
+
 export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
@@ -455,6 +522,8 @@ export type UpdateUserMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
   phoneNumber: Scalars['String'];
+  gender: Scalars['String'];
+  income: Scalars['String'];
 }>;
 
 
@@ -553,11 +622,7 @@ export type SurveyResultsQuery = (
     { __typename?: 'SurveyResults' }
     & { results?: Maybe<Array<(
       { __typename?: 'Result' }
-      & Pick<Result, 'answerCount' | 'question' | 'qid'>
-      & { summaryStats: (
-        { __typename?: 'SummaryStatistics' }
-        & Pick<SummaryStatistics, 'mean' | 'median' | 'mode'>
-      ) }
+      & Pick<Result, 'question' | 'userId' | 'userGender' | 'userIncome' | 'answer'>
     )>>, errors?: Maybe<(
       { __typename?: 'FieldError' }
       & StdFieldErrorFragment
@@ -595,6 +660,8 @@ export const RegularUserFragmentDoc = gql`
   gender
   income
   typeOfUser
+  rewards
+  balance
 }
     `;
 export const StdFieldErrorFragmentDoc = gql`
@@ -610,6 +677,8 @@ export const SurveySnippetFragmentDoc = gql`
   id
   opensAt
   closesAt
+  availablePoints
+  rewardsRate
   creator {
     id
     username
@@ -659,8 +728,8 @@ export function useCreateQuestionMutation() {
   return Urql.useMutation<CreateQuestionMutation, CreateQuestionMutationVariables>(CreateQuestionDocument);
 };
 export const CreateSurveyDocument = gql`
-    mutation CreateSurvey($name: String!, $description: String!) {
-  createSurvey(input: {name: $name, description: $description}) {
+    mutation CreateSurvey($name: String!, $description: String!, $allocatedMoney: Float!, $numGuarenteedResponses: Int!) {
+  createSurvey(input: {name: $name, description: $description, allocatedMoney: $allocatedMoney, numGuarenteedResponses: $numGuarenteedResponses}) {
     name
     description
     id
@@ -734,6 +803,40 @@ export const OpenSurveyDocument = gql`
 export function useOpenSurveyMutation() {
   return Urql.useMutation<OpenSurveyMutation, OpenSurveyMutationVariables>(OpenSurveyDocument);
 };
+export const PayBalanceDocument = gql`
+    mutation PayBalance($payInFull: Boolean!, $amount: Float, $creditCard: String, $bankPaymentInfo: BankPaymentInfo) {
+  payBalance(payInFull: $payInFull, amount: $amount, creditCard: $creditCard, bankPaymentInfo: $bankPaymentInfo) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function usePayBalanceMutation() {
+  return Urql.useMutation<PayBalanceMutation, PayBalanceMutationVariables>(PayBalanceDocument);
+};
+export const RedeemRewardDocument = gql`
+    mutation RedeemReward($cost: Float!, $reward: String!) {
+  redeemReward(cost: $cost, reward: $reward) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function useRedeemRewardMutation() {
+  return Urql.useMutation<RedeemRewardMutation, RedeemRewardMutationVariables>(RedeemRewardDocument);
+};
 export const RegisterDocument = gql`
     mutation Register($username: String!, $email: String!, $phoneNumber: String!, $typeOfUser: String!, $password: String!, $gender: String!, $income: String!) {
   register(options: {username: $username, email: $email, phoneNumber: $phoneNumber, typeOfUser: $typeOfUser, password: $password, gender: $gender, income: $income}) {
@@ -764,8 +867,8 @@ export function useSubmitSurveyMutation() {
   return Urql.useMutation<SubmitSurveyMutation, SubmitSurveyMutationVariables>(SubmitSurveyDocument);
 };
 export const UpdateUserDocument = gql`
-    mutation UpdateUser($username: String!, $email: String!, $phoneNumber: String!) {
-  updateUser(input: {username: $username, email: $email, phoneNumber: $phoneNumber}) {
+    mutation UpdateUser($username: String!, $email: String!, $phoneNumber: String!, $gender: String!, $income: String!) {
+  updateUser(input: {username: $username, email: $email, phoneNumber: $phoneNumber, gender: $gender, income: $income}) {
     errors {
       field
       message
@@ -848,14 +951,11 @@ export const SurveyResultsDocument = gql`
     query SurveyResults($survey_id: Int!) {
   surveyResults(survey_id: $survey_id) {
     results {
-      answerCount
-      summaryStats {
-        mean
-        median
-        mode
-      }
       question
-      qid
+      userId
+      userGender
+      userIncome
+      answer
     }
     errors {
       ...StdFieldError

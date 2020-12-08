@@ -7,7 +7,9 @@ import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from "../constants";
 import { v4 } from "uuid";
 import { sendEmail } from "../utils/sendEmail";
 import { UserResponse } from "./object-types";
+import luhn from "luhn";
 import {
+  BankPaymentInfo,
   UpdateUserInput,
   RegisterInput,
   UsernamePasswordInput,
@@ -104,6 +106,34 @@ export class UserResolver {
       };
     }
 
+    if (options.typeOfUser.toUpperCase() === "SURVEYEE") {
+      if (
+        ["MALE", "FEMALE", "OTHER"].find(
+          (e) => options.gender.toUpperCase() === e
+        ) === undefined
+      ) {
+        return {
+          errors: [
+            {
+              field: "gender",
+              message: "gender must be MALE | FEMALE | OTHER",
+            },
+          ],
+        };
+      }
+
+      if (options.income === "") {
+        return {
+          errors: [
+            {
+              field: "income",
+              message: "income must not be blank",
+            },
+          ],
+        };
+      }
+    }
+
     const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
@@ -115,10 +145,11 @@ export class UserResolver {
           username: options.username,
           email: options.email,
           phoneNumber: options.phoneNumber,
-          gender: options.gender,
+          gender: options.gender.toUpperCase(),
           income: options.income,
           typeOfUser: options.typeOfUser.toUpperCase(),
           password: hashedPassword,
+          rewards: 0,
         })
         .returning("*")
         .execute();
@@ -130,7 +161,7 @@ export class UserResolver {
         return {
           errors: [
             {
-              field: "unkown",
+              field: "unknown",
               message: "a unique field is already taken",
             },
           ],
@@ -151,6 +182,151 @@ export class UserResolver {
     // this will set a cookie on the user
     // keep them logged in
     req.session.userId = user.id;
+
+    return { user };
+  }
+
+  @Mutation(() => UserResponse)
+  async thousandPoints(@Ctx() { req }: MyContext): Promise<UserResponse> {
+    let user = await User.findOneOrFail(req.session.userId);
+    user.rewards += 1000;
+    user.save();
+    return { user };
+  }
+
+  @Mutation(() => UserResponse)
+  async redeemReward(
+    @Ctx() { req }: MyContext,
+    @Arg("cost") cost: number,
+    @Arg("reward") reward: string
+  ): Promise<UserResponse> {
+    let user = await User.findOneOrFail(req.session.userId);
+
+    if (cost > user.rewards) {
+      return {
+        errors: [
+          {
+            field: "cost",
+            message: "Not enough points to redeem rewards",
+          },
+        ],
+      };
+    }
+
+    user.rewards -= cost;
+    user.save();
+
+    sendEmail(
+      user.email,
+      `
+      <h2>Thanks for sticking with us! Here is your ${reward}:</h2>
+      <p>${v4()}</p>
+      `,
+      "Your SurveyIT Reward has been redeemded!"
+    );
+
+    return { user };
+  }
+  @Mutation(() => UserResponse)
+  async payBalance(
+    @Ctx() { req }: MyContext,
+    @Arg("payInFull") payInFull: boolean,
+    @Arg("amount", { nullable: true }) amount?: number,
+    @Arg("creditCard", { nullable: true }) creditCard?: string,
+    @Arg("bankPaymentInfo", { nullable: true })
+    bankPaymentInfo?: BankPaymentInfo
+  ): Promise<UserResponse> {
+    let user = await User.findOneOrFail(req.session.userId);
+
+    //inverse XOR, one must be provided
+    if (
+      !((creditCard && !bankPaymentInfo) || (!creditCard && bankPaymentInfo))
+    ) {
+      return {
+        errors: [
+          {
+            field: "creditCard",
+            message: "please select one payment option",
+          },
+          {
+            field: "bankPaymentInfo",
+            message: "please select one payment option",
+          },
+        ],
+      };
+    }
+
+    if (creditCard) {
+      //validate card
+      if (!luhn.validate(creditCard)) {
+        return {
+          errors: [
+            {
+              field: "creditCard",
+              message: "invalid credit card",
+            },
+          ],
+        };
+      }
+      //charge card
+    }
+
+    if (bankPaymentInfo) {
+      const isNum = (val: string) => /^\d+$/.test(val);
+      //validate rn
+      if (
+        bankPaymentInfo.routingNumber.length !== 9 ||
+        !isNum(bankPaymentInfo.routingNumber)
+      ) {
+        return {
+          errors: [
+            {
+              field: "routingNumber",
+              message: "invalid routing number",
+            },
+          ],
+        };
+      }
+
+      //validate an
+      if (
+        !(
+          bankPaymentInfo.accountNumber.length >= 10 &&
+          bankPaymentInfo.accountNumber.length <= 12
+        ) ||
+        !isNum(bankPaymentInfo.accountNumber)
+      ) {
+        return {
+          errors: [
+            {
+              field: "accountNumber",
+              message: "invalid account number",
+            },
+          ],
+        };
+      }
+      //charge bank acct
+    }
+
+    if (payInFull) {
+      user.balance = 0;
+    } else if (amount === undefined) {
+      return {
+        errors: [
+          {
+            field: "amount",
+            message: "amount is empty and payInFull is false",
+          },
+        ],
+      };
+    } else if (user.balance) {
+      user.balance -= amount;
+      if (user.balance < 0) {
+        user.balance = 0;
+      }
+    }
+
+    user.save();
 
     return { user };
   }
@@ -309,7 +485,8 @@ export class UserResolver {
     user.email = input.email;
     user.phoneNumber = input.phoneNumber;
     user.username = input.username;
-    //user.gender = input.gender;
+    user.gender = input.gender;
+    user.income = input.income;
 
     try {
       const updatedUser = await user.save();

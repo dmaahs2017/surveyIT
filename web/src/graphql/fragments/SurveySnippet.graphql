@@ -4,6 +4,8 @@ fragment SurveySnippet on Survey {
   id
   opensAt
   closesAt
+  availablePoints
+  rewardsRate
   creator {
     id
     username

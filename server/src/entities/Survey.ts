@@ -7,8 +7,9 @@ import {
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from "typeorm";
-import { ObjectType, Field } from "type-graphql";
+import { Float, ObjectType, Field } from "type-graphql";
 import { Question } from "./Question";
 import { User } from "./User";
 
@@ -35,6 +36,14 @@ export class Survey extends BaseEntity {
   @Column({ nullable: true })
   closesAt?: Date;
 
+  @Field(() => Float)
+  @Column({ type: "float" })
+  availablePoints!: number;
+
+  @Field(() => Float)
+  @Column({ type: "float" })
+  rewardsRate!: number;
+
   @Field()
   @Column()
   creatorId: number;
@@ -45,6 +54,9 @@ export class Survey extends BaseEntity {
 
   @OneToMany(() => Question, (question) => question.survey)
   questions: Question[];
+
+  @ManyToMany(() => User, (user) => user.surveysTaken)
+  usersCompleted: User[];
 
   @Field(() => String)
   @CreateDateColumn()
