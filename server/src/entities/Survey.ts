@@ -7,6 +7,7 @@ import {
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from "typeorm";
 import { Float, ObjectType, Field } from "type-graphql";
 import { Question } from "./Question";
@@ -53,6 +54,9 @@ export class Survey extends BaseEntity {
 
   @OneToMany(() => Question, (question) => question.survey)
   questions: Question[];
+
+  @ManyToMany(() => User, (user) => user.surveysTaken)
+  usersCompleted: User[];
 
   @Field(() => String)
   @CreateDateColumn()
