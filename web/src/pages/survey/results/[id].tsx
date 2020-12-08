@@ -177,9 +177,7 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
   return (
     <div className="surveyScrollbar">
       <NavBar />
-      <div className="surveyContainer">
-        {survey}
-        </div>
+      <div className="surveyContainer">{survey}</div>
     </div>
   );
 };
