@@ -187,6 +187,47 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
+  async thousandPoints(@Ctx() { req }: MyContext): Promise<UserResponse> {
+    let user = await User.findOneOrFail(req.session.userId);
+    user.rewards += 1000;
+    user.save();
+    return { user };
+  }
+
+  @Mutation(() => UserResponse)
+  async redeemReward(
+    @Ctx() { req }: MyContext,
+    @Arg("cost") cost: number,
+    @Arg("reward") reward: string
+  ): Promise<UserResponse> {
+    let user = await User.findOneOrFail(req.session.userId);
+
+    if (cost > user.rewards) {
+      return {
+        errors: [
+          {
+            field: "cost",
+            message: "Not enough points to redeem rewards",
+          },
+        ],
+      };
+    }
+
+    user.rewards -= cost;
+    user.save();
+
+    sendEmail(
+      user.email,
+      `
+      <h2>Thanks for sticking with us! Here is your ${reward}:</h2>
+      <p>${v4()}</p>
+      `,
+      "Your SurveyIT Reward has been redeemded!"
+    );
+
+    return { user };
+  }
+  @Mutation(() => UserResponse)
   async payBalance(
     @Ctx() { req }: MyContext,
     @Arg("payInFull") payInFull: boolean,

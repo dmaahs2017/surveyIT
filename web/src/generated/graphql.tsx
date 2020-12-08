@@ -140,6 +140,7 @@ export type Question = {
 export type Mutation = {
   __typename?: 'Mutation';
   register: UserResponse;
+  redeemReward: UserResponse;
   payBalance: UserResponse;
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
@@ -157,6 +158,12 @@ export type Mutation = {
 
 export type MutationRegisterArgs = {
   options: RegisterInput;
+};
+
+
+export type MutationRedeemRewardArgs = {
+  reward: Scalars['String'];
+  cost: Scalars['Float'];
 };
 
 
@@ -441,6 +448,26 @@ export type PayBalanceMutationVariables = Exact<{
 export type PayBalanceMutation = (
   { __typename?: 'Mutation' }
   & { payBalance: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
+    )> }
+  ) }
+);
+
+export type RedeemRewardMutationVariables = Exact<{
+  cost: Scalars['Float'];
+  reward: Scalars['String'];
+}>;
+
+
+export type RedeemRewardMutation = (
+  { __typename?: 'Mutation' }
+  & { redeemReward: (
     { __typename?: 'UserResponse' }
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
@@ -792,6 +819,23 @@ export const PayBalanceDocument = gql`
 
 export function usePayBalanceMutation() {
   return Urql.useMutation<PayBalanceMutation, PayBalanceMutationVariables>(PayBalanceDocument);
+};
+export const RedeemRewardDocument = gql`
+    mutation RedeemReward($cost: Float!, $reward: String!) {
+  redeemReward(cost: $cost, reward: $reward) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function useRedeemRewardMutation() {
+  return Urql.useMutation<RedeemRewardMutation, RedeemRewardMutationVariables>(RedeemRewardDocument);
 };
 export const RegisterDocument = gql`
     mutation Register($username: String!, $email: String!, $phoneNumber: String!, $typeOfUser: String!, $password: String!, $gender: String!, $income: String!) {
