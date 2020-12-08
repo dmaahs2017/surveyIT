@@ -6,6 +6,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Column,
+  JoinTable,
+  ManyToMany,
 } from "typeorm";
 import { Float, ObjectType, Field } from "type-graphql";
 import { Survey } from "./Survey";
@@ -55,6 +57,12 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Survey, (survey) => survey.creator)
   surveys: Survey[];
+
+  @ManyToMany(() => Survey, (survey) => survey.usersCompleted, {
+    cascade: true,
+  })
+  @JoinTable({ name: "SurveysTaken" })
+  surveysTaken: Survey[];
 
   @OneToMany(() => Answer, (qa) => qa.user)
   answers: Answer[];

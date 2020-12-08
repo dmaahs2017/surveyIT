@@ -111,6 +111,24 @@ const Survey: NextPage<{ id: number }> = ({ id }) => {
                   });
 
                   if (response) {
+                    let alreadyResponded = false;
+                    let somethingWentWrong = false;
+                    response.data?.submitSurvey.map((e) => {
+                      if (/already responded/.test(e.message)) {
+                        alreadyResponded = true;
+                      }
+                      if (/must be between/.test(e.message)) {
+                        somethingWentWrong = true;
+                      }
+                    });
+                    if (somethingWentWrong)
+                      alert(
+                        "Something Went wrong submitting the survey, please retake it"
+                      );
+                    else if (alreadyResponded)
+                      alert(
+                        "You may have already taken this survey. Please Refresh the dashboard."
+                      );
                     router.push("/surveyeeDash");
                   }
                 }}

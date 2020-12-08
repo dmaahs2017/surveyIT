@@ -255,19 +255,19 @@ export class SurveyResolver {
   @Query(() => PaginatedSurveys)
   async surveys(
     @Arg("limit", () => Int) limit: number,
-    @Arg("offset", () => Int, { nullable: true }) offset: number
+    @Arg("offset", () => Int, { nullable: true }) offset: number,
+    @Ctx() { req }: MyContext
   ): Promise<PaginatedSurveys> {
-    const [surveys, count] = await getConnection()
-      .getRepository(Survey)
-      .createQueryBuilder("s")
-      .innerJoinAndSelect("s.creator", "user", 'user.id = s."creatorId"')
-      .orderBy("s.rewardsRate", "DESC")
-      .take(limit)
-      .offset(offset)
-      .getManyAndCount();
+    const [surveys, count] = await Survey.findAndCount({
+      relations: ["usersCompleted", "creator"],
+      take: limit,
+      skip: offset,
+    });
 
     return {
-      surveys: surveys,
+      surveys: surveys.filter(
+        (s) => !s.usersCompleted.find((u) => u.id === req.session.userId)
+      ),
       total: count,
       hasMore: count - (offset + limit) > 0,
       id: v4(),
@@ -363,8 +363,10 @@ export class SurveyResolver {
       submitter.rewards += survey.rewardsRate;
       survey.availablePoints -= survey.rewardsRate;
 
-      submitter.save();
-      survey.save();
+      submitter.surveysTaken = [survey];
+
+      await submitter.save();
+      await survey.save();
     }
 
     return errors;
