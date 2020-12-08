@@ -261,7 +261,7 @@ export class SurveyResolver {
       .getRepository(Survey)
       .createQueryBuilder("s")
       .innerJoinAndSelect("s.creator", "user", 'user.id = s."creatorId"')
-      .orderBy("s.createdAt", "DESC")
+      .orderBy("s.rewardsRate", "DESC")
       .take(limit)
       .offset(offset)
       .getManyAndCount();
